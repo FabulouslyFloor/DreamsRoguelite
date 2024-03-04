@@ -1,51 +1,51 @@
 animations {
   id: "idle"
   images {
-    image: "/assets/protagonist_idle/idle_00001.png"
+    image: "/assets/protagonist/idle/idle_00001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00002.png"
+    image: "/assets/protagonist/idle/idle_00002.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00003.png"
+    image: "/assets/protagonist/idle/idle_00003.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00004.png"
+    image: "/assets/protagonist/idle/idle_00004.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00005.png"
+    image: "/assets/protagonist/idle/idle_00005.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00006.png"
+    image: "/assets/protagonist/idle/idle_00006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00007.png"
+    image: "/assets/protagonist/idle/idle_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00008.png"
+    image: "/assets/protagonist/idle/idle_00008.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00009.png"
+    image: "/assets/protagonist/idle/idle_00009.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00010.png"
+    image: "/assets/protagonist/idle/idle_00010.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00011.png"
+    image: "/assets/protagonist/idle/idle_00011.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_idle/idle_00012.png"
+    image: "/assets/protagonist/idle/idle_00012.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -56,51 +56,51 @@ animations {
 animations {
   id: "run_side"
   images {
-    image: "/assets/protagonist_run_side/runside_00001.png"
+    image: "/assets/protagonist/run/side/runside_00001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00002.png"
+    image: "/assets/protagonist/run/side/runside_00002.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00003.png"
+    image: "/assets/protagonist/run/side/runside_00003.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00004.png"
+    image: "/assets/protagonist/run/side/runside_00004.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00005.png"
+    image: "/assets/protagonist/run/side/runside_00005.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00006.png"
+    image: "/assets/protagonist/run/side/runside_00006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00007.png"
+    image: "/assets/protagonist/run/side/runside_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00008.png"
+    image: "/assets/protagonist/run/side/runside_00008.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00009.png"
+    image: "/assets/protagonist/run/side/runside_00009.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00010.png"
+    image: "/assets/protagonist/run/side/runside_00010.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00011.png"
+    image: "/assets/protagonist/run/side/runside_00011.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_side/runside_00012.png"
+    image: "/assets/protagonist/run/side/runside_00012.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -111,35 +111,35 @@ animations {
 animations {
   id: "run_down"
   images {
-    image: "/assets/protagonist_run_down/rundown_00001.png"
+    image: "/assets/protagonist/run/down/rundown_00001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_down/rundown_00002.png"
+    image: "/assets/protagonist/run/down/rundown_00002.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_down/rundown_00003.png"
+    image: "/assets/protagonist/run/down/rundown_00003.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_down/rundown_00004.png"
+    image: "/assets/protagonist/run/down/rundown_00004.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_down/rundown_00005.png"
+    image: "/assets/protagonist/run/down/rundown_00005.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_down/rundown_00006.png"
+    image: "/assets/protagonist/run/down/rundown_00006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_down/rundown_00007.png"
+    image: "/assets/protagonist/run/down/rundown_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_down/rundown_00008.png"
+    image: "/assets/protagonist/run/down/rundown_00008.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
@@ -150,35 +150,140 @@ animations {
 animations {
   id: "run_up"
   images {
-    image: "/assets/protagonist_run_up/runup_00001.png"
+    image: "/assets/protagonist/run/up/runup_00001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_up/runup_00002.png"
+    image: "/assets/protagonist/run/up/runup_00002.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_up/runup_00003.png"
+    image: "/assets/protagonist/run/up/runup_00003.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_up/runup_00004.png"
+    image: "/assets/protagonist/run/up/runup_00004.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_up/runup_00005.png"
+    image: "/assets/protagonist/run/up/runup_00005.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_up/runup_00006.png"
+    image: "/assets/protagonist/run/up/runup_00006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_up/runup_00007.png"
+    image: "/assets/protagonist/run/up/runup_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist_run_up/runup_00008.png"
+    image: "/assets/protagonist/run/up/runup_00008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "melee_up"
+  images {
+    image: "/assets/protagonist/melee/up/meleeup_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeup_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeup_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeup_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeup_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeup_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeup_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "melee_down"
+  images {
+    image: "/assets/protagonist/melee/down/meleedown_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedown_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedown_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedown_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedown_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedown_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedown_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "melee_side"
+  images {
+    image: "/assets/protagonist/melee/side/meleeside_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleeside_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleeside_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleeside_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleeside_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleeside_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleeside_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
