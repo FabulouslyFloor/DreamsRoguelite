@@ -20,8 +20,9 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("show_World_Select") then
 		show(self, "#world select")
 	elseif message_id == hash("show_opening") then
-		print("recieved")
 		show(self, "#opening")
+	elseif message_id == hash("show_Level") then
+		show(self,"#level")
 	elseif message_id == hash("proxy_loaded") then -- <9>
 		self.current_proxy = sender -- <10>
 		msg.post(sender, "enable") -- <11>
