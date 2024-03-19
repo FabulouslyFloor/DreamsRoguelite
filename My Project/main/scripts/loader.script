@@ -24,7 +24,7 @@ function on_message(self, message_id, message, sender)
 	-- If it recieves a call to display the World Select scene
 	if message_id == hash("show_World_Select") then
 		show(self, "#world select")
-	-- If it recieves a call to display the Opening scene
+		-- If it recieves a call to display the Opening scene
 	elseif message_id == hash("show_opening") then
 		show(self, "#opening")
 	-- If it recieves a call to display a playable level
