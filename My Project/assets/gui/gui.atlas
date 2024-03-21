@@ -1,9 +1,9 @@
 images {
-  image: "/istockphoto-472378625-612x612.jpg"
+  image: "/assets/gui/textures/cloud-button-unpushed.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 images {
-  image: "/photo8.png"
+  image: "/assets/gui/textures/cloud-button-pushed.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
 margin: 0
