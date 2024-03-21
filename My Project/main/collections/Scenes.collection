@@ -40,7 +40,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"world select\"\n"
   "  type: \"collectionproxy\"\n"
-  "  data: \"collection: \\\"/main/collections/World Select.collection\\\"\\n"
+  "  data: \"collection: \\\"/main/collections/World_Select.collection\\\"\\n"
   "exclude: false\\n"
   "\"\n"
   "  position {\n"
