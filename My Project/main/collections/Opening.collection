@@ -90,6 +90,7 @@ embedded_instances {
   data: "components {\n"
   "  id: \"opening\"\n"
   "  component: \"/main/guis/opening.gui\"\n"
+  
   "  position {\n"
   "    x: 0.0\n"
   "    y: 0.0\n"
