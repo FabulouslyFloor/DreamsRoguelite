@@ -15,3 +15,6 @@ input_method = HiddenInputField
 [project]
 title = Dreams Roguelike
 
+[tilemap]
+max_tile_count = 10000
+
