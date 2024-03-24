@@ -1,0 +1,103 @@
+local function show_buttons(self)
+	print("Executing show_buttons")
+	local d = .5 		-- time delay
+
+	local to_color1 = gui.get_color(gui.get_node("world1_button/cloud"))
+	to_color1.w = 1
+	local to_color2 = gui.get_color(gui.get_node("world2_button/cloud"))
+	to_color2.w = 1
+	local to_color3 = gui.get_color(gui.get_node("world3_button/cloud"))
+	to_color3.w = 1
+
+	local to_color4 = gui.get_color(gui.get_node("world1_button/text"))
+	to_color4.w = 1
+	local to_color5 = gui.get_color(gui.get_node("world2_button/text"))
+	to_color5.w = 1
+	local to_color6 = gui.get_color(gui.get_node("world3_button/text"))
+	to_color6.w = 1
+	
+	gui.animate(self.world1_button, gui.PROP_COLOR, to_color1, gui.EASING_IN, 0.5, d)
+	gui.animate(self.world2_button, gui.PROP_COLOR, to_color2, gui.EASING_IN, 0.5, d)
+	gui.animate(self.world3_button, gui.PROP_COLOR, to_color3, gui.EASING_IN, 0.5, d)
+
+	gui.animate(self.world1_text, gui.PROP_COLOR, to_color4, gui.EASING_IN, 0.5, d)
+	gui.animate(self.world2_text, gui.PROP_COLOR, to_color5, gui.EASING_IN, 0.5, d)
+	gui.animate(self.world3_text, gui.PROP_COLOR, to_color6, gui.EASING_IN, 0.5, d)
+end
+
+local function show_worlds(self)
+	print("Executing show_worlds")
+	local d = .5 		-- time delay
+	
+	local to_color1 = gui.get_color(gui.get_node("world1"))
+	to_color1.w = 1
+	local to_color2 = gui.get_color(gui.get_node("world2"))
+	to_color2.w = 1
+	local to_color3 = gui.get_color(gui.get_node("world3"))
+	to_color3.w = 1
+	
+	gui.animate(self.world1, gui.PROP_COLOR, to_color1, gui.EASING_IN, 0.5, d)
+	gui.animate(self.world2, gui.PROP_COLOR, to_color2, gui.EASING_IN, 0.5, d)
+	gui.animate(self.world3, gui.PROP_COLOR, to_color3, gui.EASING_IN, 0.5, d, show_buttons)
+end
+
+local function show_background(self)
+	print("Executing show_background")
+	local d = 1.5 		-- time delay
+	-- get the color and change w (alpha) to 1 to get the end color
+	local to_color = gui.get_color(gui.get_node("background"))
+	to_color.w = 1
+	gui.animate(self.background, gui.PROP_COLOR, to_color, gui.EASING_IN, 1, d, show_worlds)
+end
+
+
+function init(self)
+	self.background = gui.get_node("background")
+	self.world1 = gui.get_node("world1")
+	self.world2 = gui.get_node("world2")
+	self.world3 = gui.get_node("world3")
+	self.world1_button = gui.get_node("world1_button/cloud")
+	self.world2_button = gui.get_node("world2_button/cloud")
+	self.world3_button = gui.get_node("world3_button/cloud")
+	self.world1_text = gui.get_node("world1_button/text")
+	self.world2_text = gui.get_node("world2_button/text")
+	self.world3_text = gui.get_node("world3_button/text")
+
+	show_background(self)
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

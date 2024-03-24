@@ -1,4 +1,4 @@
-script: "/main/scripts/opening_gui.gui_script"
+script: "/main/scripts/gui_scripts/opening_gui.gui_script"
 fonts {
   name: "dogica"
   font: "/assets/fonts/dogica.font"
