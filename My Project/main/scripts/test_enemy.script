@@ -3,7 +3,7 @@ local trackplayer = false
 
 function init(self)
 	self.dir = vmath.vector3(0, 1, 0)
-	self.speed = 100
+	self.speed = 50
 	self.going = nil
 	msg.post(".","get_new_position")
 	timer = 0
