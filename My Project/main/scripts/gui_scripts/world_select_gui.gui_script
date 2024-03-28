@@ -1,3 +1,7 @@
+local function scene_transition(self)
+	msg.post("Scenes:/controller#loader","show_Level") -- open world1
+end
+
 local function show_buttons(self)
 	print("Executing show_buttons")
 	local d = .5 		-- time delay
@@ -53,6 +57,8 @@ end
 local button_clicked = false -- No redundant clicks
 
 function init(self)
+	msg.post(".", "acquire_input_focus")
+	
 	self.background = gui.get_node("background")
 	self.world1 = gui.get_node("world1")
 	self.world2 = gui.get_node("world2")
@@ -68,10 +74,7 @@ function init(self)
 end
 
 function on_input(self, action_id, action)
-	msg.post(".", "acquire_input_focus")
-	
 	if action.pressed and gui.pick_node(gui.get_node("world1_button/cloud"), action.x, action.y) and button_clicked == false then
-		print("button touched")
 		gui.play_flipbook(self.world1_button, hash("cloud-button-pushed"))
 	elseif action.pressed and gui.pick_node(gui.get_node("world2_button/cloud"), action.x, action.y) and button_clicked == false then
 		gui.play_flipbook(self.world2_button, hash("cloud-button-pushed"))
@@ -83,16 +86,24 @@ function on_input(self, action_id, action)
 		gui.play_flipbook(self.world1_button, hash("cloud-button-unpushed"))
 		if button_clicked == false then
 			button_clicked = true
+			gui.animate(self.world1_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.world2_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.world3_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.world1, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.world2, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5, 1, scene_transition)
+			
 		end
 	elseif action.released and gui.pick_node(gui.get_node("world2_button/cloud"), action.x, action.y) then
 		gui.play_flipbook(self.world2_button, hash("cloud-button-unpushed"))
 		if button_clicked == false then
-			button_clicked = true
+			--button_clicked = true
 		end
 	elseif action.released and gui.pick_node(gui.get_node("world3_button/cloud"), action.x, action.y) then
 		gui.play_flipbook(self.world3_button, hash("cloud-button-unpushed"))
 		if button_clicked == false then
-			button_clicked = true
+			--button_clicked = true
 		end
 	end	
 end
