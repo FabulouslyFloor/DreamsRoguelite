@@ -1,4 +1,8 @@
 script: "/main/scripts/gui_scripts/world_select_gui.gui_script"
+textures {
+  name: "gui"
+  texture: "/assets/gui/gui.atlas"
+}
 background_color {
   x: 0.0
   y: 0.0
@@ -716,14 +720,14 @@ nodes {
     w: 1.0
   }
   color {
-    x: 0.302
-    y: 0.102
-    z: 0.302
+    x: 1.0
+    y: 1.0
+    z: 1.0
     w: 1.0
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: ""
+  texture: "gui/world-select-background"
   id: "background"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
