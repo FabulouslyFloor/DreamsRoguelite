@@ -1,8 +1,9 @@
 local timer = 0
+local trackplayer = false
 
 function init(self)
 	self.dir = vmath.vector3(0, 1, 0)
-	self.speed = 200
+	self.speed = 100
 	self.going = nil
 	msg.post(".","get_new_position")
 	timer = 0
@@ -15,10 +16,12 @@ function final(self)
 end
 
 function update(self, dt)
-	if timer == 0 then
+
+	local anim = hash("idle")
+
+	if trackplayer then
 		local current_position = go.get_position()
-		local diff = self.going - current_position
-		--local diff = go.get_position("/player") - current_position
+		local diff = go.get_position("/Player") - current_position
 		local distance_to_target = vmath.length(diff)
 		if distance_to_target > 0 then
 			local direction = vmath.normalize(diff)
@@ -27,15 +30,57 @@ function update(self, dt)
 			-- update with the new position
 			local new_position = current_position + direction * distance_to_move
 			go.set_position(new_position)
+
+			if new_position.y > current_position.y then
+				anim = hash("up")
+			elseif new_position.y < current_position.y then
+				anim = hash("down")
+			end
+
+			if anim ~= self.current_anim then                          -- [3]
+				msg.post("#sprite", "play_animation", { id = anim })   -- [4]
+				self.current_anim = anim                               -- [5]
+			end
+
 		elseif distance_to_target <= 0 then
-			timer = 60
+			anim = hash("idle")
 		end
-	elseif timer == 1 then
-		msg.post(".","get_new_position")
-		timer = timer -1
 	else
-		timer = timer - 1
+		if timer == 0 then
+			local current_position = go.get_position()
+			local diff = self.going - current_position
+			local distance_to_target = vmath.length(diff)
+			if distance_to_target > 0 then
+				local direction = vmath.normalize(diff)
+				-- don't overshoot the target by moving too far in a frame
+				local distance_to_move = math.min(distance_to_target, self.speed * dt)
+				-- update with the new position
+				local new_position = current_position + direction * distance_to_move
+				go.set_position(new_position)
+
+				if self.going.y > current_position.y then
+					anim = hash("up")
+				elseif self.going.y < current_position.y then
+					anim = hash("down")
+				end
+
+				if anim ~= self.current_anim then                          -- [3]
+					msg.post("#sprite", "play_animation", { id = anim })   -- [4]
+					self.current_anim = anim                               -- [5]
+				end
+
+			elseif distance_to_target <= 0 then
+				anim = hash("idle")
+				timer = 60
+			end
+		elseif timer == 1 then
+			msg.post(".","get_new_position")
+			timer = timer -1
+		else
+			timer = timer - 1
+		end
 	end
+
 end
 
 function fixed_update(self, dt)
@@ -50,9 +95,13 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("get_new_position") then
 		local pos = go.get_position()
-		pos.x = pos.x + math.random(-200,200)
-		pos.y = pos.y + math.random(-200,200)
+		pos.x = pos.x + math.random(-400,400)
+		pos.y = pos.y + math.random(-400,400)
 		self.going = pos
+	elseif message_id == hash("collision_response") then
+		if not trackplayer then
+			trackplayer = true
+		end
 	end
 end
 
