@@ -1,5 +1,17 @@
-local function scene_transition(self)
+local level_selected
+
+local function scene_transition(self, level_selected)
 	msg.post("Scenes:/controller#loader","show_Level") -- open world1
+end
+
+local function fade_everything(self)
+	gui.animate(self.world1_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world2_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world3_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world1, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world2, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
 end
 
 local function show_buttons(self)
@@ -86,14 +98,9 @@ function on_input(self, action_id, action)
 		gui.play_flipbook(self.world1_button, hash("cloud-button-unpushed"))
 		if button_clicked == false then
 			button_clicked = true
-			gui.animate(self.world1_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
-			gui.animate(self.world2_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
-			gui.animate(self.world3_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
-			gui.animate(self.world1, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
-			gui.animate(self.world2, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
-			gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
-			gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5, 1, scene_transition)
-			
+			level_selected = 1
+			fade_everything(self)
+			scene_transition(self, level_selected)
 		end
 	elseif action.released and gui.pick_node(gui.get_node("world2_button/cloud"), action.x, action.y) then
 		gui.play_flipbook(self.world2_button, hash("cloud-button-unpushed"))
