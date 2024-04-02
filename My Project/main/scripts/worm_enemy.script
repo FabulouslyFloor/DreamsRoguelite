@@ -12,6 +12,7 @@ function init(self)
 	end
 	self.speed = 50
 	self.range = 500
+	-- sets enemy to being partially through the movement animation so it's not perfectly centered every time
 	self.local_pos = math.random(-75, 75)
 	update_animation(self)
 end
