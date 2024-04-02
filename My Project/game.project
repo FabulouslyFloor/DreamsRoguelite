@@ -1,5 +1,5 @@
 [bootstrap]
-main_collection = /main/collections/Scenes.collectionc
+main_collection = /main/collections/Level.collectionc
 
 [script]
 shared_state = 1
@@ -14,4 +14,7 @@ input_method = HiddenInputField
 
 [project]
 title = Dreams Roguelike
+
+[tilemap]
+max_tile_count = 10000
 

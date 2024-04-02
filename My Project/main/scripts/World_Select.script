@@ -15,7 +15,7 @@ function on_input(self, action_id, action)
 	-- be received regardless of where on the screen it happened.
 	-- Learn more: https://defold.com/manuals/input/
 	-- Remove this function if not needed
-	if action_id == hash("space") then
+	if action_id == hash("enter") then
 		msg.post("Scenes:/controller#loader","show_Level")
 		print("Space touched")
 	end
