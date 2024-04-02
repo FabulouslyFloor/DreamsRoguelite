@@ -1,0 +1,50 @@
+
+-- todo: i think this might need a factory so they aren't all in sync with their 'randomness'
+function init(self)
+	math.randomseed(os.time())
+	bool = math.random(0,1)
+	if bool == 0 then
+		self.go_left = false
+		self.dir = vmath.vector3(1,0,0)
+	else
+		self.go_left = true
+		self.dir = vmath.vector3(-1,0,0)
+	end
+	self.speed = 50
+	self.range = 500
+	self.local_pos = math.random(-75, 75)
+	update_animation(self)
+end
+
+-- WHY WILL THIS NOT GO STRAIGHT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+-- THE COLLISION OBJECT WAS AUTO-APPLYING FUCKIN GRAVITY?????? **AAAAAAAAAAAAAAA**
+function update(self, dt)
+	local pos = go.get_position()
+	if self.go_left then
+		pos = pos + (self.dir * self.speed * dt)
+		go.set_position(pos)
+		self.local_pos = self.local_pos - 1
+	else
+		pos = pos + (self.dir * self.speed * dt)
+		go.set_position(pos)
+		self.local_pos = self.local_pos + 1
+	end
+
+	if self.local_pos > self.range or self.local_pos < (self.range * -1) then
+		self.go_left = not self.go_left
+		if self.dir == vmath.vector3(-1,0,0) then
+			self.dir = vmath.vector3(1,0,0)
+		else
+			self.dir = vmath.vector3(-1,0,0)
+		end
+		update_animation(self)
+	end
+end
+
+function update_animation(self)
+	if self.go_left then
+		sprite.play_flipbook("#sprite", "left")
+	else
+		sprite.play_flipbook("#sprite", "right")
+	end
+end
