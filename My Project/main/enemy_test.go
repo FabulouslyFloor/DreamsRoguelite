@@ -49,7 +49,7 @@ embedded_components {
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"gremlin\"\n"
+  "group: \"detect\"\n"
   "mask: \"player\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
