@@ -42,14 +42,14 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "collisionobject"
+  id: "gremlin_detect_range"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
-  "type: COLLISION_OBJECT_TYPE_KINEMATIC\n"
+  "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"gremlin\"\n"
+  "group: \"detect\"\n"
   "mask: \"player\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
@@ -89,15 +89,15 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "collisionobject1"
+  id: "gremlin_body_range"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
   "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"gremlin\"\n"
-  "mask: \"rockets\"\n"
+  "group: \"attack\"\n"
+  "mask: \"player\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
