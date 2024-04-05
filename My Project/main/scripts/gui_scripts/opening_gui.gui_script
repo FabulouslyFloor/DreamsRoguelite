@@ -46,7 +46,7 @@ local function hide_logo(self)
 	print("Executing hide_logo")
 	local d = 2
 
-	gui.animate(self.logo, gui.PROP_COLOR, 0, gui.EASING_OUT, 3, d, show_background)
+	gui.animate(self.logo, gui.PROP_COLOR, 0, gui.EASING_OUT, 1, d, show_background)
 
 end
 
