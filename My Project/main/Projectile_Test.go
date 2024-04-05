@@ -50,7 +50,7 @@ embedded_components {
   "friction: 0.1\n"
   "restitution: 0.5\n"
   "group: \"rockets\"\n"
-  "mask: \"gremlin\"\n"
+  "mask: \"enemy_body\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
