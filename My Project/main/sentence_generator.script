@@ -34,7 +34,7 @@ function final(self)
 end
 
 function createSentence(self, space)
-	
+	math.randomseed(os.time())
 	sentence = {}
 	sentence[1] = "Spawn"
 	sentence[2] = "[CONTENT]"
@@ -75,6 +75,15 @@ function createSentence(self, space)
 		end
 	end
 
+	-- can alter these values later if we want more guaranteed tiles between boss and end room. currently 2 guaranteed.
+	while #sentence > 48 do
+		if sentence[#sentence-3] == "Boss" then
+			table.remove(sentence, #sentence-4)
+		else
+			table.remove(sentence, #sentence-1)
+		end
+	end
+	
 	finalSentence = table.concat(sentence, " ")
 	print(finalSentence)
 
