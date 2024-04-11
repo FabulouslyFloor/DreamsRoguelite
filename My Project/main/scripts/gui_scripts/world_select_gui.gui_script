@@ -1,3 +1,19 @@
+local level_selected
+
+local function scene_transition(self, level_selected)
+	msg.post("Scenes:/controller#loader","show_Level") -- open world1
+end
+
+local function fade_everything(self)
+	gui.animate(self.world1_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world2_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world3_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world1, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world2, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+	gui.animate(self.world3, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+end
+
 local function show_buttons(self)
 	print("Executing show_buttons")
 	local d = .5 		-- time delay
@@ -43,15 +59,18 @@ end
 
 local function show_background(self)
 	print("Executing show_background")
-	local d = 1.5 		-- time delay
+	local d = 0.5 		-- time delay
 	-- get the color and change w (alpha) to 1 to get the end color
 	local to_color = gui.get_color(gui.get_node("background"))
 	to_color.w = 1
 	gui.animate(self.background, gui.PROP_COLOR, to_color, gui.EASING_IN, 1, d, show_worlds)
 end
 
+local button_clicked = false -- No redundant clicks
 
 function init(self)
+	msg.post(".", "acquire_input_focus")
+	
 	self.background = gui.get_node("background")
 	self.world1 = gui.get_node("world1")
 	self.world2 = gui.get_node("world2")
@@ -66,38 +85,32 @@ function init(self)
 	show_background(self)
 end
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
-end
-
 function on_input(self, action_id, action)
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
-end
+	if action.pressed and gui.pick_node(gui.get_node("world1_button/cloud"), action.x, action.y) and button_clicked == false then
+		gui.play_flipbook(self.world1_button, hash("cloud-button-pushed"))
+	elseif action.pressed and gui.pick_node(gui.get_node("world2_button/cloud"), action.x, action.y) and button_clicked == false then
+		gui.play_flipbook(self.world2_button, hash("cloud-button-pushed"))
+	elseif action.pressed and gui.pick_node(gui.get_node("world3_button/cloud"), action.x, action.y) and button_clicked == false then
+		gui.play_flipbook(self.world3_button, hash("cloud-button-pushed"))
+	end
 
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
+	if action.released and gui.pick_node(gui.get_node("world1_button/cloud"), action.x, action.y) then
+		gui.play_flipbook(self.world1_button, hash("cloud-button-unpushed"))
+		if button_clicked == false then
+			button_clicked = true
+			level_selected = 1
+			fade_everything(self)
+			scene_transition(self, level_selected)
+		end
+	elseif action.released and gui.pick_node(gui.get_node("world2_button/cloud"), action.x, action.y) then
+		gui.play_flipbook(self.world2_button, hash("cloud-button-unpushed"))
+		if button_clicked == false then
+			--button_clicked = true
+		end
+	elseif action.released and gui.pick_node(gui.get_node("world3_button/cloud"), action.x, action.y) then
+		gui.play_flipbook(self.world3_button, hash("cloud-button-unpushed"))
+		if button_clicked == false then
+			--button_clicked = true
+		end
+	end	
 end
