@@ -23,6 +23,7 @@ end
 
 function update(self, dt)
 	if self.damage_cooldown > 0 then
+		print(self.damage_cooldown)
 		self.damage_cooldown = self.damage_cooldown - 1
 	else
 		self.damaged = false
@@ -89,14 +90,25 @@ function on_message(self, message_id, message, sender)
 			if attackMelee then
 				if anim == hash("run_right") then
 					msg.post(".", "play_animation", {id = hash("melee_right")})
+					local props = { anim = hash("melee_right_sword") }
+					factory.create("#Weaponfactory",nil,nil,props)
+					--msg.post(id, "id", {)
 				elseif anim == hash("run_left") then
 					msg.post(".", "play_animation", {id = hash("melee_left")})
+					local props = { anim = hash("melee_left_sword") }
+					factory.create("#Weaponfactory",nil,nil,props)
 				elseif anim == hash("run_up") then
 					msg.post(".", "play_animation", {id = hash("melee_up")})
+					local props = { anim = hash("melee_up_sword") }
+					factory.create("#Weaponfactory",nil,nil,props)
 				elseif anim == hash("run_down") then
 					msg.post(".", "play_animation", {id = hash("melee_down")})
+					local props = { anim = hash("melee_down_sword") }
+					factory.create("#Weaponfactory",nil,nil,props)
 				elseif anim == hash("idle") then
 					msg.post(".", "play_animation", {id = hash("melee_down")})
+					local props = { anim = hash("melee_down_sword") }
+					factory.create("#Weaponfactory",nil,nil,props)
 				end
 			else
 				if anim == hash("run_right") then
