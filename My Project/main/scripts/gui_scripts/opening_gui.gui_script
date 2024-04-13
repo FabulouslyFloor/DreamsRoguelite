@@ -72,6 +72,10 @@ function init(self)
 	self.exit_button = gui.get_node("exit_button")
 	self.game_title = gui.get_node("game_title")
 
+	local to_position = gui.get_position(gui.get_node("game_title"))
+	to_position.y = 510
+	gui.animate(self.game_title, gui.PROP_POSITION, to_position, gui.EASING_INOUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
+	
 	show_logo(self)
 end
 
