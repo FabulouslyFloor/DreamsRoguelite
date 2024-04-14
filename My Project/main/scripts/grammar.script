@@ -76,6 +76,16 @@ function createSentence(self, space)
 		end
 	end
 
+
+	-- can alter these values later if we want more guaranteed tiles between boss and end room. currently 2 guaranteed.
+	while #sentence > 48 do
+		if sentence[#sentence-3] == "Boss" then
+			table.remove(sentence, #sentence-4)
+		else
+			table.remove(sentence, #sentence-1)
+		end
+	end
+	
 	finalSentence = table.concat(sentence, " ")
 	--print(finalSentence)
 	msg.post('#cellularAutomata', 'createMap', sentence)

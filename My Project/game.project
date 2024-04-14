@@ -1,6 +1,5 @@
 [bootstrap]
-main_collection = /main/collections/Level.collectionc
-
+main_collection = /main/collections/mapGeneration.collectionc
 
 [script]
 shared_state = 1
@@ -8,7 +7,6 @@ shared_state = 1
 [display]
 width = 1480
 height = 780
-fullscreen = 0
 
 [android]
 input_method = HiddenInputField
@@ -18,4 +16,10 @@ title = Dreams Roguelike
 
 [tilemap]
 max_tile_count = 1000000
+
+[physics]
+debug = 1
+
+[graphics]
+max_debug_vertices = 10000000
 

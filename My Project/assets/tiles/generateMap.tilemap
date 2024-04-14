@@ -12,13 +12,23 @@ layers {
     rotate90: 0
   }
   cell {
-    x: 299
-    y: 299
-    tile: 0
+    x: 560
+    y: 560
+    tile: 8
     h_flip: 0
     v_flip: 0
     rotate90: 0
   }
+}
+layers {
+  id: "walls"
+  z: 0.0
+  is_visible: 1
+}
+layers {
+  id: "gym_lines"
+  z: 1.0E-15
+  is_visible: 1
 }
 material: "/builtins/materials/tile_map.material"
 blend_mode: BLEND_MODE_ALPHA
