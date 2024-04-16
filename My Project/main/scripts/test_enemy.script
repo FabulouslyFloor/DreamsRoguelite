@@ -35,7 +35,6 @@ function update(self, dt)
 		timer = timer -1
 	else
 		timer = timer - 1
-		print(timer)
 	end
 end
 
@@ -54,7 +53,6 @@ function on_message(self, message_id, message, sender)
 		pos.x = pos.x + math.random(-200,200)
 		pos.y = pos.y + math.random(-200,200)
 		self.going = pos
-		print(self.going)
 	end
 end
 

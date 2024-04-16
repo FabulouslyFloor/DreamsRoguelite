@@ -2,11 +2,14 @@ local current_level
 local paused
 
 function init(self)
+	msg.post(".", "acquire_input_focus")
+	msg.post("#gameproxy", "load")
 	gui.set_enabled(gui.get_node("menu"), false)
-	paused = false
+	self.paused = false
 end
 
 function final(self)
+	msg.post(".", "release_input_focus")
 end
 
 function update(self, dt)
@@ -16,14 +19,21 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
+	if message_id == hash("proxy_loaded") then
+		msg.post(sender, "enable")
+	end
 end
 
 function on_input(self, action_id, action)
-	if action.released and gui.pick_node(gui.get_node("pause"), action.x, action.y) and !paused then
+	if action.released and gui.pick_node(gui.get_node("pause"), action.x, action.y) and self.paused == false then
+		self.paused = true
+		gui.set_enabled(gui.get_node("menu"), true)
 		msg.post("#gameproxy", "set_time_step", {factor = 0, mode = 1})
+	elseif action.released and gui.pick_node(gui.get_node("pause"), action.x, action.y) and self.paused == true then
+		self.paused = false
+		gui.set_enabled(gui.get_node("menu"), false)
+		msg.post("#gameproxy", "set_time_step", {factor = 1, mode = 1})
+	end
 	-- Add input-handling code here. The game object this script is attached to
 	-- must have acquired input focus:
 	--
