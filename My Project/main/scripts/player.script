@@ -1,12 +1,18 @@
+-- Local Variables Initialized
 local speed = 300
 local attacking = false
+-- Animation Variable
 local anim = nil
+-- Melee attack flag
 local attackMelee = true
+-- Timers
 local weaponSwitchTimer = 0
 local attackingTimer = 0
 
 function init(self)
+	-- Acquires input focus to recieve inputs
 	msg.post(".", "acquire_input_focus")
+	-- Sets up internal variables
 	self.dir = vmath.vector3()
 	self.current_anim = nil
 	self.firing = false
@@ -24,30 +30,41 @@ function final(self)
 end
 
 function update(self, dt)
+	-- 
 	if self.damage_cooldown > 0 then
 		print(self.damage_cooldown)
 		self.damage_cooldown = self.damage_cooldown - 1
 	elseif self.damaged == true then
 		self.damaged = false
 	end
-	
+
+	-- Checks if the direction is greater than one and normalizes it if it is
 	if vmath.length_sqr(self.dir) > 1 then
 		self.dir = vmath.normalize(self.dir)
 	end
 
+	-- Checks if the weapon timer is greater than zero and decrements it
 	if weaponSwitchTimer ~= 0 then
 		weaponSwitchTimer = weaponSwitchTimer - 1
 	end
 
+	-- Checks is self.firing is true meaning the player has clicked to shoot
 	if self.firing then
+		-- Calculates the angle using the players y and x direction
 		local angle = math.atan2(self.dir.y, self.dir.x)
+		-- Calculates the rotation using the angle
 		local rot = vmath.quat_rotation_z(angle)
+		-- Sets up a table with the players direction to pass to the bullet
 		local props = { dir = self.dir }
+		-- Calls the correct factory and passes the information
 		factory.create("#rocketfactory", nil, rot, props)
+		-- sets self firing to false
 		self.firing = false
 	end
 
+	-- Checks if attacking to prevent moving while attacking
 	if not attacking then
+		-- Gets position, then resets it using the players inner variables 
 		local p = go.get_position()
 		go.set_position(p + self.dir * speed * dt) 
 
@@ -58,11 +75,13 @@ function update(self, dt)
 			self.knocked_back = false
 		end
 
+		-- Sets to Idle by default 
 		local anim = hash("idle")
 
 		-- TODO: DAMAGED STATE OVERRIDES DIRECTIONS. BY DESIGN AS PLACEHOLDER. 
 		if self.damaged == true then
 			anim = hash("damaged")
+		-- Checks the X and Y directions to determine the animation to play - prioritizes X over Y
 		elseif self.dir.x > 0 then  
 			anim = hash("run_right")
 		elseif self.dir.x < 0 then
@@ -73,9 +92,11 @@ function update(self, dt)
 			anim = hash("run_down")
 		end
 
-		if anim ~= self.current_anim then                          -- [3]
-			msg.post("#sprite", "play_animation", { id = anim })   -- [4]
-			self.current_anim = anim                               -- [5]
+		-- If the anim variable doesn't match the internal variable
+		if anim ~= self.current_anim then
+			-- Sends a message to the sprite component to play the new animation
+			msg.post("#sprite", "play_animation", { id = anim })
+			self.current_anim = anim 
 		end
 
 		-- resets movement vector to 0,0,0 unless player is still being knocked back
@@ -96,10 +117,17 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	-- Checks for attack messages
 	if message_id == hash("play attack") then
-		if not attacking then
+		-- Checks if the player is not already currently attacking or playing the damaged animation
+		if not attacking and self.damage_cooldown == 0 then
+			-- Saves the animation being played currently
 			anim = self.current_anim
+			-- If the player is on Melee weapon
 			if attackMelee then
+				-- Checks which direction the player was facing based on animation 
+				-- Plays the proper attack animation
+				-- Spawns a weapon object with the direction animation which plays the proper animation
 				if anim == hash("run_right") then
 					msg.post(".", "play_animation", {id = hash("melee_right")})
 					local props = { anim = hash("melee_right_sword") }
