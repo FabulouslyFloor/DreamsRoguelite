@@ -151,6 +151,9 @@ function on_message(self, message_id, message, sender)
 					factory.create("#Weaponfactory",nil,nil,props)
 				end
 			else
+				-- Checks which direction the player was facing based on animation 
+				-- Plays the proper attack animation
+				-- Sets self.firing to true so the firing code in update happens
 				if anim == hash("run_right") then
 					msg.post(".", "play_animation", {id = hash("ranged_right")})
 					self.firing = true
@@ -168,19 +171,25 @@ function on_message(self, message_id, message, sender)
 					self.firing = true
 				end
 			end
+			-- Sets attacking to true to stop the player from moving during the attack animation
 			attacking = true
 		end
 	end
+	-- The "play_animation" message sends an "animation_done" message when it finishes playing
 	if message_id == hash("animation_done") then
+		-- Attacking set to false so player can move again
 		attacking = false
+		-- Sets the animation back to what it was when the player attacked
 		msg.post("#sprite", "play_animation", { id = anim })
 	end
+	-- Goes off if the player hits the key to switch weapons
 	if message_id == hash("switch") then
-		print(weaponSwitchTimer)
+		-- Checks that the weapon timer is at 0
 		if weaponSwitchTimer == 0 then
+			-- sets the timer
 			weaponSwitchTimer = 100
+			-- Changes the attack type boolean
 			attackMelee = not attackMelee
-			print("Weapon Switched")
 		end
 	end
 
@@ -219,6 +228,8 @@ end
 function on_input(self, action_id, action)
 	-- if in knockback state then take no user input
 	if not self.knocked_back then
+		-- Recieves input as designated in the game file
+		-- If it is a movement key, it sets the intenal direction of the player
 		if action_id == hash("down") then                        -- [1]
 			self.dir.y = -1
 		elseif action_id == hash("up") then
@@ -227,8 +238,10 @@ function on_input(self, action_id, action)
 			self.dir.x = -1
 		elseif action_id == hash("right") then
 			self.dir.x = 1
+		-- If it is attack, it sends a message to attack to itself
 		elseif action_id == hash("attack") then
 			msg.post(".", "play attack")
+		-- If it is to switch weapons, it sends a message to itself to switch
 		elseif action_id == hash("switch") then
 			msg.post(".", "switch")
 		end
