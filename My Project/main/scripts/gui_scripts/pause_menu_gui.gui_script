@@ -1,13 +1,12 @@
+local current_level
+local paused
+
 function init(self)
-	-- Add initialization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	gui.set_enabled(gui.get_node("menu"), false)
+	paused = false
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
 end
 
 function update(self, dt)
@@ -23,6 +22,8 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+	if action.released and gui.pick_node(gui.get_node("pause"), action.x, action.y) and !paused then
+		msg.post("#gameproxy", "set_time_step", {factor = 0, mode = 1})
 	-- Add input-handling code here. The game object this script is attached to
 	-- must have acquired input focus:
 	--
