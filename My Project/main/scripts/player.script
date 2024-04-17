@@ -20,7 +20,7 @@ function update(self, dt)
 		self.dir = vmath.normalize(self.dir)
 	end
 
-	if not attacking then
+	if not attacking and dt ~= 0 then
 		local p = go.get_position()
 		go.set_position(p + self.dir * speed * dt) 
 
@@ -57,7 +57,7 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("play attack") then
+	if message_id == hash("play attack")  and dt ~= 0 then
 		anim = self.current_anim
 		if attackMelee then
 			if self.dir.x > 0 then  

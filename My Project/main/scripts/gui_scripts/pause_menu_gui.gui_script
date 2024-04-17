@@ -5,7 +5,12 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 	msg.post("#gameproxy", "load")
 	gui.set_enabled(gui.get_node("menu"), false)
+	gui.set_enabled(gui.get_node("background"), false)
 	self.paused = false
+
+	self.pause = gui.get_node("pause")
+	self.continue = gui.get_node("continue")
+	self.quit_to_menu = gui.get_node("quit_to_menu")
 end
 
 function final(self)
@@ -22,27 +27,41 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("proxy_loaded") then
 		msg.post(sender, "enable")
 	end
+	if message_id == hash("opening") then
+		msg.post("Scenes:/controller#loader", "show_opening")
+	end
 end
 
 function on_input(self, action_id, action)
-	if action.released and gui.pick_node(gui.get_node("pause"), action.x, action.y) and self.paused == false then
+	if action.pressed and action_id == hash("touch") and gui.pick_node(gui.get_node("pause"), action.x, action.y) then
+		gui.play_flipbook(self.pause, hash("cloud-button-pushed"))
+
+	elseif action.pressed and action_id == hash("touch") and gui.pick_node(gui.get_node("continue"), action.x, action.y) then
+		gui.play_flipbook(self.continue, hash("menu-button-pushed"))
+		
+	elseif action.pressed and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) then
+		gui.play_flipbook(self.quit_to_menu, hash("menu-button-pushed"))
+
+	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("pause"), action.x, action.y) and self.paused == false then
+		gui.play_flipbook(self.pause, hash("cloud-button-unpushed"))
 		self.paused = true
 		gui.set_enabled(gui.get_node("menu"), true)
+		gui.set_enabled(gui.get_node("background"), true)
+		gui.set_enabled(gui.get_node("pause"), false)
 		msg.post("#gameproxy", "set_time_step", {factor = 0, mode = 1})
-	elseif action.released and gui.pick_node(gui.get_node("pause"), action.x, action.y) and self.paused == true then
+		
+	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("continue"), action.x, action.y) and self.paused == true then
+		gui.play_flipbook(self.continue, hash("menu-button-unpushed"))
 		self.paused = false
 		gui.set_enabled(gui.get_node("menu"), false)
+		gui.set_enabled(gui.get_node("background"), false)
+		gui.set_enabled(gui.get_node("pause"), true)
 		msg.post("#gameproxy", "set_time_step", {factor = 1, mode = 1})
+		
+	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) and self.paused == true then
+		gui.play_flipbook(self.quit_to_menu, hash("menu-button-unpushed"))
+		msg.post("#", "opening")
 	end
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
 end
 
 function on_reload(self)

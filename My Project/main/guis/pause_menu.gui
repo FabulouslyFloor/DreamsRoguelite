@@ -200,7 +200,7 @@ nodes {
 nodes {
   position {
     x: -25.0
-    y: -100.0
+    y: -150.0
     z: 0.0
     w: 1.0
   }
@@ -404,8 +404,8 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 8.0
-    y: 8.0
+    x: 10.0
+    y: 10.0
     z: 1.0
     w: 1.0
   }
@@ -440,7 +440,7 @@ nodes {
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
   clipping_inverted: false
-  alpha: 0.15
+  alpha: 0.45
   template_node_child: false
   size_mode: SIZE_MODE_AUTO
   custom_type: 0
