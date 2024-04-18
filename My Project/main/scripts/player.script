@@ -43,7 +43,6 @@ function update(self, dt)
 	end
 
 
-	if not attacking and dt ~= 0 then
 	-- Checks if the weapon timer is greater than zero and decrements it
 	if weaponSwitchTimer ~= 0 then
 		weaponSwitchTimer = weaponSwitchTimer - 1
@@ -64,7 +63,7 @@ function update(self, dt)
 	end
 
 	-- Checks if attacking to prevent moving while attacking
-	if not attacking then
+	if not attacking and dt ~= 0 then
 		-- Gets position, then resets it using the players inner variables 
 		local p = go.get_position()
 		go.set_position(p + self.dir * speed * dt) 
