@@ -1,10 +1,18 @@
+-- Local variables initialized
+-- timer is for movement
 local timer = 0
+-- Boolean for whether the player is being tracked
+local trackplayer = false
 
 function init(self)
+	-- Sets up internal variables
 	self.dir = vmath.vector3(0, 1, 0)
-	self.speed = 200
+	self.speed = 50
 	self.going = nil
+	self.health = 3 
+	-- Sends a message to get a place for the enemy to walk to
 	msg.post(".","get_new_position")
+	-- Ensures the timer starts at zero when it spawns in
 	timer = 0
 end
 
@@ -15,27 +23,91 @@ function final(self)
 end
 
 function update(self, dt)
-	if timer == 0 then
+
+	-- Ensures that the base animation is always idle
+	local anim = hash("idle")
+
+	-- Checks whether the player is supposed to be chased
+	-- If the player is being chased,
+	if trackplayer then
+		-- The enemy compares it's position to that of the player 
 		local current_position = go.get_position()
-		local diff = self.going - current_position
-		--local diff = go.get_position("/player") - current_position
+		local diff = go.get_position("/Player") - current_position
 		local distance_to_target = vmath.length(diff)
+		-- If the enemy has not reached the player
 		if distance_to_target > 0 then
+			-- Normalizes the direction
 			local direction = vmath.normalize(diff)
 			-- don't overshoot the target by moving too far in a frame
 			local distance_to_move = math.min(distance_to_target, self.speed * dt)
 			-- update with the new position
 			local new_position = current_position + direction * distance_to_move
 			go.set_position(new_position)
+
+			-- Sets the appropriate walking animation
+			if new_position.y > current_position.y then
+				anim = hash("up")
+			elseif new_position.y < current_position.y then
+				anim = hash("down")
+			end
+
+			-- Updates the animation if it has changed
+			if anim ~= self.current_anim then                          -- [3]
+				msg.post("#sprite", "play_animation", { id = anim })   -- [4]
+				self.current_anim = anim                               -- [5]
+			end
+
+		-- If the enemy has reached the player, they are to idle
 		elseif distance_to_target <= 0 then
-			timer = 60
+			anim = hash("idle")
 		end
-	elseif timer == 1 then
-		msg.post(".","get_new_position")
-		timer = timer -1
+	-- If the enemy is not chasing the player
 	else
-		timer = timer - 1
+		-- If the enemy has not reached it's destination and is currently waiting for a moment
+		if timer == 0 then
+			-- Checks the difference between the enemies current position and where they are heading
+			local current_position = go.get_position()
+			local diff = self.going - current_position
+			local distance_to_target = vmath.length(diff)
+			-- If they have not reached the destination yet
+			if distance_to_target > 0 then
+				-- normalizes the direction
+				local direction = vmath.normalize(diff)
+				-- don't overshoot the target by moving too far in a frame
+				local distance_to_move = math.min(distance_to_target, self.speed * dt)
+				-- update with the new position
+				local new_position = current_position + direction * distance_to_move
+				go.set_position(new_position)
+
+				-- Sets the animation based on the y position
+				if self.going.y > current_position.y then
+					anim = hash("up")
+				elseif self.going.y < current_position.y then
+					anim = hash("down")
+				end
+
+				-- Sets the animation if it changed
+				if anim ~= self.current_anim then                          -- [3]
+					msg.post("#sprite", "play_animation", { id = anim })   -- [4]
+					self.current_anim = anim                               -- [5]
+				end
+
+			-- If they have reached the target position, idle for 60 frames
+			elseif distance_to_target <= 0 then
+				anim = hash("idle")
+				timer = 60
+			end
+		-- When the timer reaches 1
+		elseif timer == 1 then
+			-- Sends a message to itself to pick a new position to walk to
+			msg.post(".","get_new_position")
+			timer = timer -1
+		else
+			-- Decrement the timer
+			timer = timer - 1
+		end
 	end
+
 end
 
 function fixed_update(self, dt)
@@ -48,12 +120,45 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	-- When the enemy requests a position to move too
 	if message_id == hash("get_new_position") then
+		-- gets the enemies current position
 		local pos = go.get_position()
-		pos.x = pos.x + math.random(-200,200)
-		pos.y = pos.y + math.random(-200,200)
+		-- Adds a random number to the x and y
+		pos.x = pos.x + math.random(-400,400)
+		pos.y = pos.y + math.random(-400,400)
+		-- Sets this new position to "going" variable
 		self.going = pos
+	-- When the players hitbox collides with the enemy's scanning hitbox
+	elseif message_id == hash("collision_response") and message.own_group == hash("detect") then
+		-- Sets the variable to track the player to true (as if they got to close and are chasing them)
+		if not trackplayer then
+			trackplayer = true
+		end
+	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
+		print("play")
+		damage(self)
+		knockback(self, message.normal)
 	end
+	
+end
+
+function damage(self)
+	-- take away 1 hp
+	print(self.health)
+	self.health = self.health - 1
+	print(self.health)
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+end
+
+function knockback(self, normal)
+	local pos = go.get_position()
+	-- set a pushback direction based on the collision normal
+	local to = pos + normal * 50
+	go.set_position(to)
 end
 
 function on_input(self, action_id, action)
