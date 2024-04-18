@@ -15,6 +15,7 @@ function init(self)
 	self.damaged = false
 	self.knocked_back = false
 	self.knockback_cooldown = 0
+	self.current_location = "outside" -- todo: will be used to help determine what walking sound to use
 end
 
 function final(self)
@@ -72,9 +73,16 @@ function update(self, dt)
 			anim = hash("run_down")
 		end
 
+		if self.dir ~= vmath.vector3() and self.current_anim == hash("idle") then -- if the player is about to start moving
+			sound.play("#walking") -- play walking noises
+		end
+
 		if anim ~= self.current_anim then                          -- [3]
 			msg.post("#sprite", "play_animation", { id = anim })   -- [4]
 			self.current_anim = anim                               -- [5]
+			if anim == hash("idle") then -- used to detect if player is going idle, turns off walking noises
+				sound.stop("#walking")
+			end
 		end
 
 		-- resets movement vector to 0,0,0 unless player is still being knocked back
@@ -152,6 +160,8 @@ end
 
 -- happens when player collides with an object with group 'enemy_body' (todo: if enemies hit in ways other than melee, add group 'enemy_attack')
 function on_damage(self, given_normal)
+	-- play damage sound effect
+	sound.play("#on_hurt")
 	-- take away 1 hp
 	self.health = self.health - 1
 	-- if  hp at 0, kill player

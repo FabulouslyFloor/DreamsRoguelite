@@ -1,43 +1,47 @@
+go.property("local_pos", 0)
+go.property("bool", 0)
+-- draws in values from factory and uses them to set these values
+-- self.local_pos sets enemy to being partially through the movement animation so it's not perfectly centered every time
+-- can be up to 15% off center to the left or right
+-- self.bool randomly sets worm to be facing + moving left or right on initialization
 
--- todo: i think this might need a factory so they aren't all in sync with their 'randomness'
 function init(self)
-	math.randomseed(os.time())
-	bool = math.random(0,1)
-	if bool == 0 then
+	self.speed = 50
+	self.range = 500
+	if self.bool == 0 then
 		self.go_left = false
 		self.dir = vmath.vector3(1,0,0)
 	else
 		self.go_left = true
 		self.dir = vmath.vector3(-1,0,0)
 	end
-	self.speed = 50
-	self.range = 500
-	-- sets enemy to being partially through the movement animation so it's not perfectly centered every time
-	self.local_pos = math.random(-75, 75)
+	-- called to set animation according to established direction
 	update_animation(self)
 end
 
--- WHY WILL THIS NOT GO STRAIGHT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
--- THE COLLISION OBJECT WAS AUTO-APPLYING FUCKIN GRAVITY?????? **AAAAAAAAAAAAAAA**
 function update(self, dt)
 	local pos = go.get_position()
+	-- if set position to appropriate for direction
 	if self.go_left then
 		pos = pos + (self.dir * self.speed * dt)
 		go.set_position(pos)
-		self.local_pos = self.local_pos - 1
+		self.local_pos = self.local_pos - 1 -- [L_P] tracks progress through left-to-right motion; used below
 	else
 		pos = pos + (self.dir * self.speed * dt)
 		go.set_position(pos)
-		self.local_pos = self.local_pos + 1
+		self.local_pos = self.local_pos + 1 -- [L_P] ditto above
 	end
 
+	-- if enemy is at limits of range, positive or negative...
 	if self.local_pos > self.range or self.local_pos < (self.range * -1) then
+		-- toggle go_left and reset direction vector appropriately
 		self.go_left = not self.go_left
 		if self.dir == vmath.vector3(-1,0,0) then
 			self.dir = vmath.vector3(1,0,0)
 		else
 			self.dir = vmath.vector3(-1,0,0)
 		end
+		-- called to update animation for new direction
 		update_animation(self)
 	end
 end
