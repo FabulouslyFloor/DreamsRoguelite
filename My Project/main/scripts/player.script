@@ -32,7 +32,6 @@ end
 function update(self, dt)
 	-- 
 	if self.damage_cooldown > 0 then
-		print(self.damage_cooldown)
 		self.damage_cooldown = self.damage_cooldown - 1
 	elseif self.damaged == true then
 		self.damaged = false

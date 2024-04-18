@@ -37,8 +37,9 @@ function on_message(self, message_id, message, sender)
 		go.delete()
 	-- if the rocket collides with an enemy, it triggers the explosion and deletes the other enemy.
 	elseif message_id == hash("collision_response") then
-		explode(self)
-		go.delete(message.other_id)
+		--explode(self)
+		--go.delete(message.other_id)
+		go.delete()
 	end
 end
 

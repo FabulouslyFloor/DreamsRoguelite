@@ -9,6 +9,7 @@ function init(self)
 	self.dir = vmath.vector3(0, 1, 0)
 	self.speed = 50
 	self.going = nil
+	self.health = 3 
 	-- Sends a message to get a place for the enemy to walk to
 	msg.post(".","get_new_position")
 	-- Ensures the timer starts at zero when it spawns in
@@ -129,12 +130,35 @@ function on_message(self, message_id, message, sender)
 		-- Sets this new position to "going" variable
 		self.going = pos
 	-- When the players hitbox collides with the enemy's scanning hitbox
-	elseif message_id == hash("collision_response") then
+	elseif message_id == hash("collision_response") and message.own_group == hash("detect") then
 		-- Sets the variable to track the player to true (as if they got to close and are chasing them)
 		if not trackplayer then
 			trackplayer = true
 		end
+	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
+		print("play")
+		damage(self)
+		knockback(self, message.normal)
 	end
+	
+end
+
+function damage(self)
+	-- take away 1 hp
+	print(self.health)
+	self.health = self.health - 1
+	print(self.health)
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+end
+
+function knockback(self, normal)
+	local pos = go.get_position()
+	-- set a pushback direction based on the collision normal
+	local to = pos + normal * 50
+	go.set_position(to)
 end
 
 function on_input(self, action_id, action)

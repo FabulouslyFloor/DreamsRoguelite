@@ -1,7 +1,7 @@
 name: "Level"
 instances {
   id: "enemy_test"
-  prototype: "/main/enemy_test.go"
+  prototype: "/main/scripts/enemy_test.go"
   position {
     x: 800.0
     y: 500.0
