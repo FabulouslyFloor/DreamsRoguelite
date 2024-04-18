@@ -42,6 +42,8 @@ function update(self, dt)
 		self.dir = vmath.normalize(self.dir)
 	end
 
+
+	if not attacking and dt ~= 0 then
 	-- Checks if the weapon timer is greater than zero and decrements it
 	if weaponSwitchTimer ~= 0 then
 		weaponSwitchTimer = weaponSwitchTimer - 1
