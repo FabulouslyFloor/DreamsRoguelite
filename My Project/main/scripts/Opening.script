@@ -9,7 +9,7 @@ function on_input(self, action_id, action)
 	--    msg.post(".", "acquire_input_focus")
 	--
 	-- All mapped input bindings will be received.
-	if action_id == hash("space") then
+	if action_id == hash("enter") then
 		msg.post("Scenes:/controller#loader","show_World_Select")
 		print("Space touched")
 	end
