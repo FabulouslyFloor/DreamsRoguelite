@@ -310,6 +310,82 @@ animations {
   flip_horizontal: 0
   flip_vertical: 0
 }
+animations {
+  id: "ranged_up"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "ranged_down"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 1
+}
+animations {
+  id: "ranged_left"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 1
+  flip_vertical: 0
+}
+animations {
+  id: "ranged_right"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0
