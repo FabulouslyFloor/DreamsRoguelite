@@ -78,7 +78,7 @@ function createSentence(self, space)
 
 
 	-- can alter these values later if we want more guaranteed tiles between boss and end room. currently 2 guaranteed.
-	while #sentence > 48 do
+	while #sentence > 20 do
 		if sentence[#sentence-3] == "Boss" then
 			table.remove(sentence, #sentence-4)
 		else

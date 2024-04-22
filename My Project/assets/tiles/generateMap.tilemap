@@ -4,30 +4,30 @@ layers {
   z: 0.0
   is_visible: 1
   cell {
-    x: -48
-    y: -34
-    tile: 0
+    x: -11
+    y: -11
+    tile: 14
     h_flip: 0
     v_flip: 0
     rotate90: 0
   }
   cell {
-    x: 560
-    y: 560
-    tile: 8
+    x: 253
+    y: 272
+    tile: 14
     h_flip: 0
     v_flip: 0
     rotate90: 0
   }
 }
 layers {
-  id: "walls"
-  z: 0.0
+  id: "gym_lines"
+  z: 1.0E-15
   is_visible: 1
 }
 layers {
-  id: "gym_lines"
-  z: 1.0E-15
+  id: "walls"
+  z: 1.0E-13
   is_visible: 1
 }
 material: "/builtins/materials/tile_map.material"

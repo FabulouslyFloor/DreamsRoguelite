@@ -19,7 +19,15 @@ max_tile_count = 1000000
 
 [physics]
 debug = 1
+max_collision_object_count = 100000000
+max_collisions = 10000000
+max_contacts = 10000000
+ray_cast_limit_2d = 1000000
 
 [graphics]
 max_debug_vertices = 10000000
+max_draw_calls = 100000000
+
+[resource]
+max_resources = 100000000
 
