@@ -28,7 +28,7 @@ animations {
     image: "/assets/protagonist/melee/down/meleedownweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -63,7 +63,8 @@ animations {
     image: "/assets/protagonist/melee/side/meleesideweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -98,7 +99,7 @@ animations {
     image: "/assets/protagonist/melee/up/meleeupweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -133,9 +134,257 @@ animations {
     image: "/assets/protagonist/melee/side/meleesideweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 1
+  flip_vertical: 0
+}
+animations {
+  id: "melee_down_effect"
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/down/meleedowneffect_00009.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "melee_right_effect"
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00009.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "melee_left_effect"
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/side/meleesideeffect_00009.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
   playback: PLAYBACK_LOOP_FORWARD
   fps: 12
   flip_horizontal: 1
+  flip_vertical: 0
+}
+animations {
+  id: "melee_up_effect"
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/melee/up/meleeupeffect_00009.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "ranged_up"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "ranged_down"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_v_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 1
+}
+animations {
+  id: "ranged_left"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 1
+  flip_vertical: 0
+}
+animations {
+  id: "ranged_right"
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/ranged/ranged_attack_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
   flip_vertical: 0
 }
 margin: 0

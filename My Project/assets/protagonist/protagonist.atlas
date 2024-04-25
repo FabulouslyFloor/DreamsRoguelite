@@ -397,6 +397,33 @@ animations {
   flip_vertical: 0
 }
 animations {
+  id: "hit"
+  images {
+    image: "/assets/protagonist/hit/get_hit_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_ONCE_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations{
   id: "run_left"
   images {
     image: "/assets/protagonist/run/side/runside_00005.png"
@@ -537,6 +564,33 @@ animations {
   }
   playback: PLAYBACK_LOOP_PINGPONG
   fps: 8
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "hit"
+  images {
+    image: "/assets/protagonist/hit/get_hit_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/protagonist/hit/get_hit_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
   flip_horizontal: 0
   flip_vertical: 0
 }
