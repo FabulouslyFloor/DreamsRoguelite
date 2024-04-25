@@ -34,22 +34,6 @@ images {
   image: "/assets/gui/textures/title.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
-images {
-  image: "/assets/gui/textures/heart.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-}
-images {
-  image: "/assets/gui/textures/menu-button-pushed.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-}
-images {
-  image: "/assets/gui/textures/menu-button-unpushed.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-}
-images {
-  image: "/assets/gui/textures/menu.png"
-  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-}
 margin: 0
 extrude_borders: 2
 inner_padding: 0

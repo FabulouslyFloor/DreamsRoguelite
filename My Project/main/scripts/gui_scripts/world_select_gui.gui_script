@@ -82,16 +82,6 @@ function init(self)
 	self.world2_text = gui.get_node("world2_button/text")
 	self.world3_text = gui.get_node("world3_button/text")
 
-	local to_position1 = gui.get_position(gui.get_node("world1"))
-	to_position1.y = 440
-	gui.animate(self.world1, gui.PROP_POSITION, to_position1, gui.EASING_INOUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
-	local to_position2 = gui.get_position(gui.get_node("world2"))
-	to_position2.y = 440
-	gui.animate(self.world2, gui.PROP_POSITION, to_position2, gui.EASING_INOUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
-	local to_position3 = gui.get_position(gui.get_node("world3"))
-	to_position3.y = 440
-	gui.animate(self.world3, gui.PROP_POSITION, to_position3, gui.EASING_INOUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
-	
 	show_background(self)
 end
 

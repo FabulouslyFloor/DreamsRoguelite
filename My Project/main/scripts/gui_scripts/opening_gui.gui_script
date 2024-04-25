@@ -6,8 +6,6 @@ Controls opening splash screen and start/quit buttons
 
 ]]--
 
-local play_splash = true
-
 local function scene_transition(self)
 	msg.post("Scenes:/controller#loader","show_World_Select") -- open world select scene
 end
@@ -74,18 +72,7 @@ function init(self)
 	self.exit_button = gui.get_node("exit_button")
 	self.game_title = gui.get_node("game_title")
 
-	local to_position = gui.get_position(gui.get_node("game_title"))
-	to_position.y = 510
-	gui.animate(self.game_title, gui.PROP_POSITION, to_position, gui.EASING_INOUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
-
-	if play_splash then
-		show_logo(self)
-	else
-		gui.set_alpha(self.background, 1)
-		gui.set_alpha(self.start_button, 1)
-		gui.set_alpha(self.exit_button, 1)
-		gui.set_alpha(self.game_title, 1)
-	end
+	show_logo(self)
 end
 
 function on_input(self, action_id, action)
@@ -133,6 +120,9 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
 end
 
 function on_reload(self)

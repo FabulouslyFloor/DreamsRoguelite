@@ -1,4 +1,4 @@
-image: "/assets/tiles/tilesource.png"
+image: "/assets/tiles/test.png"
 tile_width: 32
 tile_height: 32
 tile_margin: 0

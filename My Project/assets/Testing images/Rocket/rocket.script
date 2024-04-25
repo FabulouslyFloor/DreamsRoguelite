@@ -1,45 +1,34 @@
--- Sets up the object to accept the direction passed to it
 go.property("dir", vmath.vector3())
 
 function init(self)
-	-- Sets up local variables
 	self.speed = 200 
 	self.life = 2
 end
 
 local function explode(self)
-	-- Sets the life really high so it doesn't trigger again
 	self.life = 1000
-	-- Stops moving
 	go.set_rotation(vmath.quat())
 	self.speed = 0
-	-- Plays the explosion animation
 	sprite.play_flipbook("#sprite", "explosion")       
 end
 
 function update(self, dt)
-	-- Moves itself forward
 	local pos = go.get_position()
 	pos = pos + self.dir * self.speed * dt
 	go.set_position(pos)
 
-	-- Decrement life
 	self.life = self.life - dt
-	-- If life is below zero, trigger explosion
 	if self.life < 0 then
 		explode(self)
 	end
 end
 
 function on_message(self, message_id, message, sender)
-	-- When the explosion animation finishes, it deletes itself
 	if message_id == hash("animation_done") then
 		go.delete()
-	-- if the rocket collides with an enemy, it triggers the explosion and deletes the other enemy.
 	elseif message_id == hash("collision_response") then
-		--explode(self)
-		--go.delete(message.other_id)
-		go.delete()
+		explode(self)
+		go.delete(message.other_id)
 	end
 end
 
