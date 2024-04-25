@@ -274,7 +274,7 @@ embedded_instances {
   "far_z: 1000.0\\n"
   "auto_aspect_ratio: 0\\n"
   "orthographic_projection: 1\\n"
-  "orthographic_zoom: 0.5\\n"
+  "orthographic_zoom: 1.0\\n"
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"

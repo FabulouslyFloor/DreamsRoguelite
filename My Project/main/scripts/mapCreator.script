@@ -341,40 +341,61 @@ function exit(temp_x, temp_y)
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
 			end
 
+			tilemap.set_tile("/level#generateMap", "borders", temp_y+((LENGTH+1)/2), temp_x+((WIDTH+1)/2)+2, 20)
+			
 			if y == ((LENGTH+1)/2)-1 and x == ((WIDTH+1)/2)-1 then
+				
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y-1, temp_x+x, 19)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y-2, temp_x+x, 19)
+
+				--bottom middle
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 29)
+
+				--bottom left
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y-1, temp_x+x, 30)
 			end
 
 			if y == ((LENGTH+1)/2)-1 and x == ((WIDTH+1)/2)+2 then
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y-1, temp_x+x, 19)
+				
+				--top middle
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 39)
+
+				--top left
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y-1, temp_x+x, 10)
 			end
 
 			if y == ((LENGTH+1)/2) and x == ((WIDTH+1)/2) then
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x-1, 19)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y+1, temp_x+x-1, 19)
+
+				--rightside bottom
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 59)
+
+				--bottom right
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x-1, 40)
 			end
 
 			if y == ((LENGTH+1)/2)-2 and x == ((WIDTH+1)/2) then
+				
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
+
+				--leftside bottom
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 49)
 			end
 
 			if y == ((LENGTH+1)/2) and x == ((WIDTH+1)/2)+1 then
+				
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y+1, (temp_x+x)+1, 19)
+				
+				--rightside top
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 59)
 			end
 
 			if y == ((LENGTH+1)/2)-2 and x == ((WIDTH+1)/2)+1 then
+	
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
+
+				--leftside top
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 49)
 			end
 
 		end
