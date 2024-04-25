@@ -1,11 +1,31 @@
 name: "Level"
 instances {
   id: "enemy_test"
-  prototype: "/main/enemy_test.go"
+  prototype: "/main/scripts/enemy_test.go"
   position {
     x: 800.0
     y: 500.0
     z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "MeleeObject"
+  prototype: "/main/MeleeObject.go"
+  position {
+    x: 250.0
+    y: 500.0
+    z: 0.0
   }
   rotation {
     x: 0.0
@@ -157,6 +177,7 @@ embedded_instances {
   "group: \\\"player\\\"\\n"
   "mask: \\\"detect\\\"\\n"
   "mask: \\\"enemy_body\\\"\\n"
+  "mask: \\\"itemrange\\\"\\n"
   "embedded_collision_shape {\\n"
   "  shapes {\\n"
   "    shape_type: TYPE_BOX\\n"

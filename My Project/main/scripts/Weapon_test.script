@@ -1,8 +1,8 @@
+-- Sets up the object to recieve the data from the factory.create call
 go.property("anim", hash(""))
---go.property("id", hash(""))
 
 function init(self)
-	print(self.anim)
+	-- Tells itself to play the right animation 
 	msg.post(".", "play_animation", {id = self.anim})
 end
 
@@ -28,20 +28,23 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	-- When it recieves the animation done message it deletes itself
 	if message_id == hash("animation_done") then
 		go.delete()
 	end
-	if message_id == hash("trigger_response") then
-		if message.own_group == hash("up") and self.anim == hash("melee_up_sword") then
-			go.delete(message.other_id)
-		elseif message.own_group == hash("down") and self.anim == hash("melee_down_sword") then
-			go.delete(message.other_id)
-		elseif message.own_group == hash("left") and self.anim == hash("melee_left_sword") then
-			go.delete(message.other_id)
-		elseif message.own_group == hash("right") and self.anim == hash("melee_right_sword") then
-			go.delete(message.other_id)
-		end
-	end
+	-- When it recieves a collision response from it's trigger hitboxes
+	--if message_id == hash("trigger_response") then
+		-- Checks if the collision is with the proper side of the knife and deletes the other object if it's correct
+		--if message.own_group == hash("up") and self.anim == hash("melee_up_sword") then
+			--go.delete(message.other_id)
+		--elseif message.own_group == hash("down") and self.anim == hash("melee_down_sword") then
+			--go.delete(message.other_id)
+		--elseif message.own_group == hash("left") and self.anim == hash("melee_left_sword") then
+			--go.delete(message.other_id)
+		--elseif message.own_group == hash("right") and self.anim == hash("melee_right_sword") then
+			--go.delete(message.other_id)
+		--end
+	--send
 	
 end
 
