@@ -81,7 +81,7 @@ function update(self, dt)
 
 		-- TODO: DAMAGED STATE OVERRIDES DIRECTIONS. BY DESIGN AS PLACEHOLDER. 
 		if self.damaged == true then
-			anim = hash("damaged")
+			anim = hash("hit")
 		-- Checks the X and Y directions to determine the animation to play - prioritizes X over Y
 		elseif self.dir.x > 0 and dt ~= 0 then  
 			anim = hash("run_right")
