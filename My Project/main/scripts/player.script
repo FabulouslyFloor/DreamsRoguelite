@@ -5,6 +5,7 @@ local attacking = false
 local anim = nil
 -- Melee attack flag
 local attackMelee = true
+local weaponAcquired = false
 -- Timers
 local weaponSwitchTimer = 0
 local attackingTimer = 0
@@ -118,7 +119,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	-- Checks for attack messages
-	if message_id == hash("play attack") then
+	if message_id == hash("play attack") and weaponAcquired then
 		-- Checks if the player is not already currently attacking or playing the damaged animation
 		if not attacking and self.damage_cooldown == 0 then
 			-- Saves the animation being played currently
@@ -244,6 +245,9 @@ function on_input(self, action_id, action)
 		-- If it is to switch weapons, it sends a message to itself to switch
 		elseif action_id == hash("switch") then
 			msg.post(".", "switch")
+		elseif action_id == hash("interact") then
+			weaponAcquired = true
+			msg.post("/MeleeObject#item", "picked_up")
 		end
 	end
 end

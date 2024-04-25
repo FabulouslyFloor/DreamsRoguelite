@@ -1,9 +1,25 @@
+components {
+  id: "item"
+  component: "/main/scripts/item.script"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
 embedded_components {
-  id: "sprite"
+  id: "itembody"
   type: "sprite"
   data: "default_animation: \"melee_left_sword\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "playback_rate: 0.0\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
   "  texture: \"/assets/protagonist/weapons.atlas\"\n"
@@ -12,7 +28,7 @@ embedded_components {
   position {
     x: 0.0
     y: 0.0
-    z: 0.0
+    z: 1.0
   }
   rotation {
     x: 0.0
@@ -27,15 +43,15 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "collisionobject"
+  id: "pickuprange"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
   "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"default\"\n"
-  "mask: \"default\"\n"
+  "group: \"itemrange\"\n"
+  "mask: \"player\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
@@ -73,5 +89,33 @@ embedded_components {
     y: 0.0
     z: 0.0
     w: 1.0
+  }
+}
+embedded_components {
+  id: "E"
+  type: "sprite"
+  data: "default_animation: \"flash\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/assets/Testing images/E.atlas\"\n"
+  "}\n"
+  ""
+  position {
+    x: 10.0
+    y: 0.0
+    z: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 0.1
+    y: 0.1
+    z: 1.0
   }
 }
