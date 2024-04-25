@@ -18,7 +18,7 @@ title = Dreams Roguelike
 max_tile_count = 1000000
 
 [physics]
-debug = 1
+debug = 0
 max_collision_object_count = 100000000
 max_collisions = 10000000
 max_contacts = 10000000
