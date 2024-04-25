@@ -28,7 +28,7 @@ animations {
     image: "/assets/protagonist/melee/down/meleedownweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -63,7 +63,8 @@ animations {
     image: "/assets/protagonist/melee/side/meleesideweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -98,7 +99,7 @@ animations {
     image: "/assets/protagonist/melee/up/meleeupweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -133,7 +134,7 @@ animations {
     image: "/assets/protagonist/melee/side/meleesideweapon_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 1
   flip_vertical: 0

@@ -6,58 +6,59 @@ Controls opening splash screen and start/quit buttons
 
 ]]--
 
-BYPASS_SPLASH = false 		-- turn off display of opening splash screen
+local play_splash = true
 
-local function complete_splash()
-	print("Executing complete_splash")
-	gui.set_enabled(self.start_button, true)
-	gui.set_enabled(self.exit_button, true)
-	msg.post("/controllers#Opening", "splash_complete")
+local function scene_transition(self)
+	msg.post("Scenes:/controller#loader","show_World_Select") -- open world select scene
+end
+
+local function show_title(self)
+	print("Executing show_title")
+	local d = 0
+	local to_color = gui.get_color(gui.get_node("game_title"))
+	to_color.w = 1
+	gui.animate(self.game_title, gui.PROP_COLOR, to_color, gui.EASING_IN, 1, d)
 end
 
 local function show_exit_button(self)
 	print("Executing show_exit_button")
-	local d = 1.5
-
-	local to_color = gui.get_color(self.start_button)
-	
-	gui.animate(self.exit_button, gui.PROP_COLOR, to_color, gui.EASING_IN, .5, d, complete_splash)
-
+	local d = 0
+	local to_color = gui.get_color(gui.get_node("exit_button"))
+	to_color.w = 1
+	gui.animate(self.exit_button, gui.PROP_COLOR, to_color, gui.EASING_IN, 1, d, show_title)
 end
 
 local function show_start_button(self)
 	print("Executing show_start_button")
-	local d = 1.5
-	
-	local to_color = gui.get_color(self.start_button)
-
-	gui.animate(self.start_button, gui.PROP_COLOR, to_color, gui.EASING_IN, .5, d, show_exit_button)
+	local d = 0
+	local to_color = gui.get_color(gui.get_node("start_button"))
+	to_color.w = 1
+	gui.animate(self.start_button, gui.PROP_COLOR, to_color, gui.EASING_IN, 1, d, show_exit_button)
 end
 
 local function show_background(self)
 	print("Executing show_background")
 	local d = .75
-
-	local to_color = gui.get_color(self.background)
-
+	local to_color = gui.get_color(gui.get_node("background"))
+	to_color.w = 1
 	gui.animate(self.background, gui.PROP_COLOR, to_color, gui.EASING_IN, 1, d, show_start_button)
 end
 
 local function hide_logo(self)
 	print("Executing hide_logo")
-	local d = 0.75
+	local d = 2
 
-	gui.animate(self.logo, gui.PROP_COLOR, 0, gui.EASING_IN, 3, d, show_background)
+	gui.animate(self.logo, gui.PROP_COLOR, 0, gui.EASING_OUT, 1, d, show_background)
 
 end
 
 local function show_logo(self)
 	print("Executing show_logo")
 	local d = 1.5 		-- time delay
-
-	local to_color = gui.get_color(self.logo)
-
-	gui.animate(self.logo, gui.PROP_COLOR, to_color, gui.EASING_IN, 1.5, d, hide_logo)
+	-- get the color and change w (alpha) to 1 to get the end color
+	local to_color = gui.get_color(gui.get_node("logo"))
+	to_color.w = 1
+	gui.animate(self.logo, gui.PROP_COLOR, to_color, gui.EASING_IN, 1, d, hide_logo)
 
 end
 
@@ -71,43 +72,49 @@ function init(self)
 	self.background = gui.get_node("background")
 	self.start_button = gui.get_node("start_button")
 	self.exit_button = gui.get_node("exit_button")
+	self.game_title = gui.get_node("game_title")
 
-	-- No clicks during the splash screen!!
-	gui.set_enabled(self.start_button, false)
-	gui.set_enabled(self.exit_button, false)
+	local to_position = gui.get_position(gui.get_node("game_title"))
+	to_position.y = 510
+	gui.animate(self.game_title, gui.PROP_POSITION, to_position, gui.EASING_INOUTQUAD, 2, 0, nil, gui.PLAYBACK_LOOP_PINGPONG)
 
-	-- Bypass the splash screen for debugging
-	if BYPASS_SPLASH == false then
+	if play_splash then
 		show_logo(self)
-	elseif BYPASS_SPLASH == true then
-		msg.post("/controllers#Opening", "splash_complete")
+	else
+		gui.set_alpha(self.background, 1)
+		gui.set_alpha(self.start_button, 1)
+		gui.set_alpha(self.exit_button, 1)
+		gui.set_alpha(self.game_title, 1)
 	end
 end
 
 function on_input(self, action_id, action)
-	-- Continue from here
+	-- Reacts when pressed
 	if action.pressed and gui.pick_node(gui.get_node("start_button"), action.x, action.y) and button_clicked == false then
 		gui.play_flipbook(self.start_button, hash("cloud-button-pushed"))
 	end
 	if action.pressed and gui.pick_node(gui.get_node("exit_button"), action.x, action.y) and button_clicked == false then
-		gui.play_flipbook(self.start_button, hash("cloud-button-pushed"))
+		gui.play_flipbook(self.exit_button, hash("cloud-button-pushed"))
 	end
 
+	-- Reacts when released
 	if action.released and gui.pick_node(gui.get_node("start_button"), action.x, action.y) then
 		gui.play_flipbook(self.start_button, hash("cloud-button-unpushed"))
-
 		if button_clicked == false then
 			button_clicked = true
-			msg.post("Scenes:/controller#loader","show_World_Select") -- open world select scene
+			gui.animate(self.start_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.exit_button, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.game_title, gui.PROP_COLOR, 0, gui.EASING_OUT, .5)
+			gui.animate(self.background, gui.PROP_COLOR, 0, gui.EASING_OUT, .5, .5, scene_transition)
 		end
 	end
 
 	if action.released and gui.pick_node(gui.get_node("exit_button"), action.x, action.y) then
-		gui.play_flipbook(self.start_button, hash("cloud-button-unpushed"))
+		gui.play_flipbook(self.exit_button, hash("cloud-button-unpushed"))
 
 		if button_clicked == false then
 			button_clicked = true
-			msg.post("@system", "exit", {code = 0}) -- exit program
+			sys.exit(0)
 		end
 	end
 	
@@ -126,9 +133,6 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
 end
 
 function on_reload(self)
