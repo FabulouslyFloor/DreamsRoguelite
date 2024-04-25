@@ -338,13 +338,14 @@ function exit(temp_x, temp_y)
 			else
 				local pool = {41,41,41,41,41,42,42,42,42,42,43,43,43,43,43,44,45,45,45,45,45}
 				local tile = pool[math.random(#pool)]
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 11)
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
 			end
 
 			if y == ((LENGTH+1)/2)-1 and x == ((WIDTH+1)/2)-1 then
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y-1, temp_x+x, 19)
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y-2, temp_x+x, 19)
 			end
 
 			if y == ((LENGTH+1)/2)-1 and x == ((WIDTH+1)/2)+2 then
@@ -357,6 +358,7 @@ function exit(temp_x, temp_y)
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x-1, 19)
+				tilemap.set_tile("/level#generateMap", "floor", temp_y+y+1, temp_x+x-1, 19)
 			end
 
 			if y == ((LENGTH+1)/2)-2 and x == ((WIDTH+1)/2) then
@@ -374,7 +376,7 @@ function exit(temp_x, temp_y)
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 19)
 			end
-			
+
 		end
 	end
 end

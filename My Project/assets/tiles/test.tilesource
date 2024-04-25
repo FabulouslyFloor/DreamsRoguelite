@@ -43,12 +43,12 @@ convex_hulls {
 convex_hulls {
   index: 28
   count: 4
-  collision_group: "walls"
+  collision_group: "doors"
 }
 convex_hulls {
   index: 32
   count: 4
-  collision_group: "walls"
+  collision_group: "doors"
 }
 convex_hulls {
   index: 36
@@ -306,6 +306,7 @@ convex_hulls {
   collision_group: ""
 }
 collision_groups: "default"
+collision_groups: "doors"
 collision_groups: "walls"
 animations {
   id: "anim"
