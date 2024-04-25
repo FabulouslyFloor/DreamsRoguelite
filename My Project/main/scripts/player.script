@@ -5,6 +5,7 @@ local attacking = false
 local anim = nil
 -- Melee attack flag
 local attackMelee = true
+local weaponAcquired = false
 -- Timers
 local weaponSwitchTimer = 0
 local attackingTimer = 0
@@ -43,9 +44,7 @@ function update(self, dt)
 	end
 
 
-	if not attacking and dt ~= 0 then
-		-- Checks if the weapon timer is greater than zero and decrements it
-	end
+
 	if weaponSwitchTimer ~= 0 then
 		weaponSwitchTimer = weaponSwitchTimer - 1
 	end
@@ -65,7 +64,7 @@ function update(self, dt)
 	end
 
 	-- Checks if attacking to prevent moving while attacking
-	if not attacking then
+	if not attacking and dt ~= 0 then
 		-- Gets position, then resets it using the players inner variables 
 		local p = go.get_position()
 		go.set_position(p + self.dir * speed * dt) 
@@ -120,7 +119,8 @@ end
 
 function on_message(self, message_id, message, sender)
 	-- Checks for attack messages
-	if message_id == hash("play attack") and dt ~= 0 then
+
+	if message_id == hash("play attack") and weaponAcquired and dt ~= 0 then
 		-- Checks if the player is not already currently attacking or playing the damaged animation
 		if not attacking and self.damage_cooldown == 0 then
 			-- Saves the animation being played currently
@@ -246,6 +246,9 @@ function on_input(self, action_id, action)
 		-- If it is to switch weapons, it sends a message to itself to switch
 		elseif action_id == hash("switch") and dt ~= 0 then
 			msg.post(".", "switch")
+		elseif action_id == hash("interact") then
+			weaponAcquired = true
+			msg.post("/MeleeObject#item", "picked_up")
 		end
 	end
 end
