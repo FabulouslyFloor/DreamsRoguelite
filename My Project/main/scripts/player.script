@@ -205,6 +205,7 @@ function on_message(self, message_id, message, sender)
 
 	-- if message is an attack collision and the player is not in the cooldown state...
 	if message_id == hash("contact_point_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") or message.other_group == hash("enemy_attack") then
+		anim = self.current_anim
 		on_damage(self, message.normal)
 	end
 end
