@@ -22,6 +22,7 @@ function init(self)
 	self.damaged = false
 	self.knocked_back = false
 	self.knockback_cooldown = 0
+	self.current_location = "outside" -- todo: will be used to help determine what walking sound to use
 end
 
 function final(self)
@@ -93,11 +94,18 @@ function update(self, dt)
 			anim = hash("run_down")
 		end
 
+		if self.dir ~= vmath.vector3() and self.current_anim == hash("idle") then -- if the player is about to start moving
+			sound.play("#walking") -- play walking noises
+		end
+
 		-- If the anim variable doesn't match the internal variable
 		if anim ~= self.current_anim then
 			-- Sends a message to the sprite component to play the new animation
 			msg.post("#sprite", "play_animation", { id = anim })
 			self.current_anim = anim 
+			if anim == hash("idle") then -- used to detect if player is going idle, turns off walking noises
+				sound.stop("#walking")
+			end
 		end
 
 		-- resets movement vector to 0,0,0 unless player is still being knocked back
@@ -196,13 +204,15 @@ function on_message(self, message_id, message, sender)
 	end
 
 	-- if message is an attack collision and the player is not in the cooldown state...
-	if message_id == hash("contact_point_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") then
+	if message_id == hash("contact_point_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") or message.other_group == hash("enemy_attack")) then
 		on_damage(self, message.normal)
 	end
 end
 
 -- happens when player collides with an object with group 'enemy_body' (todo: if enemies hit in ways other than melee, add group 'enemy_attack')
 function on_damage(self, given_normal)
+	-- play damage sound effect
+	sound.play("#on_hurt")
 	-- take away 1 hp
 	self.health = self.health - 1
 	-- if  hp at 0, kill player
@@ -224,6 +234,7 @@ function on_death(self)
 	-- removes control from player
 	msg.post(".", "release_input_focus")
 	print("you died!")
+	go.delete()
 	-- TODO: death screen
 end
 
