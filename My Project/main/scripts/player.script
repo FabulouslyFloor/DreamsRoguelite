@@ -153,7 +153,7 @@ function on_message(self, message_id, message, sender)
 	end
 
 	-- if message is an attack collision and the player is not in the cooldown state...
-	if message_id == hash("contact_point_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") then
+	if message_id == hash("contact_point_response") and self.damage_cooldown == 0 and (message.other_group == hash("enemy_body") or message.other_group == hash("enemy_attack")) then
 		on_damage(self, message.normal)
 	end
 end
@@ -172,7 +172,6 @@ function on_damage(self, given_normal)
 		msg.post("Level:/health_gui#player_health", "lost_health")
 		self.damaged = true
 		self.damage_cooldown = 120
-		-- TODO: implement knockback
 		self.knocked_back = true
 		self.dir = given_normal
 		self.knockback_cooldown = 60
@@ -183,6 +182,7 @@ function on_death(self)
 	-- removes control from player
 	msg.post(".", "release_input_focus")
 	print("you died!")
+	go.delete()
 	-- TODO: death screen
 end
 
