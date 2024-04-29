@@ -543,7 +543,7 @@ embedded_instances {
   }
 }
 embedded_instances {
-  id: "enemy_spawner"
+  id: "enemyspawner"
   data: "embedded_components {\n"
   "  id: \"bee_factory\"\n"
   "  type: \"factory\"\n"
