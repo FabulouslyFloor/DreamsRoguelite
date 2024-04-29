@@ -4,9 +4,6 @@ local function continue_playing(self)
 function init(self)
 	msg.post(".", "acquire_input_focus")
 
-	gui.set_enabled(gui.get_node("menu"), false)
-	gui.set_enabled(gui.get_node("background"), false)
-
 	self.continue = gui.get_node("continue")
 	self.quit_to_menu = gui.get_node("quit_to_menu")
 
@@ -24,9 +21,11 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
-	-- Remove this function if not needed
+	print("please")
+	gui.set_alpha(gui.get_node("menu"), 1)
+	gui.set_alpha(gui.get_node("background"), .5)
+	gui.set_enabled(gui.get_node("continue"), true)
+	gui.set_enabled(gui.get_node("quit_to_menu"), true)
 end
 
 function on_input(self, action_id, action)
