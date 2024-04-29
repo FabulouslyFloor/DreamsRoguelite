@@ -10,6 +10,14 @@ local weaponAcquired = false
 local weaponSwitchTimer = 0
 local attackingTimer = 0
 
+function on_death(self)
+	-- removes control from player
+	msg.post(".", "release_input_focus")
+	print("you died!")
+	go.delete()
+	-- TODO: death screen
+end
+
 function init(self)
 	-- Acquires input focus to recieve inputs
 	msg.post(".", "acquire_input_focus")
@@ -229,14 +237,6 @@ function on_damage(self, given_normal)
 		self.dir = given_normal
 		self.knockback_cooldown = 60
 	end
-end
-
-function on_death(self)
-	-- removes control from player
-	msg.post(".", "release_input_focus")
-	print("you died!")
-	go.delete()
-	-- TODO: death screen
 end
 
 function on_input(self, action_id, action)
