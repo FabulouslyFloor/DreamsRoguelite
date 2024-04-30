@@ -37,11 +37,11 @@ function on_input(self, action_id, action)
 
 	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("continue"), action.x, action.y) and self.paused == true then
 		gui.play_flipbook(self.continue, hash("menu-button-unpushed"))
-		self.continue)continue_playing(self)
+		self.continue_playing(self)
 
 	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) and self.paused == true then
 		gui.play_flipbook(self.quit_to_menu, hash("menu-button-unpushed"))
-		msg.post("#", "opening")
+		msg.post("Scenes:/controller#loader", "opening")
 	end
 end
 

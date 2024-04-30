@@ -1,6 +1,3 @@
-local function continue_playing(self)
-	msg.post("Scenes:/controller#loader", "show_Level")
-
 	function init(self)
 		msg.post(".", "acquire_input_focus")
 
@@ -41,7 +38,7 @@ local function continue_playing(self)
 
 		elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) and self.paused == true then
 			gui.play_flipbook(self.quit_to_menu, hash("menu-button-unpushed"))
-			msg.post("#", "opening")
+			msg.post("Scenes:/controller#loader", "show_World_Select")
 		end
 	end
 
