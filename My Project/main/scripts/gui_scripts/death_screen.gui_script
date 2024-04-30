@@ -22,8 +22,8 @@ end
 
 function on_message(self, message_id, message, sender)
 	print("please")
-	gui.set_alpha(gui.get_node("menu"), 1)
-	gui.set_alpha(gui.get_node("background"), .5)
+	gui.set_color(gui.get_node("menu"), 1,1,1,1)
+	gui.set_color(gui.get_node("background"), 0,0,0,.5)
 	gui.set_enabled(gui.get_node("continue"), true)
 	gui.set_enabled(gui.get_node("quit_to_menu"), true)
 end
