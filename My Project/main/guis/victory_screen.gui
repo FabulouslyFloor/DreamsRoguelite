@@ -67,7 +67,7 @@ nodes {
   template_node_child: false
   size_mode: SIZE_MODE_AUTO
   custom_type: 0
-  enabled: true
+  enabled: false
   visible: true
   material: ""
 }
@@ -444,7 +444,7 @@ nodes {
   template_node_child: false
   size_mode: SIZE_MODE_AUTO
   custom_type: 0
-  enabled: true
+  enabled: false
   visible: true
   material: ""
 }

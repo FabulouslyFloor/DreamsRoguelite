@@ -2,6 +2,7 @@ local current_level
 local paused
 
 function init(self)
+	print(msg.url())
 	msg.post(".", "acquire_input_focus")
 	msg.post("#gameproxy", "load")
 	gui.set_enabled(gui.get_node("menu"), false)
@@ -29,6 +30,11 @@ function on_message(self, message_id, message, sender)
 	end
 	if message_id == hash("opening") then
 		msg.post("Scenes:/controller#loader", "show_opening")
+	end
+	if message_id == hash("death_pause") then
+		self.paused = true
+		gui.set_enabled(gui.get_node("pause"), false)
+		msg.post("#gameproxy", "set_time_step", {factor = 0, mode = 1})	
 	end
 end
 

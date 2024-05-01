@@ -1,8 +1,11 @@
 	function init(self)
-		msg.post(".", "acquire_input_focus")
 
 		self.continue = gui.get_node("continue")
 		self.quit_to_menu = gui.get_node("quit_to_menu")
+
+		gui.set_enabled(gui.get_node("menu"), false)
+		gui.set_enabled(gui.get_node("continue"), false)
+		gui.set_enabled(gui.get_node("quit_to_menu"), false)
 
 	end
 
@@ -19,8 +22,8 @@
 
 	function on_message(self, message_id, message, sender)
 		print("please")
-		gui.set_color(gui.get_node("menu"), 1,1,1,1)
-		gui.set_color(gui.get_node("background"), 0,0,0,.5)
+		msg.post(".", "acquire_input_focus")
+		gui.set_enabled(gui.get_node("menu"), true)
 		gui.set_enabled(gui.get_node("continue"), true)
 		gui.set_enabled(gui.get_node("quit_to_menu"), true)
 	end
@@ -32,13 +35,13 @@
 		elseif action.pressed and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) then
 			gui.play_flipbook(self.quit_to_menu, hash("menu-button-pushed"))
 
-		elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("continue"), action.x, action.y) and self.paused == true then
+		elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("continue"), action.x, action.y) then
 			gui.play_flipbook(self.continue, hash("menu-button-unpushed"))
-			self.continue)continue_playing(self)
-
-		elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) and self.paused == true then
-			gui.play_flipbook(self.quit_to_menu, hash("menu-button-unpushed"))
 			msg.post("Scenes:/controller#loader", "show_World_Select")
+
+		elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) then
+			gui.play_flipbook(self.quit_to_menu, hash("menu-button-unpushed"))
+			msg.post("Scenes:/controller#loader", "show_opening")
 		end
 	end
 
