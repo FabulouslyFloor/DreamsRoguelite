@@ -1,4 +1,4 @@
-script: ""
+script: "/main/scripts/gui_scripts/death_screen.gui_script"
 fonts {
   name: "dogica"
   font: "/assets/fonts/dogica.font"
@@ -63,7 +63,7 @@ nodes {
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
   clipping_inverted: false
-  alpha: 0.96
+  alpha: 1.0
   template_node_child: false
   size_mode: SIZE_MODE_AUTO
   custom_type: 0
@@ -440,7 +440,7 @@ nodes {
   clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
   clipping_inverted: false
-  alpha: 0.46
+  alpha: 0.5
   template_node_child: false
   size_mode: SIZE_MODE_AUTO
   custom_type: 0

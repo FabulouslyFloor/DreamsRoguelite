@@ -12,6 +12,7 @@ local attackingTimer = 0
 
 function on_death(self)
 	-- removes control from player
+	msg.post("Level:/death#death_screen", "dead!")
 	msg.post(".", "release_input_focus")
 	print("you died!")
 	go.delete()

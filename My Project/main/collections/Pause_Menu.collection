@@ -3,7 +3,7 @@ scale_along_z: 0
 embedded_instances {
   id: "menu"
   data: "components {\n"
-  "  id: \"pause menu\"\n"
+  "  id: \"pause_menu\"\n"
   "  component: \"/main/guis/pause_menu.gui\"\n"
   "  position {\n"
   "    x: 0.0\n"

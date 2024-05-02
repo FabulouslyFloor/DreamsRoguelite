@@ -67,7 +67,7 @@ nodes {
   template_node_child: false
   size_mode: SIZE_MODE_AUTO
   custom_type: 0
-  enabled: true
+  enabled: false
   visible: true
   material: ""
 }
@@ -356,7 +356,9 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Victory!!"
+  text: "A Winner \n"
+  "\n"
+  "Is You!"
   font: "dogica"
   id: "title"
   xanchor: XANCHOR_NONE
@@ -444,7 +446,7 @@ nodes {
   template_node_child: false
   size_mode: SIZE_MODE_AUTO
   custom_type: 0
-  enabled: true
+  enabled: false
   visible: true
   material: ""
 }

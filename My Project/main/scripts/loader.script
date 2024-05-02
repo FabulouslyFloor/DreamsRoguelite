@@ -11,6 +11,7 @@ end
 
 -- When function loads
 function init(self)
+	print(msg.url())
 	-- Gets focus
 	msg.post(".", "acquire_input_focus") 
 	-- Sets current proxy to nil
