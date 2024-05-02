@@ -1,0 +1,17 @@
+function init(self)
+	self.dir = vmath.vector3(0, -1, 0)
+	self.speed = 400
+end
+
+-- rotation could be handled by animation. ignore for now.
+function update(self, dt)
+	local pos = go.get_position()
+	pos = pos + self.dir * self.speed * dt
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("collision_response") then
+		go.delete()
+	end
+end
