@@ -1,0 +1,48 @@
+function init(self)
+	math.randomseed(os.time())
+	self.health = 50
+	self.attack_cooldown = 240
+	self.damage_cooldown = 20
+	self.currAttk = 0
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- if the cooldown is done, reset the cooldown, pick a new attack, and perform it
+	if self.attack_cooldown == 0 then
+		self.attack_cooldown = 240
+		-- select new attack and go to loop that performs it
+		self.currAttk = math.random(1, 1)
+		print(self.currAttk)
+		if self.currAttk == 1 then
+			woodchip_attack()
+		elseif self.currAttk == 2 then
+			stick_attack()
+		else
+			child_attack()
+		end
+	end
+	-- if not currently attacking then iterate cooldown
+	if self.currAttk == 0 then
+		self.attack_cooldown = self.attack_cooldown - 1
+	end
+	
+end
+
+function woodchip_attack(self)
+	print("making woodchips")
+	factory.create("/slide_boss#woodchip_factory", go.get_position(), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+	factory.create("/slide_boss#woodchip_factory", go.get_position(), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+	factory.create("/slide_boss#woodchip_factory", go.get_position(), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+end
+
+function stick_attack(self)
+end
+
+function child_attack(self)
+end

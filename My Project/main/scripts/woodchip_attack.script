@@ -1,0 +1,24 @@
+go.property("dir", vmath.vector3(0,0,0))
+function init(self)
+	print("made at", go.get_position())
+	self.speed = 400
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+-- rotation could be handled by animation. ignore for now.
+function update(self, dt)
+	local pos = go.get_position()
+	pos = pos + self.dir * self.speed * dt
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("collision_response") then
+		go.delete()
+	end
+end

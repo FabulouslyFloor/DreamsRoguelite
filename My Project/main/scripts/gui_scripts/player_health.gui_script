@@ -1,4 +1,5 @@
 function init(self)
+	-- sets hp counter
 	self.health_tracker = 5
 	self.health_table = {}
 	self.health_table[1] = gui.get_node("heart_1")
@@ -6,43 +7,15 @@ function init(self)
 	self.health_table[3] = gui.get_node("heart_3")
 	self.health_table[4] = gui.get_node("heart_4")
 	self.health_table[5] = gui.get_node("heart_5")
-	--print(msg.url())
-
-end
-
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	--fills a table with all nodes, each of which holds one heart
+	--hp 1 = leftmost heart, hp5 = rightmost heart
 end
 
 function on_message(self, message_id, message, sender)
+	-- while health is greater than zero... 
 	if self.health_tracker > 0 then
-		gui.set_enabled(self.health_table[self.health_tracker], false)
-		self.health_tracker = self.health_tracker - 1
+		gui.set_enabled(self.health_table[self.health_tracker], false) -- disable the current 'largest' heart...
+		self.health_tracker = self.health_tracker - 1 -- and decrement the heart count
 	end
-end
-
-function on_input(self, action_id, action)
-	-- Add input-handling code here. The game object this script is attached to
-	-- must have acquired input focus:
-	--
-	--    msg.post(".", "acquire_input_focus")
-	--
-	-- All mapped input bindings will be received. Mouse and touch input will
-	-- be received regardless of where on the screen it happened.
-	-- Learn more: https://defold.com/manuals/input/
-	-- Remove this function if not needed
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
+	-- if =0 or <0 do nothing, there is no self.health_table below 1
 end

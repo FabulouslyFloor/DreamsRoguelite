@@ -1,9 +1,10 @@
-local speed = 250
-local GRAVITY = 1000
+local speed = 1000
 
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	self.dir = vmath.vector3()
+
+	self.correction = vmath.vector3()
 end
 
 function final(self)
@@ -18,6 +19,8 @@ function update(self, dt)
 	local p = go.get_position()
 	go.set_position(p + self.dir * speed * dt)
 	self.dir = vmath.vector3()
+
+	self.correction = vmath.vector3()
 end
 
 function on_input(self, action_id, action)
@@ -35,4 +38,27 @@ end
 function on_reload(self)
 	-- Add reload-handling code here
 	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Handle collision
+	if message_id == hash("contact_point_response") then
+		-- Get the info needed to move out of collision. We might
+		-- get several contact points back and have to calculate
+		-- how to move out of all of them by accumulating a
+		-- correction vector for this frame:
+		if message.distance > 0 then
+			-- First, project the accumulated correction onto
+			-- the penetration vector
+			local proj = vmath.project(self.correction, message.normal * message.distance)
+			if proj < 1 then
+				-- Only care for projections that does not overshoot.
+				local comp = (message.distance - message.distance * proj) * message.normal
+				-- Apply compensation
+				go.set_position(go.get_position() + comp)
+				-- Accumulate correction done
+				self.correction = self.correction + comp
+			end
+		end
+	end
 end

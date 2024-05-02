@@ -1,28 +1,36 @@
+-- todo: add factory here too (see worm_enemy)
 function init(self)
+	-- seed random object
 	math.randomseed(os.time())
-	self.max_speed = 250
+	self.max_speed = 200
 	self.current_dir = vmath.vector3(0,0,0)
 	self.dir_change_timer = 20
 	self.tracking = false
 	self.current_anim = "left"
+	-- self.track_table is used for idle animation. here initialized with all 8 values false.
 	self.track_table = {}
 	for i = 1,8 do
 		self.track_table[i] = false
 	end
 	self.track_numerator = 0
+	-- the current code moves the flying enemy in a random cycle of the 8 directions, but always in a cycle, going through
+	-- all of them before repeating any. this ensures no 'wandering' occurs. enemies will stay in roughly the place
+	-- you put them.
 	change_dir(self)
 end
 
 function update(self, dt)
 	local pos = go.get_position()
+	-- if not tracking the player, move according to current vector
 	if self.tracking == false then
 		pos = pos + (self.current_dir * self.max_speed / 5 * dt)
 		go.set_position(pos)
+		-- decrement dir_change_timer. if it's time to change directions, call change_dir
 		self.dir_change_timer = self.dir_change_timer - 1
 		if self.dir_change_timer == 0 then
 			change_dir(self)
 		end
-	else
+	else -- if tracking player, move according to vector from track_player
 		dir_go = track_player(self)
 		pos = pos + (dir_go * self.max_speed * dt)
 		go.set_position(pos)
@@ -32,23 +40,25 @@ end
 function change_dir(self)
 	valid_num = false
 	while not valid_num do
-		number = math.random(1, 8) -- 1 ^ 2 ^> 3 > 4>v 5v 6<v 7< 8<^
-		if self.track_table[number] == false then
-			self.track_table[number] = true
-			valid_num = true
-			self.track_numerator = self.track_numerator + 1
+		number = math.random(1, 8) -- generate a random number between 1 and 8 (inclusive)
+		if self.track_table[number] == false then -- if it hasn't been used in this cycle...
+			self.track_table[number] = true -- set the relevant table value to true...
+			valid_num = true -- get ready to exit this loop...
+			self.track_numerator = self.track_numerator + 1 -- and increase self.track_numerator (tracks how many numbers have been used)
 		end
 	end
 
-	if self.track_numerator == 8 then
+	if self.track_numerator == 8 then -- if all 8 values have been used...
 		for i = 1,8 do
-			self.track_table[i] = false
+			self.track_table[i] = false -- reset table to all falses
 		end
-		self.track_numerator = 0
+		self.track_numerator = 0 -- and reset numerator to 0
 	end
 
-	self.current_dir = vmath.vector3(0,0,0)
-		
+	self.current_dir = vmath.vector3(0,0,0) -- set motion vector to nul...
+
+	-- and change x and y accordingly
+	-- numbers:directions are as follows: 1:^ 2:^> 3:> 4:>v 5:v 6:<v 7:< 8:<^
 	if number == 1 or number == 2 or number == 8 then
 		self.current_dir.y = 1
 	elseif number == 4 or number == 5 or number == 6 then
@@ -60,25 +70,30 @@ function change_dir(self)
 	elseif number == 6 or number == 7 or number == 8 then
 		self.current_dir.x = -1
 	end
-	
+
+	-- set animation to right if we're now moving right
 	if self.current_dir.x == 1 and self.current_anim ~= "right" then
 		self.current_anim = "right"
 		sprite.play_flipbook("#sprite", "right")
 	end
-	
+
+	-- set animation to left if we're now moving left
 	if self.current_dir.x == -1 and self.current_anim ~= "left" then
 		self.current_anim = "left"
 		sprite.play_flipbook("#sprite", "left")
 	end
 
+	-- normalize diagonals
 	if vmath.length(self.current_dir) > 1 then
 		self.current_dir = vmath.normalize(self.current_dir)
 	end
-	
+
+	-- reset change_timer 
 	self.dir_change_timer = 60
 end
 
--- todo: add attack animation for when hurts player
+-- todo: add attack animation for when hurts player?
+-- when detects the player, set self.tracking to true and start tracking the player
 function on_message(self, message_id, message, sender)
 	if message_id == hash("collision_response") and message.other_group == hash("player") then
 		track_player(self)
@@ -87,12 +102,13 @@ function on_message(self, message_id, message, sender)
 end
 
 function track_player(self)
-	target_location = go.get_position("Level:/Player#player")
+	target_location = go.get_position("Level:/Player#player") -- get the location of the player object
 	my_location = go.get_position()
-	diff_location = target_location-my_location
-	-- normalize value
+	diff_location = target_location-my_location -- find the difference between the two
+	
+	-- normalize value 
 	if vmath.length_sqr(diff_location) > 1 then
 		diff_location = vmath.normalize(diff_location)
 	end
-	return diff_location
+	return diff_location -- return resulting vector
 end
