@@ -219,7 +219,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"on_hurt\"\n"
   "  type: \"sound\"\n"
-  "  data: \"sound: \\\"/assets/Sounds/630006__trexlasso__walking-through-grass2.ogg\\\"\\n"
+  "  data: \"sound: \\\"/assets/sounds/630006__trexlasso__walking-through-grass2.ogg\\\"\\n"
   "looping: 0\\n"
   "group: \\\"master\\\"\\n"
   "gain: 0.5\\n"
@@ -242,7 +242,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"walking\"\n"
   "  type: \"sound\"\n"
-  "  data: \"sound: \\\"/assets/Sounds/630006__trexlasso__walking-through-grass2.ogg\\\"\\n"
+  "  data: \"sound: \\\"/assets/sounds/630006__trexlasso__walking-through-grass2.ogg\\\"\\n"
   "looping: 1\\n"
   "group: \\\"master\\\"\\n"
   "gain: 2.0\\n"
@@ -524,68 +524,10 @@ embedded_instances {
   "    w: 1.0\n"
   "  }\n"
   "}\n"
-  ""
-  position {
-    x: 682.0
-    y: 475.0
-    z: 1.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 0.33
-    y: 0.33
-    z: 1.0
-  }
-}
-embedded_instances {
-  id: "enemyspawner"
-  data: "embedded_components {\n"
-  "  id: \"bee_factory\"\n"
-  "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/bee_blueprint.go\\\"\\n"
-  "load_dynamically: false\\n"
-  "dynamic_prototype: false\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
   "embedded_components {\n"
-  "  id: \"gremlin_factory\"\n"
+  "  id: \"child_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/enemy_test.go\\\"\\n"
-  "load_dynamically: false\\n"
-  "dynamic_prototype: false\\n"
-  "\"\n"
-  "  position {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "  }\n"
-  "  rotation {\n"
-  "    x: 0.0\n"
-  "    y: 0.0\n"
-  "    z: 0.0\n"
-  "    w: 1.0\n"
-  "  }\n"
-  "}\n"
-  "embedded_components {\n"
-  "  id: \"worm_factory\"\n"
-  "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/worm_blueprint.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/childball.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -603,9 +545,9 @@ embedded_instances {
   "}\n"
   ""
   position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
+    x: 682.0
+    y: 475.0
+    z: 1.0
   }
   rotation {
     x: 0.0
@@ -614,8 +556,8 @@ embedded_instances {
     w: 1.0
   }
   scale3 {
-    x: 1.0
-    y: 1.0
+    x: 0.33
+    y: 0.33
     z: 1.0
   }
 }
