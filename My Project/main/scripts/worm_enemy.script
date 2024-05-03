@@ -8,6 +8,7 @@ go.property("bool", 0)
 function init(self)
 	self.speed = 50
 	self.range = 500
+	self.health = 5
 	if self.bool == 0 then
 		self.go_left = false
 		self.dir = vmath.vector3(1,0,0)

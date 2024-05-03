@@ -1,6 +1,6 @@
 components {
   id: "rocket"
-  component: "/assets/Testing images/Rocket/rocket.script"
+  component: "/main/scripts/rocket.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,12 +16,12 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"rocket\"\n"
+  data: "default_animation: \"ranged_right\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/assets/Testing images/Rocket/Projectiles.atlas\"\n"
+  "  texture: \"/assets/protagonist/weapons.atlas\"\n"
   "}\n"
   ""
   position {
@@ -36,8 +36,8 @@ embedded_components {
     w: 1.0
   }
   scale {
-    x: 3.0
-    y: 3.0
+    x: 0.25
+    y: 0.25
     z: 1.0
   }
 }

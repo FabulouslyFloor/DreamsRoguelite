@@ -7,6 +7,7 @@ function init(self)
 	self.dir_change_timer = 20
 	self.tracking = false
 	self.current_anim = "left"
+	self.health = 1
 	-- self.track_table is used for idle animation. here initialized with all 8 values false.
 	self.track_table = {}
 	for i = 1,8 do
@@ -95,10 +96,34 @@ end
 -- todo: add attack animation for when hurts player?
 -- when detects the player, set self.tracking to true and start tracking the player
 function on_message(self, message_id, message, sender)
-	if message_id == hash("collision_response") and message.other_group == hash("player") then
+	if message_id == hash("collision_response") and message.other_group == hash("player") and message.own_group == hash("detect") then
 		track_player(self)
 		self.tracking = true
+		-- Should only trigger if the collision is between a weapon and the enemy body
+	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
+		-- Calls damage
+		damage(self)
+		-- Calls knockback with special vector from this message
+		knockback(self, message.normal)
 	end
+end
+
+function damage(self)
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+end
+
+function knockback(self, normal)
+	-- Gets current position
+	local pos = go.get_position()
+	-- set a pushback direction based on the collision normal
+	local to = pos + normal * 50
+	-- sets the object to that position 
+	go.set_position(to)
 end
 
 function track_player(self)
