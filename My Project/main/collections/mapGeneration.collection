@@ -274,7 +274,7 @@ embedded_instances {
   "far_z: 1000.0\\n"
   "auto_aspect_ratio: 0\\n"
   "orthographic_projection: 1\\n"
-  "orthographic_zoom: 1.0\\n"
+  "orthographic_zoom: 0.1\\n"
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
@@ -293,6 +293,83 @@ embedded_instances {
     x: 0.0
     y: 0.0
     z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "enemy_spawner"
+  data: "embedded_components {\n"
+  "  id: \"bee_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/main/bee_blueprint.go\\\"\\n"
+  "load_dynamically: false\\n"
+  "dynamic_prototype: false\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"gremlin_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/main/enemy_test.go\\\"\\n"
+  "load_dynamically: false\\n"
+  "dynamic_prototype: false\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  "embedded_components {\n"
+  "  id: \"worm_factory\"\n"
+  "  type: \"factory\"\n"
+  "  data: \"prototype: \\\"/main/worm_blueprint.go\\\"\\n"
+  "load_dynamically: false\\n"
+  "dynamic_prototype: false\\n"
+  "\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 1.0
   }
   rotation {
     x: 0.0

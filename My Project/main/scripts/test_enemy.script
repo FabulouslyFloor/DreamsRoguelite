@@ -5,6 +5,7 @@ local timer = 0
 local trackplayer = false
 
 function init(self)
+	print("generated")
 	-- Sets up internal variables
 	self.dir = vmath.vector3(0, 1, 0)
 	self.speed = 50

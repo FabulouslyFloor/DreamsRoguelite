@@ -77,9 +77,14 @@ function on_message(self, message_id, message, sender)
 					boss(temp_x, temp_y)
 				elseif grid[i][j] == "End" then
 					exit(temp_x, temp_y)
+					factory.create("/enemy_spawner#worm_factory", vmath.vector3(2000, 2000, 0))
 				else
 					classroom(temp_x, temp_y)
 				end
+
+				--factory.create("/enemy_spawner#gremlin_factory", vmath.vector3(temp_y+(LENGTH/2), temp_x+(WIDTH/2), 0))
+				--coords = {temp_y+20, temp_x+20}
+				--msg.post('/enemy_spawner#fill_with_enemies', 'fill', coords)
 				
 				if up then
 					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH/2), temp_x, 7)
