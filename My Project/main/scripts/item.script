@@ -5,8 +5,10 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") and message.enter == true then
 		msg.post("#E", "enable")
+		print("entered")
 	elseif message_id == hash("trigger_response") and message.enter == false then
 		msg.post("#E", "disable")
+		print("left")
 	end
 
 	if message_id == hash("picked_up") then
