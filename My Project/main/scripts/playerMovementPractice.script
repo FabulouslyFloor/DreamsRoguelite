@@ -1,4 +1,4 @@
-local speed = 1000
+local speed = 350
 
 function init(self)
 	msg.post(".", "acquire_input_focus")

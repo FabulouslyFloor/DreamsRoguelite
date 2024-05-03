@@ -1,8 +1,8 @@
 tile_set: "/assets/tiles/test.tilesource"
 layers {
   id: "background"
-  z: 0.0
-  is_visible: 0
+  z: -1.0
+  is_visible: 1
   cell {
     x: -11
     y: -11
@@ -22,8 +22,8 @@ layers {
 }
 layers {
   id: "floor"
-  z: 1.0E-20
-  is_visible: 0
+  z: -0.5
+  is_visible: 1
   cell {
     x: 8
     y: 232

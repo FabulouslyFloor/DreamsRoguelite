@@ -1,8 +1,0 @@
-function init(self)
-end
-
-function on_message(self, message_id, message, sender)
-	y = message[1]
-	x = message[2]
-	factory.create("/enemy_spawner#gremlin_factory", vmath.vector3(y, x, 0))
-end
