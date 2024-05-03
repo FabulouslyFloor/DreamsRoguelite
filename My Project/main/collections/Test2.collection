@@ -60,11 +60,11 @@ instances {
   }
 }
 instances {
-  id: "enemy_test"
-  prototype: "/main/enemy_test.go"
+  id: "worm_blueprint"
+  prototype: "/main/worm_blueprint.go"
   position {
-    x: 0.0
-    y: 0.0
+    x: 500.0
+    y: 200.0
     z: 1.0
   }
   rotation {
@@ -74,8 +74,8 @@ instances {
     w: 1.0
   }
   scale3 {
-    x: 1.0
-    y: 1.0
+    x: 0.5
+    y: 0.5
     z: 1.0
   }
 }
