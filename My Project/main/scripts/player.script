@@ -10,13 +10,34 @@ local weaponAcquired = false
 local weaponSwitchTimer = 0
 local attackingTimer = 0
 
-function on_death(self)
+local function on_death(self)
 	-- removes control from player
-	msg.post("FloorTest:/death#death_screen", "dead!")
+	msg.post("Test2:/death#death_screen", "dead!")
 	msg.post(".", "release_input_focus")
 	print("you died!")
 	go.delete()
 	-- TODO: death screen
+end
+
+-- happens when player collides with an object with group 'enemy_body' (todo: if enemies hit in ways other than melee, add group 'enemy_attack')
+local function on_damage(self, given_normal)
+	-- play damage sound effect
+	sound.play("#on_hurt")
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- send message to gui to remove heart, activate damage cooldown
+	msg.post("Test2:/health_gui#player_health", "lost_health")
+	-- if  hp at 0, kill player
+	if self.health == 0 then
+		on_death(self)
+	else
+		self.damaged = true
+		self.damage_cooldown = 120
+		-- TODO: implement knockback
+		self.knocked_back = true
+		self.dir = given_normal
+		self.knockback_cooldown = 60
+	end
 end
 
 function init(self)
@@ -216,27 +237,6 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("contact_point_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") or message.other_group == hash("enemy_attack") then
 		anim = self.current_anim
 		on_damage(self, message.normal)
-	end
-end
-
--- happens when player collides with an object with group 'enemy_body' (todo: if enemies hit in ways other than melee, add group 'enemy_attack')
-function on_damage(self, given_normal)
-	-- play damage sound effect
-	sound.play("#on_hurt")
-	-- take away 1 hp
-	self.health = self.health - 1
-	-- send message to gui to remove heart, activate damage cooldown
-	msg.post("FloorTest:/health_gui#player_health", "lost_health")
-	-- if  hp at 0, kill player
-	if self.health == 0 then
-		on_death(self)
-	else
-		self.damaged = true
-		self.damage_cooldown = 120
-		-- TODO: implement knockback
-		self.knocked_back = true
-		self.dir = given_normal
-		self.knockback_cooldown = 60
 	end
 end
 
