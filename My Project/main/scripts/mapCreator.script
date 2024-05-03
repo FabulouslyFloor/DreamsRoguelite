@@ -2,23 +2,6 @@ WIDTH = 39
 LENGTH = 39
 
 function init(self)
-	for r = -10, WIDTH*6.5 do
-		for c = -10, LENGTH*7 do
-			local pool = {11,11,11,12,12,12,13,13,13,14,14,14,15,16,17,17,17}
-			local tile = pool[math.random(#pool)]
-			tilemap.set_tile("/level#generateMap", "background", r, c, tile)
-		end
-	end
-
-	--spawn door
-	--[[--
-	tilemap.set_tile("/level#generateMap", "roof", 98, 233, 9, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 98, 234, 8, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 97, 233, 9, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 97, 234, 8, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 99, 233, 9, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 99, 234, 8, tilemap.ROTATE_180)
-	--]]
 end
 
 function on_message(self, message_id, message, sender)
@@ -77,14 +60,9 @@ function on_message(self, message_id, message, sender)
 					boss(temp_x, temp_y)
 				elseif grid[i][j] == "End" then
 					exit(temp_x, temp_y)
-					factory.create("/enemy_spawner#worm_factory", vmath.vector3(2000, 2000, 0))
 				else
 					classroom(temp_x, temp_y)
 				end
-
-				--factory.create("/enemy_spawner#gremlin_factory", vmath.vector3(temp_y+(LENGTH/2), temp_x+(WIDTH/2), 0))
-				--coords = {temp_y+20, temp_x+20}
-				--msg.post('/enemy_spawner#fill_with_enemies', 'fill', coords)
 				
 				if up then
 					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH/2), temp_x, 7)
@@ -124,6 +102,7 @@ function on_message(self, message_id, message, sender)
 
 	--generate roof
 	--paint_roof(roof_rooms)
+	msg.post('/level#fillEnemies', 'generate', grid)
 end
 
 function classroom(temp_x, temp_y)

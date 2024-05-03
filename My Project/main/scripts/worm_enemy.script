@@ -6,6 +6,7 @@ go.property("bool", 0)
 -- self.bool randomly sets worm to be facing + moving left or right on initialization
 
 function init(self)
+	print("Generate")
 	self.speed = 50
 	self.range = 500
 	if self.bool == 0 then

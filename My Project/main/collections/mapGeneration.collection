@@ -36,6 +36,23 @@ embedded_instances {
   "  property_decls {\n"
   "  }\n"
   "}\n"
+  "components {\n"
+  "  id: \"fillEnemies\"\n"
+  "  component: \"/main/scripts/fillEnemies.script\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "  property_decls {\n"
+  "  }\n"
+  "}\n"
   "embedded_components {\n"
   "  id: \"collisionobject\"\n"
   "  type: \"collisionobject\"\n"
@@ -46,6 +63,7 @@ embedded_instances {
   "restitution: 0.5\\n"
   "group: \\\"\\\"\\n"
   "mask: \\\"player\\\"\\n"
+  "mask: \\\"detect\\\"\\n"
   "linear_damping: 0.0\\n"
   "angular_damping: 0.0\\n"
   "locked_rotation: false\\n"
@@ -369,7 +387,7 @@ embedded_instances {
   position {
     x: 0.0
     y: 0.0
-    z: 1.0
+    z: 0.0
   }
   rotation {
     x: 0.0

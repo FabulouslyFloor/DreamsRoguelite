@@ -133,9 +133,9 @@ function on_message(self, message_id, message, sender)
 	-- When the players hitbox collides with the enemy's scanning hitbox
 	elseif message_id == hash("collision_response") and message.own_group == hash("detect") then
 		-- Sets the variable to track the player to true (as if they got to close and are chasing them)
-		if not trackplayer then
-			trackplayer = true
-		end
+		--if not trackplayer then
+			--trackplayer = true
+		--end
 	-- Should only trigger if the collision is between a weapon and the enemy body
 	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
 		-- Calls damage
