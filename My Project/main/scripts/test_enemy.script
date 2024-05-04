@@ -5,7 +5,6 @@ local timer = 0
 local trackplayer = false
 
 local function damage(self)
-	self.damage_timer = 10
 	-- take away 1 hp
 	self.health = self.health - 1
 	print("Damaged!")
@@ -164,6 +163,7 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash("contact_point_response") and message.other_group == hash("up") or message.other_group == hash("left") or message.other_group == hash("right") or message.other_group == hash("down") then
 		if self.damage_timer == 0 then
 			print(self.health)
+			self.damage_timer = 10
 			-- Calls damage
 			damage(self)
 			-- Calls knockback with special vector from this message
