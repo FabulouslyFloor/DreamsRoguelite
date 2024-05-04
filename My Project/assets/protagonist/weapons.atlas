@@ -1,3 +1,7 @@
+images {
+  image: "/assets/protagonist/ranged/rocket.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 animations {
   id: "melee_down_sword"
   images {
