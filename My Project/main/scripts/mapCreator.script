@@ -2,32 +2,15 @@ WIDTH = 39
 LENGTH = 39
 
 function init(self)
-	for r = -10, WIDTH*6.5 do
-		for c = -10, LENGTH*7 do
-			local pool = {11,11,11,12,12,12,13,13,13,14,14,14,15,16,17,17,17}
-			local tile = pool[math.random(#pool)]
-			tilemap.set_tile("/level#generateMap", "background", r, c, tile)
-		end
-	end
-
-	--spawn door
-	--[[--
-	tilemap.set_tile("/level#generateMap", "roof", 98, 233, 9, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 98, 234, 8, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 97, 233, 9, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 97, 234, 8, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 99, 233, 9, tilemap.ROTATE_180)
-	tilemap.set_tile("/level#generateMap", "roof", 99, 234, 8, tilemap.ROTATE_180)
-	--]]
 end
 
 function on_message(self, message_id, message, sender)
-	
+
 	math.randomseed(os.time())
-	
+
 	local grid = message
 	roof_rooms = {}
-	
+
 	for i = 1, #grid do
 		for j = 1, #grid[1] do
 			local room = grid[i][j]
@@ -80,7 +63,7 @@ function on_message(self, message_id, message, sender)
 				else
 					classroom(temp_x, temp_y)
 				end
-				
+
 				if up then
 					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH/2), temp_x, 7)
 					tilemap.set_tile("/level#generateMap", "walls", (temp_y+(LENGTH/2))-1, temp_x, 7)
@@ -119,6 +102,7 @@ function on_message(self, message_id, message, sender)
 
 	--generate roof
 	--paint_roof(roof_rooms)
+	msg.post('/level#fillEnemies', 'generate', grid)
 end
 
 function classroom(temp_x, temp_y)
@@ -342,9 +326,9 @@ function exit(temp_x, temp_y)
 			end
 
 			tilemap.set_tile("/level#generateMap", "borders", temp_y+((LENGTH+1)/2), temp_x+((WIDTH+1)/2)+2, 20)
-			
+
 			if y == ((LENGTH+1)/2)-1 and x == ((WIDTH+1)/2)-1 then
-				
+
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
 
 				--bottom middle
@@ -356,7 +340,7 @@ function exit(temp_x, temp_y)
 
 			if y == ((LENGTH+1)/2)-1 and x == ((WIDTH+1)/2)+2 then
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				
+
 				--top middle
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 39)
 
@@ -375,7 +359,7 @@ function exit(temp_x, temp_y)
 			end
 
 			if y == ((LENGTH+1)/2)-2 and x == ((WIDTH+1)/2) then
-				
+
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
 
 				--leftside bottom
@@ -383,15 +367,15 @@ function exit(temp_x, temp_y)
 			end
 
 			if y == ((LENGTH+1)/2) and x == ((WIDTH+1)/2)+1 then
-				
+
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-				
+
 				--rightside top
 				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 59)
 			end
 
 			if y == ((LENGTH+1)/2)-2 and x == ((WIDTH+1)/2)+1 then
-	
+
 				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
 
 				--leftside top
