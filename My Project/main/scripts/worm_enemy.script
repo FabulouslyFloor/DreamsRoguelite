@@ -5,9 +5,29 @@ go.property("bool", 0)
 -- can be up to 15% off center to the left or right
 -- self.bool randomly sets worm to be facing + moving left or right on initialization
 
+local function damage(self)
+	print("Damaged")
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+end
+
+local function knockback(self, normal)
+	-- Gets current position
+	local pos = go.get_position()
+	-- set a pushback direction based on the collision normal
+	local to = pos + normal * 50
+	-- sets the object to that position 
+	go.set_position(to)
+end
+
 function init(self)
 	self.speed = 50
 	self.range = 500
+	self.health = 5
 	if self.bool == 0 then
 		self.go_left = false
 		self.dir = vmath.vector3(1,0,0)
@@ -53,3 +73,16 @@ function update_animation(self)
 		sprite.play_flipbook("#sprite", "right")
 	end
 end
+
+function on_message(self, message_id, message, sender)
+	-- Should only trigger if the collision is between a weapon and the enemy body
+	if message_id == hash("contact_point_response") and message.other_group == hash("up") or message.other_group == hash("left") or message.other_group == hash("right") or message.other_group == hash("down") then
+	-- Calls damage
+	damage(self)
+	-- Calls knockback with special vector from this message
+	knockback(self, message.normal)
+	end
+end
+
+
+
