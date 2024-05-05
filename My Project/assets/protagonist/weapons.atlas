@@ -400,39 +400,31 @@ animations {
 animations {
   id: "explosion"
   images {
-    image: "/assets/protagonist/ranged/explosion/1(1).png"
+    image: "/assets/protagonist/explosion/explosion_00001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist/ranged/explosion/2(1).png"
+    image: "/assets/protagonist/explosion/explosion_00002.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist/ranged/explosion/3(1).png"
+    image: "/assets/protagonist/explosion/explosion_00003.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist/ranged/explosion/4(1).png"
+    image: "/assets/protagonist/explosion/explosion_00004.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist/ranged/explosion/5(1).png"
+    image: "/assets/protagonist/explosion/explosion_00005.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist/ranged/explosion/6(1).png"
+    image: "/assets/protagonist/explosion/explosion_00006.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   images {
-    image: "/assets/protagonist/ranged/explosion/7.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/assets/protagonist/ranged/explosion/8.png"
-    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
-  }
-  images {
-    image: "/assets/protagonist/ranged/explosion/9.png"
+    image: "/assets/protagonist/explosion/explosion_00007.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_ONCE_FORWARD
