@@ -1,6 +1,6 @@
 name: "Test2"
 instances {
-  id: "MeleeObject"
+  id: "MeleeItem"
   prototype: "/main/MeleeItem.go"
   position {
     x: 200.0
@@ -63,7 +63,7 @@ instances {
   id: "enemy_test"
   prototype: "/main/enemy_test.go"
   position {
-    x: 400.0
+    x: 800.0
     y: 300.0
     z: 1.0
   }
