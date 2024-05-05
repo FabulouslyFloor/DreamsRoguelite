@@ -55,7 +55,7 @@ embedded_components {
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
   "    position {\n"
-  "      x: 6.0\n"
+  "      x: -1.0\n"
   "      y: 0.0\n"
   "      z: 0.0\n"
   "    }\n"
@@ -69,7 +69,7 @@ embedded_components {
   "    count: 3\n"
   "    id: \"\"\n"
   "  }\n"
-  "  data: 17.5\n"
+  "  data: 35.5\n"
   "  data: 10.0\n"
   "  data: 10.0\n"
   "}\n"
@@ -77,6 +77,29 @@ embedded_components {
   "angular_damping: 0.0\n"
   "locked_rotation: false\n"
   "bullet: false\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "explosion"
+  type: "sprite"
+  data: "default_animation: \"explosion\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/assets/protagonist/weapons.atlas\"\n"
+  "}\n"
   ""
   position {
     x: 0.0

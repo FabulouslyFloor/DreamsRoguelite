@@ -1,27 +1,50 @@
  -- Sets up the object to accept the direction passed to it
-go.property("dir", vmath.vector3())
+go.property("dir", hash(""))
 
 function init(self)
 	-- Sets up local variables
-	self.speed = 200 
+	self.speed = 0
 	self.life = 2
+
+	msg.post("#explosion", "disable")
+	
+	if self.dir == hash("up") then
+		msg.post(".", "play_animation", {id = hash("ranged_up")})
+		self.speed = 7
+	elseif self.dir == hash("down") then
+		msg.post(".", "play_animation", {id = hash("ranged_down")})
+		self.speed = -7
+	elseif self.dir == hash("right") then
+		msg.post(".", "play_animation", {id = hash("ranged_right")})
+		self.speed = 7
+	elseif self.dir == hash("left") then
+		msg.post(".", "play_animation", {id = hash("ranged_left")})
+		self.speed = -7
+	end
 end
 
 local function explode(self)
+	msg.post("#sprite", "disable")
+	msg.post("#explosion", "enable")
 	-- Sets the life really high so it doesn't trigger again
 	self.life = 1000
 	-- Stops moving
 	go.set_rotation(vmath.quat())
 	self.speed = 0
 	-- Plays the explosion animation
-	sprite.play_flipbook("#sprite", "explosion")       
+	sprite.play_flipbook("#explosion", "explosion")       
 end
 
 function update(self, dt)
 	-- Moves itself forward
 	local pos = go.get_position()
-	pos = pos + self.dir * self.speed * dt
-	go.set_position(pos)
+	if self.dir == hash("up") or self.dir == hash("down") then
+		pos.y = pos.y + self.speed
+		go.set_position(pos)
+	elseif self.dir == hash("right") or self.dir == hash("left") then
+		pos.x = pos.x + self.speed
+		go.set_position(pos)
+	end
 
 	-- Decrement life
 	self.life = self.life - dt

@@ -201,23 +201,28 @@ function on_message(self, message_id, message, sender)
 				if anim == hash("run_right") and dt ~= 0 then
 					msg.post(".", "play_animation", {id = hash("ranged_right")})
 					--self.firing = true
-					factory.create("#rocketfactory")
+					local props = { dir = hash("right") }
+					factory.create("#rocketfactory",nil,nil,props)
 				elseif anim == hash("run_left") and dt ~= 0 then
 					msg.post(".", "play_animation", {id = hash("ranged_left")})
 					--self.firing = true
-					factory.create("#rocketfactory")
+					local props = { dir = hash("left") }
+					factory.create("#rocketfactory",nil,nil,props)
 				elseif anim == hash("run_up") and dt ~= 0 then
 					msg.post(".", "play_animation", {id = hash("ranged_up")})
 					--self.firing = true
-					factory.create("#rocketfactory")
+					local props = { dir = hash("up") }
+					factory.create("#rocketfactory",nil,nil,props)
 				elseif anim == hash("run_down") and dt ~= 0 then
 					msg.post(".", "play_animation", {id = hash("ranged_down")})
 					--self.firing = true
-					factory.create("#rocketfactory")
+					local props = { dir = hash("down") }
+					factory.create("#rocketfactory",nil,nil,props)
 				elseif anim == hash("idle") and dt ~= 0 then
 					msg.post(".", "play_animation", {id = hash("melee_down")})
 					--self.firing = true
-					factory.create("#rocketfactory")
+					local props = { dir = hash("down") }
+					factory.create("#rocketfactory",nil,nil,props)
 				end
 			end
 			-- Sets attacking to true to stop the player from moving during the attack animation
@@ -289,6 +294,7 @@ function on_input(self, action_id, action)
 				msg.post("/RangedItem#item", "picked_up")
 				if attackMelee then
 					attackMelee = false
+				end
 			end
 		end
 	end
