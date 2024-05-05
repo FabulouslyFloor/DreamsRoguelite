@@ -124,7 +124,7 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "attack_right"
+  id: "throw_right"
   images {
     image: "/assets/enemies/slide/attack/ladder_swing_00001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
@@ -219,7 +219,7 @@ animations {
   flip_vertical: 0
 }
 animations {
-  id: "attack_left"
+  id: "throw_left"
   images {
     image: "/assets/enemies/slide/attack/ladder_swing_00001.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
@@ -344,6 +344,132 @@ animations {
   }
   images {
     image: "/assets/enemies/slide/attack/ladder_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 0
+  flip_vertical: 0
+}
+animations {
+  id: "slap_right"
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00009.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00010.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00011.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00012.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00013.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00014.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  playback: PLAYBACK_LOOP_FORWARD
+  fps: 12
+  flip_horizontal: 1
+  flip_vertical: 0
+}
+animations {
+  id: "slap_left"
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00001.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00002.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00003.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00004.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00005.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00006.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00007.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00008.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00009.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00010.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00011.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00012.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00013.png"
+    sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+  }
+  images {
+    image: "/assets/enemies/slide/slap/slide_slap_00014.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
   playback: PLAYBACK_LOOP_FORWARD
