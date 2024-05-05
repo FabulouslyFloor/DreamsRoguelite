@@ -18,7 +18,7 @@ local function knockback(self, normal)
 end
 
 local function track_player(self)
-	target_location = go.get_position("Test2:/Player#player") -- get the location of the player object
+	target_location = go.get_position("mapGeneration:/Player#player") -- get the location of the player object
 	my_location = go.get_position()
 	diff_location = target_location-my_location -- find the difference between the two
 

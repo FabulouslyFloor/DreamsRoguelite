@@ -31,8 +31,8 @@ function on_message(self, message_id, message, sender)
 		for j = 1, #grid[1] do
 			local room = grid[i][j]
 			if room ~= '' then
-				temp_x = ((((i - 1) * WIDTH) + 1) * 37)
-				temp_y = ((((j - 1) * LENGTH) + 1) * 35.5)
+				temp_x = ((((i - 1) * WIDTH) + 1) * 36.5)
+				temp_y = ((((j - 1) * LENGTH) + 1) * 35.25)
 
 				local chance = math.random(2,5)
 				for i = 1, chance do
