@@ -36,8 +36,8 @@ embedded_components {
     w: 1.0
   }
   scale {
-    x: 0.25
-    y: 0.25
+    x: 0.1
+    y: 0.1
     z: 1.0
   }
 }
@@ -54,7 +54,7 @@ embedded_components {
   ""
   position {
     x: 10.0
-    y: 50.0
+    y: 30.0
     z: 1.0
   }
   rotation {
@@ -97,8 +97,8 @@ embedded_components {
   "    count: 3\n"
   "    id: \"\"\n"
   "  }\n"
-  "  data: 100.0\n"
-  "  data: 50.0\n"
+  "  data: 37.5\n"
+  "  data: 12.5\n"
   "  data: 10.0\n"
   "}\n"
   "linear_damping: 0.0\n"

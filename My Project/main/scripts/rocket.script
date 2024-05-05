@@ -1,4 +1,4 @@
--- Sets up the object to accept the direction passed to it
+ -- Sets up the object to accept the direction passed to it
 go.property("dir", vmath.vector3())
 
 function init(self)
