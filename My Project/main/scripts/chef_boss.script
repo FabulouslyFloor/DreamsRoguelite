@@ -4,6 +4,8 @@ Author(s): Florian Hurlbert
 Date of Last Change: 05/06/2024
 
 Scripts Referenced/Messaged:
+hamburger.script
+Player.script
 
 Script Purpose: Controlling the chef boss object. The chef boss only spawns within the indoors area of the map. It spawns 
 Hamburger projectiles in 2 different attacks. It changes its attack pattern after it has been hit. It also drops a key

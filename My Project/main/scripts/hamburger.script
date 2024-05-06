@@ -1,15 +1,43 @@
+--[[
+Script Name: hamburger.script
+Author(s): Florian Hurlbert
+Date of Last Change: 05/06/2024
+
+Scripts Referenced/Messaged:
+
+Script Purpose: This script controls the projectiles spawned by the chef. It keeps track of two different types of movement
+and spawns them based on passed information. It also handles what they do upon death.
+]]
+
+-- Sets up internal variables which will get filled when the factory call is made.
 go.property("track", false)
 go.property("id", 0)
 
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function sets up all the variables needed for the hamburger to execute.
+]]
 function init(self)
 	self.speed = 150
 end
 
+--[[
+Function update
+Update is native to defold and executes it's code every frame.
+It takes in the self object to access the internal variables of the specific instance it is controlling. dt is the current frame.
+This function handles the movement of the projectiles.
+	It divdes it up between two different types of projectiles and moves them based on that.
+]]
 function update(self, dt)
+	-- If it was spawned with tracking enabled
 	if self.track then
 		-- The enemy compares it's position to that of the player 
 		local current_position = go.get_position()
+		-- Calculates the different between the players position and their position in a vector
 		local diff = go.get_position("/Player") - current_position
+		-- Determines the length of the difference
 		local distance_to_target = vmath.length(diff)
 		-- If the enemy has not reached the player
 		if distance_to_target > 0 then
@@ -21,6 +49,7 @@ function update(self, dt)
 			local new_position = current_position + direction * distance_to_move
 			go.set_position(new_position)
 		end
+	-- If the projectile is not tracking
 	else
 		local pos = go.get_position()
 		if self.id == 1 then
