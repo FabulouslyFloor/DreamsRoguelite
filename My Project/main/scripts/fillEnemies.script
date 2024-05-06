@@ -10,13 +10,14 @@ function init(self)
 			tilemap.set_tile("/level#generateMap", "background", r, c, tile)
 		end
 	end
-
+--[[
 	tilemap.set_tile("/level#generateMap", "roof2", 98, 233, 6)
 	tilemap.set_tile("/level#generateMap", "roof2", 98, 234, 7)
 	tilemap.set_tile("/level#generateMap", "roof2", 97, 233, 6)
 	tilemap.set_tile("/level#generateMap", "roof2", 97, 234, 7)
 	tilemap.set_tile("/level#generateMap", "roof2", 99, 233, 6)
 	tilemap.set_tile("/level#generateMap", "roof2", 99, 234, 7)
+	--]]
 end
 
 function on_message(self, message_id, message, sender)

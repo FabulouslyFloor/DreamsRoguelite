@@ -64,6 +64,9 @@ function on_message(self, message_id, message, sender)
 		--go.delete(message.other_id)
 		go.delete()
 	end
+	if message_id == hash("trigger_response") and message.enter then
+		msg.post(message.other_id, "hit")
+	end
 end
 
 function fixed_update(self, dt)

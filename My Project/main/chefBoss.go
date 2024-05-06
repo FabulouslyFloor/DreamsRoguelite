@@ -1,6 +1,6 @@
 components {
   id: "chef_boss"
-  component: "/main/room_maps/chef_boss.script"
+  component: "/main/scripts/chef_boss.script"
   position {
     x: 0.0
     y: 0.0
@@ -93,6 +93,25 @@ embedded_components {
   id: "hamburgerFactory"
   type: "factory"
   data: "prototype: \"/main/hamburger.go\"\n"
+  "load_dynamically: false\n"
+  "dynamic_prototype: false\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "keyFactory"
+  type: "factory"
+  data: "prototype: \"/main/key_item.go\"\n"
   "load_dynamically: false\n"
   "dynamic_prototype: false\n"
   ""
