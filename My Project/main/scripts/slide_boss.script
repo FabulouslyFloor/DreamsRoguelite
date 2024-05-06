@@ -55,6 +55,7 @@ local function damage(self)
 	self.health = self.health - 1
 	-- if  hp at 0, delete object
 	if self.health == 0 then
+		factory.create("#key_factory")
 		go.delete()
 	end
 
