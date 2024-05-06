@@ -12,6 +12,9 @@ local rangedWeaponAcquired = false
 local weaponSwitchTimer = 0
 local attackingTimer = 0
 
+local roofVisible = true
+local exitDoorsVisible = true
+
 local function on_death(self)
 	-- removes control from player
 	msg.post("mapGeneration:/guis#death_screen", "dead!")
@@ -57,6 +60,8 @@ function init(self)
 	self.current_location = "outside" -- todo: will be used to help determine what walking sound to use
 	self.in_item_range = false
 	self.itemNear = hash("")
+
+	self.keys = 0
 end
 
 function final(self)
@@ -260,6 +265,48 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash("trigger_response") and message.enter == false and message.other_group == hash("itemrange") then
 		self.in_item_range = false
 		self.itemNear = hash("")
+	end
+
+	if message_id == hash("contact_point_response") and message.other_group == hash("walls") then
+		if message.distance > 0 then
+			-- Calculate correction vector to move player out of the wall
+			local correction = message.normal * message.distance
+			-- Apply correction to player's position
+			go.set_position(go.get_position() + correction)
+		end
+	end
+
+	if message_id == hash("contact_point_response") and message.other_group == hash("enemy_walls") then
+		if self.keys == 0 then
+			if message.distance > 0 then
+				-- Calculate correction vector to move player out of the wall
+				local correction = message.normal * message.distance
+				-- Apply correction to player's position
+				go.set_position(go.get_position() + correction)
+			end
+		else
+			if roofVisible then
+				tilemap.set_visible("/level#generateMap", "roof", false)
+				tilemap.set_visible("/level#generateMap", "roof2", false)
+				roofVisible = false
+			end
+		end
+	end
+
+	if message_id == hash("contact_point_response") and message.other_group == hash("exit_doors") then
+		if self.keys < 2 then
+			if message.distance > 0 then
+				-- Calculate correction vector to move player out of the wall
+				local correction = message.normal * message.distance
+				-- Apply correction to player's position
+				go.set_position(go.get_position() + correction)
+			end
+		else
+			if exitDoorsVisible then
+				tilemap.set_visible("/level#generateMap", "locked_doors", false)
+				exitDoorsVisible = false
+			end
+		end
 	end
 end
 
