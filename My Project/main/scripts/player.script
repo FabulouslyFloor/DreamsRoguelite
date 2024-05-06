@@ -62,6 +62,7 @@ function init(self)
 	self.itemNear = hash("")
 
 	self.keys = 0
+	self.key2id = hash("")
 end
 
 function final(self)
@@ -266,9 +267,15 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("trigger_response") and message.enter == true and message.other_group == hash("itemrange") then
 		self.in_item_range = true
 		self.itemNear = message.other_id
+		print(self.itemNear)
 	elseif message_id == hash("trigger_response") and message.enter == false and message.other_group == hash("itemrange") then
 		self.in_item_range = false
 		self.itemNear = hash("")
+	end
+
+	if message_id == hash("key_2_created") then
+		self.key2id = message.key_id
+		print(self.key2id)
 	end
 
 	if message_id == hash("contact_point_response") and message.other_group == hash("walls") then

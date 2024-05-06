@@ -113,7 +113,8 @@ end
 
 function final(self)
 	pos = go.get_position()
-	factory.create("#keyFactory",pos+vmath.vector3(0,-100,.8),nil,nil,1)
+	local id = factory.create("#keyFactory",pos+vmath.vector3(0,-100,.2),nil,nil,1)
+	msg.post("/Player#player", "key_2_created", {key_id = id})
 end
 
 function fixed_update(self, dt)
