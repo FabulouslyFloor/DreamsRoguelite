@@ -242,7 +242,7 @@ function on_message(self, message_id, message, sender)
 		msg.post("#sprite", "play_animation", { id = anim })
 	end
 	-- Goes off if the player hits the key to switch weapons
-	if message_id == hash("switch") then
+	if message_id == hash("switch") and rangedWeaponAcquired == true then
 		-- Checks that the weapon timer is at 0
 		if weaponSwitchTimer == 0 then
 			-- sets the timer
