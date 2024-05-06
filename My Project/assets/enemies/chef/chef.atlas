@@ -123,7 +123,7 @@ animations {
     image: "/assets/enemies/chef/throw/chef_throw_00015.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0
@@ -230,7 +230,7 @@ animations {
     image: "/assets/enemies/chef/spray/chef_spray_00025.png"
     sprite_trim_mode: SPRITE_TRIM_MODE_OFF
   }
-  playback: PLAYBACK_LOOP_FORWARD
+  playback: PLAYBACK_ONCE_FORWARD
   fps: 12
   flip_horizontal: 0
   flip_vertical: 0

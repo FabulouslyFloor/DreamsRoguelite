@@ -1,6 +1,6 @@
 components {
-  id: "rocket"
-  component: "/main/scripts/rocket.script"
+  id: "chef_boss"
+  component: "/main/room_maps/chef_boss.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,12 +16,12 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"ranged_right\"\n"
+  data: "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   "textures {\n"
   "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/assets/protagonist/weapons.atlas\"\n"
+  "  texture: \"/assets/enemies/chef/chef.atlas\"\n"
   "}\n"
   ""
   position {
@@ -35,27 +35,26 @@ embedded_components {
     z: 0.0
     w: 1.0
   }
-  scale {
-    x: 0.15
-    y: 0.15
-    z: 1.0
-  }
 }
 embedded_components {
   id: "collisionobject"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
-  "type: COLLISION_OBJECT_TYPE_KINEMATIC\n"
+  "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"rockets\"\n"
-  "mask: \"enemy_body\"\n"
+  "group: \"enemy_body\"\n"
+  "mask: \"down\"\n"
+  "mask: \"left\"\n"
+  "mask: \"right\"\n"
+  "mask: \"up\"\n"
+  "mask: \"rockets\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"
   "    position {\n"
-  "      x: -1.0\n"
+  "      x: 0.0\n"
   "      y: 0.0\n"
   "      z: 0.0\n"
   "    }\n"
@@ -69,8 +68,8 @@ embedded_components {
   "    count: 3\n"
   "    id: \"\"\n"
   "  }\n"
-  "  data: 35.5\n"
-  "  data: 10.0\n"
+  "  data: 350.0\n"
+  "  data: 250.0\n"
   "  data: 10.0\n"
   "}\n"
   "linear_damping: 0.0\n"
@@ -91,15 +90,11 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "explosion"
-  type: "sprite"
-  data: "default_animation: \"explosion\"\n"
-  "material: \"/builtins/materials/sprite.material\"\n"
-  "blend_mode: BLEND_MODE_ALPHA\n"
-  "textures {\n"
-  "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/assets/protagonist/weapons.atlas\"\n"
-  "}\n"
+  id: "hamburgerFactory"
+  type: "factory"
+  data: "prototype: \"/main/hamburger.go\"\n"
+  "load_dynamically: false\n"
+  "dynamic_prototype: false\n"
   ""
   position {
     x: 0.0
@@ -111,10 +106,5 @@ embedded_components {
     y: 0.0
     z: 0.0
     w: 1.0
-  }
-  scale {
-    x: 0.1
-    y: 0.1
-    z: 1.0
   }
 }
