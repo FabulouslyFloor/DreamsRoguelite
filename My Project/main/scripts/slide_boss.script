@@ -1,15 +1,79 @@
-function init(self)
-	math.randomseed(os.time())
-	self.health = 50
-	self.attack_cooldown = 240
-	self.damage_cooldown = 20
+local function woodchip_attack_pt1(self)
+	-- perform rearing-up animation
+	msg.post(".", "play_animation",{id = hash("slap_left")})
+	-- on conclusion... see woodchip_attack_pt2
+end
+
+local function woodchip_attack_pt2(self)
+	print("woodchip time")
+	factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+	factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+	factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+	self.currAttk = 0
+	-- return to idle
+	msg.post(".", "play_animation",{id = hash("idle")})
+	-- and make woodchips
+end
+
+local function stick_attack_pt1(self)
+	print("ladder time")
+	-- determine if L or R
+	--self.swingside = math.random(1,2)
+	-- play beginning-attack animation
+	if self.swingside == 1 then
+		msg.post(".", "play_animation",{id = hash("throw_left")})
+	else
+		msg.post(".", "play_animation",{id = hash("throw_right")})
+	end
+	-- on conclusion... see stick_attack_pt2
+	-- i think this needs. to be fucked with in like 9 different ways to make it work.
+end
+
+local function stick_attack_pt2(self)
+	if self.swingside == 1 then
+		factory.create("#ladder_factory_l", (go.get_position()+vmath.vector3(-60,-60,0)))
+	else
+		factory.create("#ladder_factory_r")
+	end
+	-- return to idle
+	msg.post(".", "play_animation",{id = hash("idle")})
+	-- and spawn ladder, to attack and then delete itself (TODO: ladder)
 	self.currAttk = 0
 end
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+local function child_attack(self)
+	print("bowling time")
+	-- don't play anything
+	-- spawn child, have its opacity fade in
+	-- make it stay in place for a second and then get bowled idiot
+	factory.create("#child_factory", (go.get_position()+vmath.vector3(-70,-45,0)), nil, nil, .1)
+	self.currAttk = 0
+end
+
+local function damage(self)
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+
+	if self.hurt == false then
+		self.hurt = true
+	end
+end
+
+-- TODO: move from side to side???
+-- TODO: stick attack AAAAAA
+-- TODO: once all that is.. there.. get debugging idiot
+
+function init(self)
+	math.randomseed(os.time())
+	self.health = 15
+	self.attack_cooldown = 240
+	self.damage_cooldown = 20
+	self.currAttk = 0
+	self.swingside = 1
 end
 
 function update(self, dt)
@@ -17,56 +81,35 @@ function update(self, dt)
 	if self.attack_cooldown == 0 then
 		self.attack_cooldown = 240
 		-- select new attack and go to loop that performs it
-		self.currAttk = math.random(1, 3)
+		--self.currAttk = math.random(1, 3)
+		self.currAttk = math.random(1,2)
 		print(self.currAttk)
 		if self.currAttk == 1 then
-			woodchip_attack(self)
+			woodchip_attack_pt1(self)
 		elseif self.currAttk == 2 then
-			stick_attack(self)
-		else
 			child_attack(self)
+		else
+			stick_attack_pt1(self)
 		end
 	end
 	-- if not currently attacking then iterate cooldown
 	if self.currAttk == 0 then
 		self.attack_cooldown = self.attack_cooldown - 1
 	end
-	
 end
 
-function woodchip_attack(self)
-	-- TODO: perform rearing-up animation
-	-- on conclusion...
-	-- return to idle
-	-- and make woodchips
-	print("woodchip time")
-	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
-	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
-	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
-	self.currAttk = 0
+function on_message(self, message_id, message, sender)
+	if message_id == hash("animation_done") then
+		if self.currAttk == 1 then
+			woodchip_attack_pt2(self)
+		elseif self.currAttk == 2 then
+			stick_attack_pt2(self)
+		else
+			child_attack(self)
+		end
+	elseif message_id == hash("trigger_response") then
+		print("hit")
+		damage(self)
+	end 
 end
 
-function stick_attack(self)
-	print("ladder time")
-	-- determine if L or R
-	local side = math.random(1,2)
-	-- TODO: play beginning-attack animation
-	-- on conclusion...
-	-- return to idle
-	-- and spawn ladder, to attack and then delete itself
-	if side == 1 then
-		factory.create("/slide_boss#ladder_factory_l", nil, nil, nil, 1.2)
-	else
-		factory.create("/slide_boss#ladder_factory_r")
-	end
-	self.currAttk = 0
-end
-
-function child_attack(self)
-	print("bowling time")
-	-- TODO: play... something idk
-	-- spawn child
-	-- make it stay in place for a second and then get bowled idiot
-	factory.create("/slide_boss#child_factory", (go.get_position()+vmath.vector3(-70,-90,0)), nil, nil, .1)
-	self.currAttk = 0
-end

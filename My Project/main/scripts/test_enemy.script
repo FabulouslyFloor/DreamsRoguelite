@@ -160,8 +160,6 @@ function on_message(self, message_id, message, sender)
 		end
 	-- Should only trigger if the collision is between a weapon and the enemy body
 	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
-		-- Calls damage
-		--damage(self)
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
 

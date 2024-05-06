@@ -1,5 +1,6 @@
 -- upon initalizing this map, load in enemies
-loadEnemies = true
+loadEnemies = false
+loadBoss = true
 function init(self)
 	if loadEnemies then
 		math.randomseed(os.time())
@@ -22,5 +23,8 @@ function init(self)
 		factory.create("/enemy_spawner#gremlin_factory", vmath.vector3(450, 450, 1))
 
 		factory.create("/enemy_spawner#bee_factory", vmath.vector3(700, 200, 1), nil, nil, .1)
+	end
+	if loadBoss then
+		factory.create("/enemy_spawner#slidefactory", vmath.vector3(682, 475, 1), nil, nil, .33)
 	end
 end
