@@ -24,7 +24,7 @@ instances {
   prototype: "/main/Player.go"
   position {
     x: 100.0
-    y: 500.0
+    y: 600.0
     z: 1.0
   }
   rotation {
@@ -60,12 +60,12 @@ instances {
   }
 }
 instances {
-  id: "enemy_test"
-  prototype: "/main/enemy_test.go"
+  id: "chefBoss"
+  prototype: "/main/chefBoss.go"
   position {
     x: 800.0
-    y: 300.0
-    z: 1.0
+    y: 700.0
+    z: 0.1
   }
   rotation {
     x: 0.0
@@ -74,8 +74,8 @@ instances {
     w: 1.0
   }
   scale3 {
-    x: 1.0
-    y: 1.0
+    x: 0.25
+    y: 0.25
     z: 1.0
   }
 }
