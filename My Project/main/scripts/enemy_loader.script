@@ -1,5 +1,5 @@
 -- upon initalizing this map, load in enemies
-loadEnemies = false
+loadEnemies = true
 function init(self)
 	if loadEnemies then
 		math.randomseed(os.time())

@@ -1,6 +1,6 @@
 components {
   id: "chef_boss"
-  component: "/main/room_maps/chef_boss.script"
+  component: "/main/scripts/chef_boss.script"
   position {
     x: 0.0
     y: 0.0

@@ -32,6 +32,9 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("animation_done") then
 		go.delete()
 	end
+	if message_id == hash("trigger_response") and message.enter then
+		msg.post(message.other_id, "hit")
+	end
 	-- When it recieves a collision response from it's trigger hitboxes
 	--if message_id == hash("trigger_response") then
 		-- Checks if the collision is with the proper side of the knife and deletes the other object if it's correct

@@ -1,5 +1,5 @@
 [bootstrap]
-main_collection = /main/collections/mapGeneration.collectionc
+main_collection = /main/collections/Test2.collectionc
 
 [script]
 shared_state = 1
