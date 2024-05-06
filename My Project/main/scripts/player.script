@@ -15,6 +15,10 @@ local attackingTimer = 0
 local roofVisible = true
 local exitDoorsVisible = true
 
+local function on_victory(self)
+	msg.post("mapGeneration:/guis#victory_screen", "victory!")
+	go.delete()
+
 local function on_death(self)
 	-- removes control from player
 	msg.post("mapGeneration:/guis#death_screen", "dead!")
@@ -167,6 +171,12 @@ end
 function on_message(self, message_id, message, sender)
 	-- Checks for attack messages
 
+	if message_id == hash("away") and dt -= 0 then
+		msg.post(".", "release_input_focus")
+		msg.post(".", "play_animation", {id = hash("away")})
+		local ypos = go.get(".", "position.y") + 1000
+		go.animate(".", "position.y", go.PLAYBACK_ONCE_FORWARD, ypos, go.EASING_INELASTIC, 3, on_victory(self))
+	
 	if message_id == hash("play attack") and weaponAcquired and dt ~= 0 then
 		-- Checks if the player is not already currently attacking or playing the damaged animation
 		if not attacking and self.damage_cooldown == 0 then
