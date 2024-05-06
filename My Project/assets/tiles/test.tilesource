@@ -33,22 +33,22 @@ convex_hulls {
 convex_hulls {
   index: 20
   count: 4
-  collision_group: ""
+  collision_group: "enemy_walls"
 }
 convex_hulls {
   index: 24
   count: 4
-  collision_group: ""
+  collision_group: "enemy_walls"
 }
 convex_hulls {
   index: 28
   count: 4
-  collision_group: "doors"
+  collision_group: "exit_doors"
 }
 convex_hulls {
   index: 32
   count: 4
-  collision_group: "doors"
+  collision_group: "exit_doors"
 }
 convex_hulls {
   index: 36
@@ -306,7 +306,8 @@ convex_hulls {
   collision_group: ""
 }
 collision_groups: "default"
-collision_groups: "doors"
+collision_groups: "enemy_walls"
+collision_groups: "exit_doors"
 collision_groups: "walls"
 animations {
   id: "anim"

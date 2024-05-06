@@ -5,29 +5,9 @@ go.property("bool", 0)
 -- can be up to 15% off center to the left or right
 -- self.bool randomly sets worm to be facing + moving left or right on initialization
 
-local function damage(self)
-	print("Damaged")
-	-- take away 1 hp
-	self.health = self.health - 1
-	-- if  hp at 0, delete object
-	if self.health == 0 then
-		go.delete()
-	end
-end
-
-local function knockback(self, normal)
-	-- Gets current position
-	local pos = go.get_position()
-	-- set a pushback direction based on the collision normal
-	local to = pos + normal * 50
-	-- sets the object to that position 
-	go.set_position(to)
-end
-
 function init(self)
 	self.speed = 50
 	self.range = 500
-	self.health = 5
 	if self.bool == 0 then
 		self.go_left = false
 		self.dir = vmath.vector3(1,0,0)
@@ -35,34 +15,50 @@ function init(self)
 		self.go_left = true
 		self.dir = vmath.vector3(-1,0,0)
 	end
+	self.knockbacked = false
+	self.kbtimer = 0
 	-- called to set animation according to established direction
 	update_animation(self)
 end
 
 function update(self, dt)
-	local pos = go.get_position()
-	-- if set position to appropriate for direction
-	if self.go_left then
-		pos = pos + (self.dir * self.speed * dt)
-		go.set_position(pos)
-		self.local_pos = self.local_pos - 1 -- [L_P] tracks progress through left-to-right motion; used below
-	else
-		pos = pos + (self.dir * self.speed * dt)
-		go.set_position(pos)
-		self.local_pos = self.local_pos + 1 -- [L_P] ditto above
-	end
-
-	-- if enemy is at limits of range, positive or negative...
-	if self.local_pos > self.range or self.local_pos < (self.range * -1) then
-		-- toggle go_left and reset direction vector appropriately
-		self.go_left = not self.go_left
-		if self.dir == vmath.vector3(-1,0,0) then
-			self.dir = vmath.vector3(1,0,0)
-		else
-			self.dir = vmath.vector3(-1,0,0)
+	if self.knockbacked then
+		local current_position = go.get_position()
+		go.set_position(current_position + self.dir * self.speed * dt) 
+		self.kbtimer = self.kbtimer - 1
+		if self.kbtimer == 0 then
+			self.knockbacked = false
+			if self.go_left then
+				self.dir = vmath.vector3(-1,0,0)
+			else
+				self.dir = vmath.vector3(1,0,0)
+			end
 		end
-		-- called to update animation for new direction
-		update_animation(self)
+	else 
+		local pos = go.get_position()
+		-- if set position to appropriate for direction
+		if self.go_left then
+			pos = pos + (self.dir * self.speed * dt)
+			go.set_position(pos)
+			self.local_pos = self.local_pos - 1 -- [L_P] tracks progress through left-to-right motion; used below
+		else
+			pos = pos + (self.dir * self.speed * dt)
+			go.set_position(pos)
+			self.local_pos = self.local_pos + 1 -- [L_P] ditto above
+		end
+
+		-- if enemy is at limits of range, positive or negative...
+		if self.local_pos > self.range or self.local_pos < (self.range * -1) then
+			-- toggle go_left and reset direction vector appropriately
+			self.go_left = not self.go_left
+			if self.dir == vmath.vector3(-1,0,0) then
+				self.dir = vmath.vector3(1,0,0)
+			else
+				self.dir = vmath.vector3(-1,0,0)
+			end
+			-- called to update animation for new direction
+			update_animation(self)
+		end
 	end
 end
 
@@ -75,14 +71,20 @@ function update_animation(self)
 end
 
 function on_message(self, message_id, message, sender)
-	-- Should only trigger if the collision is between a weapon and the enemy body
-	if message_id == hash("contact_point_response") and message.other_group == hash("up") or message.other_group == hash("left") or message.other_group == hash("right") or message.other_group == hash("down") then
-	-- Calls damage
-	damage(self)
-	-- Calls knockback with special vector from this message
-	knockback(self, message.normal)
+	if message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
+		-- Calls damage; TODO: currently not implemented, has only one hp
+		-- damage(self)
+		-- Calls knockback with special vector from this message
+		knockback(self, message.normal)
 	end
 end
 
-
-
+function knockback(self, normal)
+	print(normal)
+	-- sets knockback state
+	self.knockbacked = true
+	-- Gets direction vector from intersection and sets the direction to it
+	self.dir = normal
+	-- sets knockback timer to appropriate length
+	self.kbtimer = 45
+end
