@@ -238,34 +238,6 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "sprite1"
-  type: "sprite"
-  data: "default_animation: \"melee_down_effect\"\n"
-  "material: \"/builtins/materials/sprite.material\"\n"
-  "blend_mode: BLEND_MODE_ALPHA\n"
-  "textures {\n"
-  "  sampler: \"texture_sampler\"\n"
-  "  texture: \"/assets/protagonist/weapons.atlas\"\n"
-  "}\n"
-  ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale {
-    x: 0.25
-    y: 0.25
-    z: 1.0
-  }
-}
-embedded_components {
   id: "downcollisiontrigger"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
@@ -448,25 +420,6 @@ embedded_components {
   "angular_damping: 0.0\n"
   "locked_rotation: false\n"
   "bullet: false\n"
-  ""
-  position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-}
-embedded_components {
-  id: "slashFactory"
-  type: "factory"
-  data: "prototype: \"/assets/protagonist/melee_slash.go\"\n"
-  "load_dynamically: false\n"
-  "dynamic_prototype: false\n"
   ""
   position {
     x: 0.0
