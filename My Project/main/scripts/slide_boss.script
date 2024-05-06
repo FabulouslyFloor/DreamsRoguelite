@@ -1,5 +1,6 @@
 local function woodchip_attack_pt1(self)
 	-- perform rearing-up animation
+	-- hi
 	msg.post(".", "play_animation",{id = hash("slap_left")})
 	-- on conclusion... see woodchip_attack_pt2
 end
