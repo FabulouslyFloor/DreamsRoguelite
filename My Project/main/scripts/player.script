@@ -336,10 +336,12 @@ function on_input(self, action_id, action)
 		elseif action_id == hash("interact") and self.in_item_range then
 			weaponAcquired = true
 			if self.itemNear == hash("/MeleeItem") and meleeWeaponAcquired == false then
+				self.itemNear = hash("")
 				print("Knife!")
 				meleeWeaponAcquired = true
 				msg.post("/MeleeItem#item", "picked_up")
 			elseif self.itemNear == hash("/RangedItem") and rangedWeaponAcquired == false then
+				self.itemNear = hash("")
 				print("Rockets!")
 				rangedWeaponAcquired = true
 				msg.post("/RangedItem#item", "picked_up")

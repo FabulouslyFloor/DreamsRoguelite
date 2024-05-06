@@ -18,7 +18,7 @@ end
 function init(self)
 	math.randomseed(os.time())
 	self.hurt = false 
-	self.health = 20
+	self.health = 3
 	self.track_attack = false
 	self.first = false
 	self.attack_timer = 50
@@ -100,14 +100,6 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash("spawn_spray5") then
 		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-50,-5,.8)), nil, { track = false, id = 5 })
 		self.spray_timer = -1
-	elseif message_id == hash("spawn_spray6") then
-		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-50,-5,.8)), nil, { track = false, id = 5 })
-	elseif message_id == hash("spawn_spray7") then
-		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-45,-5,.8)), nil, { track = false, id = 4 })
-	elseif message_id == hash("spawn_spray8") then
-		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-40,-5,.8)), nil, { track = false, id = 3 })
-	elseif message_id == hash("spawn_spray9") then
-		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-35,-5,.8)), nil, { track = false, id = 2 })
 	end
 
 	if message_id == hash("placeChef") then
@@ -120,9 +112,8 @@ function on_message(self, message_id, message, sender)
 end
 
 function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	pos = go.get_position()
+	factory.create("#keyFactory",pos+vmath.vector3(0,-100,.8),nil,nil,1)
 end
 
 function fixed_update(self, dt)
