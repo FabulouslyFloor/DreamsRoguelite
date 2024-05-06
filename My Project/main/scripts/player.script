@@ -64,7 +64,7 @@ function init(self)
 	self.itemNear = hash("")
 
 	self.keys = 0
-	self.key2id = hash("")
+	self.key2id = hash("nothing")
 end
 
 function final(self)
@@ -361,7 +361,7 @@ function on_input(self, action_id, action)
 				self.itemNear = hash("")
 				print("key obtained!")
 				self.keys = self.keys + 1
-				msg.post("/key_item#item", "picked_up")
+				msg.post(self.key2id, "picked_up")
 				print(self.keys)
 			end
 		end
