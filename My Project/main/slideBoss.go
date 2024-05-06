@@ -165,7 +165,7 @@ embedded_components {
 embedded_components {
   id: "key_factory"
   type: "factory"
-  data: "prototype: \"\"\n"
+  data: "prototype: \"/main/key_item.go\"\n"
   "load_dynamically: false\n"
   "dynamic_prototype: false\n"
   ""

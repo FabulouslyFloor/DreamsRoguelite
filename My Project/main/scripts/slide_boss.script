@@ -59,10 +59,6 @@ local function damage(self)
 		factory.create("#key_factory")
 		go.delete()
 	end
-
-	if self.hurt == false then
-		self.hurt = true
-	end
 end
 
 -- TODO: move from side to side???
