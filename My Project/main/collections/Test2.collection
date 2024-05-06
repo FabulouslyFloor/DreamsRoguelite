@@ -59,26 +59,6 @@ instances {
     z: 1.0
   }
 }
-instances {
-  id: "chefBoss"
-  prototype: "/main/chefBoss.go"
-  position {
-    x: 800.0
-    y: 700.0
-    z: 0.1
-  }
-  rotation {
-    x: 0.0
-    y: 0.0
-    z: 0.0
-    w: 1.0
-  }
-  scale3 {
-    x: 0.25
-    y: 0.25
-    z: 1.0
-  }
-}
 scale_along_z: 0
 embedded_instances {
   id: "enemy_spawner"
