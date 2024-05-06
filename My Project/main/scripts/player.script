@@ -258,10 +258,14 @@ function on_message(self, message_id, message, sender)
 		on_damage(self, message.normal)
 	end
 
+	if message_id == hash("trigger_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") then
+		anim = self.current_anim
+		on_damage(self, message.normal)
+	end
+
 	if message_id == hash("trigger_response") and message.enter == true and message.other_group == hash("itemrange") then
 		self.in_item_range = true
 		self.itemNear = message.other_id
-		print(self.itemNear)
 	elseif message_id == hash("trigger_response") and message.enter == false and message.other_group == hash("itemrange") then
 		self.in_item_range = false
 		self.itemNear = hash("")
