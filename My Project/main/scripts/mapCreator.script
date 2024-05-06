@@ -85,12 +85,12 @@ function on_message(self, message_id, message, sender)
 					tilemap.set_tile("/level#generateMap", "borders", (temp_y+(LENGTH/2))+1, temp_x, 18)
 
 					if grid[i][j] == "End" then
+						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x-1, 8)
+						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x-1, 8)
+						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x-1, 8)
 						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x, 9)
 						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x, 9)
 						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x, 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x+1, 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x+1, 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x+1, 8)
 					end
 				end
 				if down then
@@ -102,12 +102,12 @@ function on_message(self, message_id, message, sender)
 					tilemap.set_tile("/level#generateMap", "borders", (temp_y+(LENGTH/2))+1, temp_x+(WIDTH-1), 18)
 					
 					if grid[i][j] == "End" then
+						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x+(WIDTH), 9)
+						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x+(WIDTH), 9)
+						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x+(WIDTH), 9)
 						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x+(WIDTH-1), 8)
 						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x+(WIDTH-1), 8)
 						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x+(WIDTH-1), 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x-1, 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x-1, 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x-1, 9)
 					end
 				end
 				if right then
