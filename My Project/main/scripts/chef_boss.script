@@ -69,29 +69,48 @@ function update(self, dt)
 	if self.attack_timer == 0 and self.not_attacking then
 		-- If the enemy has been attacked
 		if self.hurt then
+			-- Randomly chooses one of the two attacks
 			self.currAttk = math.random(1,2)
-			if self.currAttk == 1 then--self.track_attack == false then
+			-- If it selects the first attack, the tracking one
+			if self.currAttk == 1 then
+				-- Sends a message to itself to play the throwing animation
 				msg.post(".", "play_animation",{id = hash("throw")})
+				-- Sets track_attack to true so it knows which attack it is doing
 				self.track_attack = true
-				self.first = true
+				-- Resets the attack timer
 				self.attack_timer = 50
+				-- Sets not_attacking to false 
 				self.not_attacking = false
-			elseif self.currAttk == 2 then --self.track_attack then
+			-- If it selects the second attack, the spray attack
+			elseif self.currAttk == 2 then
+				-- Sends a message to itself to play the spray animation
 				msg.post(".", "play_animation",{id = hash("spray")})
+				-- Resets the attack timer
 				self.attack_timer = 50
+				-- Sets not_attacking to false
 				self.not_attacking = false
+				-- Sets the spray timer
 				self.spray_timer = 100
 			end
+		-- If the boss has not been hit yet
 		else
+			-- Sends a message to itself to play the spray animation
 			msg.post(".", "play_animation",{id = hash("spray")})
+			-- Resets the attack timer
 			self.attack_timer = 50
+			-- Sets not_attacking to false
 			self.not_attacking = false
+			-- Sets the spray timer 
 			self.spray_timer = 100
 		end
+	-- If the boss is not currently attacking and the timer is not at 0, decrement the timer
 	elseif self.not_attacking then
 		self.attack_timer = self.attack_timer - 1
 	end
 
+	-- If the spray timer is above -1 (where it is set when not in use)
+	-- On certain frames it sends a message to itself to spawn a hamburger object
+	-- If it is not a spawning frame it will just decrement the timer
 	if self.spray_timer == 50 then
 		msg.post(".", "spawn_spray1")
 		self.spray_timer = self.spray_timer -1
