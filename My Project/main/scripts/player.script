@@ -68,7 +68,7 @@ function init(self)
 	self.in_item_range = false
 	self.itemNear = hash("")
 
-	self.keys = 0
+	self.keys = 2
 	self.key2id = hash("nothing")
 end
 

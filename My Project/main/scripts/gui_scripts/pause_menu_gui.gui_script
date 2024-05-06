@@ -58,7 +58,7 @@ function on_input(self, action_id, action)
 		
 	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) and self.paused == true then
 		gui.play_flipbook(self.quit_to_menu, hash("menu-button-unpushed"))
-		msg.post("Scenes:/controller#loader", "opening")
+		msg.post("Scenes:/controller#loader", "show_opening")
 	end
 end
 
