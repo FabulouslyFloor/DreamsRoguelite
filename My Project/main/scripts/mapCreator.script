@@ -231,6 +231,7 @@ function bathroom(temp_x, temp_y)
 end
 
 function gym(temp_x, temp_y)
+	--factory.create("/mapAssets#hoop", vmath.vector3(temp_y+(LENGTH/2), temp_x+(WIDTH/2), 0.00000001), nil, nil, 1)
 	for x = 0, WIDTH-1 do
 		for y = 0, LENGTH-1 do
 			if x == 0 then
