@@ -165,7 +165,7 @@ function on_message(self, message_id, message, sender)
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
 
-	elseif message_id == hash("trigger_response") then
+	elseif message_id == hash("trigger_response") and message.other_group == hash("up") and message.other_group == hash("down") and message.other_group == hash("left") and message.other_group == hash("right") then
 		damage(self)
 		
 	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
