@@ -52,22 +52,74 @@ function on_message(self, message_id, message, sender)
 					spawn(temp_x, temp_y)
 				elseif grid[i][j] == "C" then
 					classroom(temp_x, temp_y)
+
+					factory.create("/mapAssets#blackboard_factory", vmath.vector3((((WIDTH/2)+temp_y+1-(j*4))*35), (((LENGTH-3)+temp_x-2-(i*4))*35), 0.99), nil, nil, 1)
+					
+					-- Define minimum distance between desks
+					local minDistance = 80  -- Adjust this value as needed
+
+					-- Table to store positions of generated desks
+					local deskPositions = {}
+
+					for m = 1, 20 do
+						local deskX, deskY
+
+						-- Generate desk position and ensure it doesn't overlap with previous desks
+						repeat
+							deskX = math.random((((WIDTH/2)+temp_y-6-(j*4))*35), (((WIDTH/2)+temp_y+10-(j*4))*35))
+							deskY = math.random((((LENGTH/2)+temp_x-6-(i*4))*35), (((LENGTH/2)+temp_x+10-(i*4))*35))
+
+							-- Check overlap with previous desks
+							local overlap = false
+							for _, pos in ipairs(deskPositions) do
+								if math.abs(deskX - pos.x) < minDistance and math.abs(deskY - pos.y) < minDistance then
+									overlap = true
+									break
+								end
+							end
+						until not overlap
+
+						-- Store current desk position
+						table.insert(deskPositions, {x = deskX, y = deskY})
+
+						-- Create desk entity
+						factory.create("/mapAssets#desk_factory", vmath.vector3(deskX, deskY, 0.99), nil, nil, 1)
+						factory.create("/mapAssets#paper_factory", vmath.vector3(deskX+2, deskY+80, 0.99), nil, nil, 1)	
+						factory.create("/mapAssets#paper_factory", vmath.vector3(deskX+2, deskY-80, 0.99), nil, nil, 1)						
+						factory.create("/mapAssets#paper_factory", vmath.vector3(deskX+60, deskY, 0.99), nil, nil, 1)						
+						factory.create("/mapAssets#paper_factory", vmath.vector3(deskX-60, deskY, 0.99), nil, nil, 1)						
+						
+					end
+					
 				elseif grid[i][j] == "R" then
-					bathroom(temp_x, temp_y)
+					cafeteria(temp_x, temp_y)
+					factory.create("/mapAssets#table_factory", vmath.vector3((((WIDTH/2)+temp_y+1-(j*4))*35), (((LENGTH/2)+temp_x-1-(i*4))*35), 0.90), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y-2-(j*4))*35), (((LENGTH/2)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y-(j*4))*35), (((LENGTH/2)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y+2-(j*4))*35), (((LENGTH/2)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y+4-(j*4))*35), (((LENGTH/2)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					
+					factory.create("/mapAssets#table_factory", vmath.vector3((((WIDTH/2)+temp_y+1-(j*4))*35), (((LENGTH-3)+temp_x-1-(i*4))*35), 0.90), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y-2-(j*4))*35), (((LENGTH-3)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y-(j*4))*35), (((LENGTH-3)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y+2-(j*4))*35), (((LENGTH-3)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					factory.create("/mapAssets#tray_factory", vmath.vector3((((WIDTH/2)+temp_y+4-(j*4))*35), (((LENGTH-3)+temp_x-(i*4))*35), 0.91), nil, nil, 1)
+					
 				elseif grid[i][j] == "B" then
 					basement(temp_x, temp_y)
 				elseif grid[i][j] == "G" then
 					gym(temp_x, temp_y)
+					factory.create("/mapAssets#hoop_factory", vmath.vector3((((WIDTH/2)+temp_y+1-(j*4))*35), (((LENGTH/2)+temp_x-2-(i*4))*35), 0.99), nil, nil, 1)
+					factory.create("/mapAssets#hoop_factory", vmath.vector3((((WIDTH/2)+temp_y+1-(j*4))*35), (((LENGTH-3)+temp_x-2-(i*4))*35), 0.99), nil, nil, 1)
 				elseif grid[i][j] == "Boss" then
 					boss(temp_x, temp_y)
-					local coords = {}
-					local cloudX = temp_y
-					local cloudY = temp_x
 
-					cloudX = cloudX + (WIDTH-10)
-					cloudY = cloudY + ((LENGTH+15)/2)
-					table.insert(coords, cloudX)
-					table.insert(coords, cloudY)
+					local coords = {}
+					local chefX = ((((j-1)*WIDTH)*30)+(625)) + (j*50)
+					local chefY = ((((i-1)*LENGTH)*30)+(1025)) + (i*75)
+
+					table.insert(coords, chefX)
+					table.insert(coords, chefY)
 					msg.post("/chefBoss#chef_boss", 'placeChef', coords)
 					
 				elseif grid[i][j] == "End" then
@@ -149,7 +201,7 @@ function on_message(self, message_id, message, sender)
 	end
 
 	--generate roof
-	--paint_roof(roof_rooms)
+	paint_roof(roof_rooms)
 	msg.post('/level#fillEnemies', 'generate', grid)
 end
 
@@ -212,7 +264,7 @@ function basement(temp_x, temp_y)
 	end
 end
 
-function bathroom(temp_x, temp_y)
+function cafeteria(temp_x, temp_y)
 	for x = 0, WIDTH-1 do
 		for y = 0, LENGTH-1 do
 			if x == 0 then
@@ -243,7 +295,6 @@ function bathroom(temp_x, temp_y)
 end
 
 function gym(temp_x, temp_y)
-	--factory.create("/mapAssets#hoop", vmath.vector3(temp_y+(LENGTH/2), temp_x+(WIDTH/2), 0.00000001), nil, nil, 1)
 	for x = 0, WIDTH-1 do
 		for y = 0, LENGTH-1 do
 			if x == 0 then
@@ -370,15 +421,6 @@ end
 
 function paint_roof(roof_rooms)
 	previous = -1
-	--[[
-	tilemap.set_tile("/level#generateMap", "roof", 96, 234, 20)
-	tilemap.set_tile("/level#generateMap", "roof", 96, 233, 59)
-	tilemap.set_tile("/level#generateMap", "roof", 97, 232, 39)
-	tilemap.set_tile("/level#generateMap", "roof", 98, 232, 39)
-	tilemap.set_tile("/level#generateMap", "roof", 99, 232, 39)
-	tilemap.set_tile("/level#generateMap", "roof", 100, 234, 49)
-	tilemap.set_tile("/level#generateMap", "roof", 100, 233, 10)
-	--]]
 	for i, room in ipairs(roof_rooms) do
 		temp_x = (((6 - 1) * WIDTH) + 1)
 		temp_y = (((room - 1) * LENGTH) + 1)
