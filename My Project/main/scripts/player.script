@@ -31,7 +31,7 @@ local function on_damage(self, given_normal,trigger)
 	-- take away 1 hp
 	self.health = self.health - 1
 	-- send message to gui to remove heart, activate damage cooldown
-	--msg.post("mapGeneration:/health_gui#player_health", "lost_health")
+	msg.post("mapGeneration:/health_gui#player_health", "lost_health")
 	-- if  hp at 0, kill player
 	if self.health == 0 then
 		on_death(self)
