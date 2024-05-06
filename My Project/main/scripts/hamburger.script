@@ -49,6 +49,8 @@ function on_message(self, message_id, message, sender)
 			msg.post("/chefBoss#chef_boss", "burger_death")
 		end
 		go.delete()
+	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
+		go.delete()
 	end
 end
 

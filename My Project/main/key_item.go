@@ -1,6 +1,6 @@
 components {
-  id: "hamburger"
-  component: "/main/scripts/hamburger.script"
+  id: "item"
+  component: "/main/scripts/item.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "default_animation: \"hamburger\"\n"
+  data: "default_animation: \"key\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   "textures {\n"
@@ -42,49 +42,20 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "collisionobject"
-  type: "collisionobject"
-  data: "collision_shape: \"\"\n"
-  "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
-  "mass: 0.0\n"
-  "friction: 0.1\n"
-  "restitution: 0.5\n"
-  "group: \"enemy_body\"\n"
-  "mask: \"player\"\n"
-  "mask: \"rockets\"\n"
-  "mask: \"up\"\n"
-  "mask: \"down\"\n"
-  "mask: \"left\"\n"
-  "mask: \"right\"\n"
-  "embedded_collision_shape {\n"
-  "  shapes {\n"
-  "    shape_type: TYPE_SPHERE\n"
-  "    position {\n"
-  "      x: 0.0\n"
-  "      y: -5.0\n"
-  "      z: 0.0\n"
-  "    }\n"
-  "    rotation {\n"
-  "      x: 0.0\n"
-  "      y: 0.0\n"
-  "      z: 0.0\n"
-  "      w: 1.0\n"
-  "    }\n"
-  "    index: 0\n"
-  "    count: 1\n"
-  "    id: \"\"\n"
-  "  }\n"
-  "  data: 75.0\n"
+  id: "E"
+  type: "sprite"
+  data: "default_animation: \"flash\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/assets/Testing images/E.atlas\"\n"
   "}\n"
-  "linear_damping: 0.0\n"
-  "angular_damping: 0.0\n"
-  "locked_rotation: false\n"
-  "bullet: false\n"
   ""
   position {
-    x: 0.0
-    y: 0.0
-    z: 0.0
+    x: 30.0
+    y: 75.0
+    z: 0.2
   }
   rotation {
     x: 0.0
@@ -92,21 +63,25 @@ embedded_components {
     z: 0.0
     w: 1.0
   }
+  scale {
+    x: 0.1
+    y: 0.1
+    z: 1.0
+  }
 }
 embedded_components {
-  id: "wall_collider"
+  id: "pickuprange"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
-  "type: COLLISION_OBJECT_TYPE_KINEMATIC\n"
+  "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"enemy\"\n"
-  "mask: \"walls\"\n"
-  "mask: \"enemy_walls\"\n"
+  "group: \"itemrange\"\n"
+  "mask: \"player\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
-  "    shape_type: TYPE_SPHERE\n"
+  "    shape_type: TYPE_BOX\n"
   "    position {\n"
   "      x: 0.0\n"
   "      y: 0.0\n"
@@ -119,10 +94,12 @@ embedded_components {
   "      w: 1.0\n"
   "    }\n"
   "    index: 0\n"
-  "    count: 1\n"
+  "    count: 3\n"
   "    id: \"\"\n"
   "  }\n"
   "  data: 75.0\n"
+  "  data: 75.0\n"
+  "  data: 10.0\n"
   "}\n"
   "linear_damping: 0.0\n"
   "angular_damping: 0.0\n"

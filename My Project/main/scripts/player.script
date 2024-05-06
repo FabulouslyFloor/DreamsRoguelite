@@ -30,7 +30,7 @@ local function on_death(self)
 end
 
 -- happens when player collides with an object with group 'enemy_body' (todo: if enemies hit in ways other than melee, add group 'enemy_attack')
-local function on_damage(self, given_normal)
+local function on_damage(self, given_normal,trigger)
 	-- play damage sound effect
 	sound.play("#on_hurt")
 	-- take away 1 hp
@@ -44,9 +44,11 @@ local function on_damage(self, given_normal)
 		self.damaged = true
 		self.damage_cooldown = 120
 		-- TODO: implement knockback
-		self.knocked_back = true
-		self.dir = given_normal
-		self.knockback_cooldown = 60
+		if trigger then
+			self.knocked_back = true
+			self.dir = given_normal
+			self.knockback_cooldown = 60
+		end
 	end
 end
 
@@ -67,6 +69,7 @@ function init(self)
 	self.itemNear = hash("")
 
 	self.keys = 0
+	self.key2id = hash("nothing")
 end
 
 function final(self)
@@ -267,20 +270,26 @@ function on_message(self, message_id, message, sender)
 	-- if message is an attack collision and the player is not in the cooldown state...
 	if message_id == hash("contact_point_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") or message.other_group == hash("enemy_attack") then
 		anim = self.current_anim
-		on_damage(self, message.normal)
+		on_damage(self, message.normal,true)
 	end
 
 	if message_id == hash("trigger_response") and self.damage_cooldown == 0 and message.other_group == hash("enemy_body") then
 		anim = self.current_anim
-		on_damage(self, message.normal)
+		on_damage(self, message.normal,false)
 	end
 
 	if message_id == hash("trigger_response") and message.enter == true and message.other_group == hash("itemrange") then
 		self.in_item_range = true
 		self.itemNear = message.other_id
+		print(self.itemNear)
 	elseif message_id == hash("trigger_response") and message.enter == false and message.other_group == hash("itemrange") then
 		self.in_item_range = false
 		self.itemNear = hash("")
+	end
+
+	if message_id == hash("key_2_created") then
+		self.key2id = message.key_id
+		print(self.key2id)
 	end
 
 	if message_id == hash("contact_point_response") and message.other_group == hash("walls") then
@@ -348,10 +357,12 @@ function on_input(self, action_id, action)
 		elseif action_id == hash("interact") and self.in_item_range then
 			weaponAcquired = true
 			if self.itemNear == hash("/MeleeItem") and meleeWeaponAcquired == false then
+				self.itemNear = hash("")
 				print("Knife!")
 				meleeWeaponAcquired = true
 				msg.post("/MeleeItem#item", "picked_up")
 			elseif self.itemNear == hash("/RangedItem") and rangedWeaponAcquired == false then
+				self.itemNear = hash("")
 				print("Rockets!")
 				rangedWeaponAcquired = true
 				msg.post("/RangedItem#item", "picked_up")
@@ -360,6 +371,13 @@ function on_input(self, action_id, action)
 				end
 			elseif self.itemNear == hash("/exit_cloud") then
 				msg.post("/exit_cloud#cloudSprite", "picked_up")
+
+			elseif self.itemNear == self.key2id then
+				self.itemNear = hash("")
+				print("key obtained!")
+				self.keys = self.keys + 1
+				msg.post(self.key2id, "picked_up")
+				print(self.keys)
 			end
 		end
 	end
