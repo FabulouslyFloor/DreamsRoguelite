@@ -35,19 +35,38 @@ function update(self, dt)
 end
 
 function woodchip_attack(self)
-	print("making woodchips")
-	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(50, -100, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
-	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(0, -100, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
-	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(-50, -100, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+	-- TODO: perform rearing-up animation
+	-- on conclusion...
+	-- return to idle
+	-- and make woodchips
+	print("woodchip time")
+	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+	factory.create("/slide_boss#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
 	self.currAttk = 0
 end
 
 function stick_attack(self)
+	print("ladder time")
+	-- determine if L or R
+	local side = math.random(1,2)
+	-- TODO: play beginning-attack animation
+	-- on conclusion...
+	-- return to idle
+	-- and spawn ladder, to attack and then delete itself
+	if side == 1 then
+		factory.create("/slide_boss#ladder_factory_l", nil, nil, nil, 1.2)
+	else
+		factory.create("/slide_boss#ladder_factory_r")
+	end
 	self.currAttk = 0
 end
 
 function child_attack(self)
 	print("bowling time")
-	factory.create("/slide_boss#child_factory", go.get_position(), nil, nil, .25)
+	-- TODO: play... something idk
+	-- spawn child
+	-- make it stay in place for a second and then get bowled idiot
+	factory.create("/slide_boss#child_factory", (go.get_position()+vmath.vector3(-70,-90,0)), nil, nil, .1)
 	self.currAttk = 0
 end

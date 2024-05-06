@@ -1,6 +1,6 @@
 go.property("dir", vmath.vector3(0,0,0))
 function init(self)
-	print("made at", go.get_position())
+	--print("made at", go.get_position())
 	self.speed = 400
 end
 
