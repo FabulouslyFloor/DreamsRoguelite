@@ -1,7 +1,7 @@
 name: "Level"
 instances {
   id: "MeleeObject"
-  prototype: "/main/MeleeObject.go"
+  prototype: "/main/MeleeItem.go"
   position {
     x: 200.0
     y: 400.0

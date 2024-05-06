@@ -30,7 +30,7 @@ function on_message(self, message_id, message, sender)
 		-- If it recieves a call to display a playable level
 	-- If it recieves a call to display a playable level
 	elseif message_id == hash("show_Level") then
-		show(self,"#pause menu")
+		show(self,"#level")
 	-- If it recieves a call to load the proxy
 	elseif message_id == hash("proxy_loaded") then
 		self.current_proxy = sender 
@@ -38,6 +38,10 @@ function on_message(self, message_id, message, sender)
 	-- If it recieves a call to unload a proxy
 	elseif message_id == hash("proxy_unloaded") then
 		print("Unloaded", sender)
+	elseif message_id == hash("pause") then
+		msg.post("#level", "set_time_step", {factor = 0, mode = 1})	
+	elseif message_id == hash("unpause") then
+		msg.post("#level", "set_time_step", {factor = 1, mode = 1})
 	end
 end
 
