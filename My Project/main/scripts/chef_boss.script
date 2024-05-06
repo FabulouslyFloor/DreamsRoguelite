@@ -1,7 +1,21 @@
--- just does spray attack until player hits the enemy
--- After that it fires a homing burger and doesnt send out another one until it dies
--- throw -200, -250
+--[[
+Script Name: chef_boss.script
+Author(s): Florian Hurlbert
+Date of Last Change: 05/06/2024
 
+Scripts Referenced/Messaged:
+
+Script Purpose: Controlling the chef boss object. The chef boss only spawns within the indoors area of the map. It spawns 
+Hamburger projectiles in 2 different attacks. It changes its attack pattern after it has been hit. It also drops a key
+when it has been destoryed.
+]]
+
+--[[
+Function damage 
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function handles the enemy taking damage. 
+	It does so by accessing internal variables, subtracting and flipping booleans as necessary.
+]]
 local function damage(self)
 	-- take away 1 hp
 	self.health = self.health - 1
@@ -10,25 +24,50 @@ local function damage(self)
 		go.delete()
 	end
 
+	-- Checks if the enemy has been damaged before
 	if self.hurt == false then
+		-- Flips the variable to unlock new attack patterns
 		self.hurt = true
 	end
 end
 
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function sets up all the variables needed for the chef to execute.
+]]
 function init(self)
+	-- Sets up a random seed
 	math.randomseed(os.time())
+	-- Initializes the boss as not being hit yet 
 	self.hurt = false 
+	-- The boss as 20 hitpoints
 	self.health = 20
+	-- Sets up a tracker for which attack it is executing for spawning purposes
 	self.track_attack = false
-	self.first = false
+	-- Starts the attack timer
 	self.attack_timer = 50
+	-- Sets up the boolean for tracking attacking state
 	self.not_attacking = true
+	-- Initializes the spray timer 
 	self.spray_timer = -1
+	-- Initializes the attack tracker
 	self.currAttk = 0
 end
 
+--[[
+Function update
+Update is native to defold and executes it's code every frame.
+It takes in the self object to access the internal variables of the specific instance it is controlling. dt is the current frame.
+This function handles which attack the chef chooses.
+	It does this by checking the internal variables and executing the attack when it is ready. It then sends messages to itself
+	to spawn the projectiles.
+]]
 function update(self, dt)
+	-- If the attack timer is at 0 and the enemy is not currently attacking
 	if self.attack_timer == 0 and self.not_attacking then
+		-- If the enemy has been attacked
 		if self.hurt then
 			self.currAttk = math.random(1,2)
 			if self.currAttk == 1 then--self.track_attack == false then
