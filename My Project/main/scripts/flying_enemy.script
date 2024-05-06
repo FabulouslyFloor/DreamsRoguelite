@@ -13,6 +13,8 @@ function init(self)
 		self.track_table[i] = false
 	end
 	self.track_numerator = 0
+	self.knockbacked = false
+	self.kbtimer = 0
 	-- the current code moves the flying enemy in a random cycle of the 8 directions, but always in a cycle, going through
 	-- all of them before repeating any. this ensures no 'wandering' occurs. enemies will stay in roughly the place
 	-- you put them.
@@ -21,19 +23,28 @@ end
 
 function update(self, dt)
 	local pos = go.get_position()
-	-- if not tracking the player, move according to current vector
-	if self.tracking == false then
-		pos = pos + (self.current_dir * self.max_speed / 5 * dt)
-		go.set_position(pos)
-		-- decrement dir_change_timer. if it's time to change directions, call change_dir
-		self.dir_change_timer = self.dir_change_timer - 1
-		if self.dir_change_timer == 0 then
-			change_dir(self)
+	-- if knockedback, then
+	if self.knockbacked then
+		go.set_position(pos + self.dir * self.speed * dt) 
+		self.kbtimer = self.kbtimer - 1
+		if self.kbtimer == 0 then
+			self.knockbacked = false
 		end
-	else -- if tracking player, move according to vector from track_player
-		dir_go = track_player(self)
-		pos = pos + (dir_go * self.max_speed * dt)
-		go.set_position(pos)
+	else
+		-- if not tracking the player, move according to current vector
+		if self.tracking == false then
+			pos = pos + (self.current_dir * self.max_speed / 5 * dt)
+			go.set_position(pos)
+			-- decrement dir_change_timer. if it's time to change directions, call change_dir
+			self.dir_change_timer = self.dir_change_timer - 1
+			if self.dir_change_timer == 0 then
+				change_dir(self)
+			end
+		else -- if tracking player, move according to vector from track_player
+			dir_go = track_player(self)
+			pos = pos + (dir_go * self.max_speed * dt)
+			go.set_position(pos)
+		end
 	end
 end
 
@@ -98,6 +109,11 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("collision_response") and message.other_group == hash("player") then
 		track_player(self)
 		self.tracking = true
+	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
+		-- Calls damage; TODO: currently not implemented, has only one hp
+		-- damage(self)
+		-- Calls knockback with special vector from this message
+		knockback(self, message.normal)
 	end
 end
 
@@ -111,4 +127,14 @@ function track_player(self)
 		diff_location = vmath.normalize(diff_location)
 	end
 	return diff_location -- return resulting vector
+end
+
+function knockback(self, normal)
+	print(normal)
+	-- sets knockback state
+	self.knockbacked = true
+	-- Gets direction vector from intersection and sets the direction to it
+	self.dir = normal
+	-- sets knockback timer to appropriate length
+	self.kbtimer = 45
 end
