@@ -1,0 +1,153 @@
+-- just does spray attack until player hits the enemy
+-- After that it fires a homing burger and doesnt send out another one until it dies
+-- throw -200, -250
+
+local function damage(self)
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+
+	if self.hurt == false then
+		self.hurt = true
+	end
+end
+
+function init(self)
+	math.randomseed(os.time())
+	self.hurt = false 
+	self.health = 20
+	self.track_attack = false
+	self.first = false
+	self.attack_timer = 50
+	self.not_attacking = true
+	self.spray_timer = -1
+	self.currAttk = 0
+end
+
+function update(self, dt)
+	if self.attack_timer == 0 and self.not_attacking then
+		if self.hurt then
+			self.currAttk = math.random(1,2)
+			if self.currAttk == 1 then--self.track_attack == false then
+				msg.post(".", "play_animation",{id = hash("throw")})
+				self.track_attack = true
+				self.first = true
+				self.attack_timer = 50
+				self.not_attacking = false
+			elseif self.currAttk == 2 then --self.track_attack then
+				msg.post(".", "play_animation",{id = hash("spray")})
+				self.attack_timer = 50
+				self.not_attacking = false
+				self.spray_timer = 100
+			end
+		else
+			msg.post(".", "play_animation",{id = hash("spray")})
+			self.attack_timer = 50
+			self.not_attacking = false
+			self.spray_timer = 100
+		end
+	elseif self.not_attacking then
+		self.attack_timer = self.attack_timer - 1
+	end
+
+	if self.spray_timer == 50 then
+		msg.post(".", "spawn_spray1")
+		self.spray_timer = self.spray_timer -1
+	elseif self.spray_timer == 40 then
+		msg.post(".", "spawn_spray2")
+		self.spray_timer = self.spray_timer -1
+	elseif self.spray_timer == 30 then
+		msg.post(".", "spawn_spray3")
+		self.spray_timer = self.spray_timer -1
+	elseif self.spray_timer == 20 then
+		msg.post(".", "spawn_spray4")
+		self.spray_timer = self.spray_timer -1
+	elseif self.spray_timer == 10 then
+		msg.post(".", "spawn_spray5")
+	elseif self.spray_timer >= 0 then
+		self.spray_timer = self.spray_timer -1
+	end
+
+
+	
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("animation_done") then
+		if self.track_attack and self.first then
+			factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-60,-60,.7)), nil, { track = true, id = 0})
+			self.first = false
+		end
+		msg.post(".","play_animation",{id = hash("idle")})
+		self.not_attacking = true
+	elseif message_id == hash("burger_death") then
+		self.track_attack = false
+	elseif message_id == hash("trigger_response") then
+		print("hit")
+		self.hurt = true
+		damage(self)
+	elseif message_id == hash("spawn_spray1") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-30,-5,.8)), nil, { track = false, id = 1 })
+	elseif message_id == hash("spawn_spray2") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-35,-5,.8)), nil, { track = false, id = 2 })
+	elseif message_id == hash("spawn_spray3") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-40,-5,.8)), nil, { track = false, id = 3 })
+	elseif message_id == hash("spawn_spray4") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-45,-5,.8)), nil, { track = false, id = 4 })
+	elseif message_id == hash("spawn_spray5") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-50,-5,.8)), nil, { track = false, id = 5 })
+		self.spray_timer = -1
+	elseif message_id == hash("spawn_spray6") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-50,-5,.8)), nil, { track = false, id = 5 })
+	elseif message_id == hash("spawn_spray7") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-45,-5,.8)), nil, { track = false, id = 4 })
+	elseif message_id == hash("spawn_spray8") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-40,-5,.8)), nil, { track = false, id = 3 })
+	elseif message_id == hash("spawn_spray9") then
+		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-35,-5,.8)), nil, { track = false, id = 2 })
+	end
+
+	if message_id == hash("placeChef") then
+		local coords = message
+		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 1)
+		go.set_position(initPOS, go.get_id())
+		local s = vmath.vector3(0.5, 0.5, 1.0)
+		go.set_scale(s)
+	end
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function fixed_update(self, dt)
+	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
+	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
+	-- Physics section of game.project
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

@@ -4,6 +4,32 @@ local timer = 0
 -- Boolean for whether the player is being tracked
 local trackplayer = false
 
+local function damage(self)
+	print("Gremlin hit")
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+end
+
+local function knockback(self, normal)
+	print(normal)
+	-- sets knockback state
+	self.knockbacked = true
+	-- Gets direction vector from intersection and sets the direction to it
+	self.dir = normal
+	-- sets knockback timer to appropriate length
+	self.kbtimer = 45
+	-- vv obsolete code
+	--local pos = go.get_position()
+	-- set a pushback direction based on the collision normal
+	--local to = pos + normal * 50
+	-- sets the object to that position 
+	--go.set_position(to)
+end
+
 function init(self)
 	-- Sets up internal variables
 	self.dir = vmath.vector3(0, 1, 0)
@@ -16,12 +42,6 @@ function init(self)
 	msg.post(".","get_new_position")
 	-- Ensures the timer starts at zero when it spawns in
 	timer = 0
-end
-
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
 end
 
 function update(self, dt)
@@ -122,15 +142,6 @@ function update(self, dt)
 	end
 end
 
-function fixed_update(self, dt)
-	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
-	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
-	-- Physics section of game.project
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
 function on_message(self, message_id, message, sender)
 	-- When the enemy requests a position to move too
 	if message_id == hash("get_new_position") then
@@ -150,36 +161,19 @@ function on_message(self, message_id, message, sender)
 	-- Should only trigger if the collision is between a weapon and the enemy body
 	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
 		-- Calls damage
-		damage(self)
+		--damage(self)
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
+
+	elseif message_id == hash("trigger_response") then
+		damage(self)
+		
+	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
+		local pos = go.get_position()
+		local to = pos + message.normal * 5
+		go.set_position(to)
 	end
 	
-end
-
-function damage(self)
-	-- take away 1 hp
-	self.health = self.health - 1
-	-- if  hp at 0, delete object
-	if self.health == 0 then
-		go.delete()
-	end
-end
-
-function knockback(self, normal)
-	print(normal)
-	-- sets knockback state
-	self.knockbacked = true
-	-- Gets direction vector from intersection and sets the direction to it
-	self.dir = normal
-	-- sets knockback timer to appropriate length
-	self.kbtimer = 45
-	-- vv obsolete code
-	--local pos = go.get_position()
-	-- set a pushback direction based on the collision normal
-	--local to = pos + normal * 50
-	-- sets the object to that position 
-	--go.set_position(to)
 end
 
 function on_input(self, action_id, action)
@@ -197,5 +191,20 @@ end
 function on_reload(self)
 	-- Add reload-handling code here
 	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end
+
+function fixed_update(self, dt)
+	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
+	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
+	-- Physics section of game.project
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
 	-- Remove this function if not needed
 end

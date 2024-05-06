@@ -42,7 +42,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	-- Handle collision
-	if message_id == hash("contact_point_response") then
+	if message_id == hash("contact_point_response") and message.other_group == hash("walls") then
 		-- Get the info needed to move out of collision. We might
 		-- get several contact points back and have to calculate
 		-- how to move out of all of them by accumulating a

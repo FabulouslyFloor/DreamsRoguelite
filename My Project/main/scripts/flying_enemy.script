@@ -1,7 +1,96 @@
+
+local function change_dir(self)
+	valid_num = false
+	while not valid_num do
+		number = math.random(1, 8) -- generate a random number between 1 and 8 (inclusive)
+		if self.track_table[number] == false then -- if it hasn't been used in this cycle...
+		self.track_table[number] = true -- set the relevant table value to true...
+		valid_num = true -- get ready to exit this loop...
+		self.track_numerator = self.track_numerator + 1 -- and increase self.track_numerator (tracks how many numbers have been used)
+		end
+	end
+
+	if self.track_numerator == 8 then -- if all 8 values have been used...
+		for i = 1,8 do
+			self.track_table[i] = false -- reset table to all falses
+		end
+		self.track_numerator = 0 -- and reset numerator to 0
+	end
+
+	self.current_dir = vmath.vector3(0,0,0) -- set motion vector to nul...
+
+	-- and change x and y accordingly
+	-- numbers:directions are as follows: 1:^ 2:^> 3:> 4:>v 5:v 6:<v 7:< 8:<^
+	if number == 1 or number == 2 or number == 8 then
+		self.current_dir.y = 1
+	elseif number == 4 or number == 5 or number == 6 then
+		self.current_dir.y = -1
+	end
+
+	if number == 2 or number == 3 or number == 4 then
+		self.current_dir.x = 1
+	elseif number == 6 or number == 7 or number == 8 then
+		self.current_dir.x = -1
+	end
+
+	-- set animation to right if we're now moving right
+	if self.current_dir.x == 1 and self.current_anim ~= "right" then
+		self.current_anim = "right"
+		sprite.play_flipbook("#sprite", "right")
+	end
+
+	-- set animation to left if we're now moving left
+	if self.current_dir.x == -1 and self.current_anim ~= "left" then
+		self.current_anim = "left"
+		sprite.play_flipbook("#sprite", "left")
+	end
+
+	-- normalize diagonals
+	if vmath.length(self.current_dir) > 1 then
+		self.current_dir = vmath.normalize(self.current_dir)
+	end
+
+	-- reset change_timer 
+	self.dir_change_timer = 60
+end
+
+local function track_player(self)
+	target_location = go.get_position("/Player#player") -- get the location of the player object
+	my_location = go.get_position()
+	diff_location = target_location-my_location -- find the difference between the two
+
+	-- normalize value 
+	if vmath.length_sqr(diff_location) > 1 then
+		diff_location = vmath.normalize(diff_location)
+	end
+	return diff_location -- return resulting vector
+end
+
+local function knockback(self, normal)
+	print(normal)
+	-- sets knockback state
+	self.knockbacked = true
+	-- Gets direction vector from intersection and sets the direction to it
+	self.dir = normal
+	-- sets knockback timer to appropriate length
+	self.kbtimer = 45
+end
+
+local function damage(self)
+	print("Bee hit")
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		go.delete()
+	end
+end
+
 -- todo: add factory here too (see worm_enemy)
 function init(self)
 	-- seed random object
 	math.randomseed(os.time())
+	self.health = 1
 	self.max_speed = 200
 	self.current_dir = vmath.vector3(0,0,0)
 	self.dir_change_timer = 20
@@ -48,61 +137,6 @@ function update(self, dt)
 	end
 end
 
-function change_dir(self)
-	valid_num = false
-	while not valid_num do
-		number = math.random(1, 8) -- generate a random number between 1 and 8 (inclusive)
-		if self.track_table[number] == false then -- if it hasn't been used in this cycle...
-			self.track_table[number] = true -- set the relevant table value to true...
-			valid_num = true -- get ready to exit this loop...
-			self.track_numerator = self.track_numerator + 1 -- and increase self.track_numerator (tracks how many numbers have been used)
-		end
-	end
-
-	if self.track_numerator == 8 then -- if all 8 values have been used...
-		for i = 1,8 do
-			self.track_table[i] = false -- reset table to all falses
-		end
-		self.track_numerator = 0 -- and reset numerator to 0
-	end
-
-	self.current_dir = vmath.vector3(0,0,0) -- set motion vector to nul...
-
-	-- and change x and y accordingly
-	-- numbers:directions are as follows: 1:^ 2:^> 3:> 4:>v 5:v 6:<v 7:< 8:<^
-	if number == 1 or number == 2 or number == 8 then
-		self.current_dir.y = 1
-	elseif number == 4 or number == 5 or number == 6 then
-		self.current_dir.y = -1
-	end
-	
-	if number == 2 or number == 3 or number == 4 then
-		self.current_dir.x = 1
-	elseif number == 6 or number == 7 or number == 8 then
-		self.current_dir.x = -1
-	end
-
-	-- set animation to right if we're now moving right
-	if self.current_dir.x == 1 and self.current_anim ~= "right" then
-		self.current_anim = "right"
-		sprite.play_flipbook("#sprite", "right")
-	end
-
-	-- set animation to left if we're now moving left
-	if self.current_dir.x == -1 and self.current_anim ~= "left" then
-		self.current_anim = "left"
-		sprite.play_flipbook("#sprite", "left")
-	end
-
-	-- normalize diagonals
-	if vmath.length(self.current_dir) > 1 then
-		self.current_dir = vmath.normalize(self.current_dir)
-	end
-
-	-- reset change_timer 
-	self.dir_change_timer = 60
-end
-
 -- todo: add attack animation for when hurts player?
 -- when detects the player, set self.tracking to true and start tracking the player
 function on_message(self, message_id, message, sender)
@@ -114,27 +148,13 @@ function on_message(self, message_id, message, sender)
 		-- damage(self)
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
-	end
-end
 
-function track_player(self)
-	target_location = go.get_position("Level:/Player#player") -- get the location of the player object
-	my_location = go.get_position()
-	diff_location = target_location-my_location -- find the difference between the two
-	
-	-- normalize value 
-	if vmath.length_sqr(diff_location) > 1 then
-		diff_location = vmath.normalize(diff_location)
+	elseif message_id == hash("trigger_response") then
+		damage(self)
+		
+	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
+		local pos = go.get_position()
+		local to = pos + message.normal * 5
+		go.set_position(to)
 	end
-	return diff_location -- return resulting vector
-end
-
-function knockback(self, normal)
-	print(normal)
-	-- sets knockback state
-	self.knockbacked = true
-	-- Gets direction vector from intersection and sets the direction to it
-	self.dir = normal
-	-- sets knockback timer to appropriate length
-	self.kbtimer = 45
 end

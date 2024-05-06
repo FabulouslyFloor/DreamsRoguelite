@@ -1,5 +1,5 @@
 [bootstrap]
-main_collection = /main/collections/Level.collectionc
+main_collection = /main/collections/Test2.collectionc
 
 [script]
 shared_state = 1
@@ -30,4 +30,7 @@ max_draw_calls = 100000000
 
 [resource]
 max_resources = 100000000
+
+[sprite]
+max_count = 1000000
 
