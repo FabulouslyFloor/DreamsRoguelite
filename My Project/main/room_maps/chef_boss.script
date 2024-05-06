@@ -18,7 +18,7 @@ end
 function init(self)
 	math.randomseed(os.time())
 	self.hurt = false 
-	self.health = 3
+	self.health = 20
 	self.track_attack = false
 	self.first = false
 	self.attack_timer = 50
