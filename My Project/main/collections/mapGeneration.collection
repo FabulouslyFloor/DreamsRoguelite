@@ -1,4 +1,64 @@
 name: "mapGeneration"
+instances {
+  id: "chefBoss"
+  prototype: "/main/chefBoss.go"
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 0.25
+  }
+}
+instances {
+  id: "MeleeItem"
+  prototype: "/main/MeleeItem.go"
+  position {
+    x: 3500.0
+    y: 7800.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+instances {
+  id: "RangedItem"
+  prototype: "/main/RangedItem.go"
+  position {
+    x: 2500.0
+    y: 7800.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "level"
@@ -127,7 +187,7 @@ embedded_instances {
   "mass: 0.0\\n"
   "friction: 0.1\\n"
   "restitution: 0.5\\n"
-  "group: \\\"\\\"\\n"
+  "group: \\\"player\\\"\\n"
   "mask: \\\"walls\\\"\\n"
   "mask: \\\"enemy_walls\\\"\\n"
   "mask: \\\"exit_doors\\\"\\n"
@@ -386,7 +446,7 @@ embedded_instances {
   "far_z: 1000.0\\n"
   "auto_aspect_ratio: 0\\n"
   "orthographic_projection: 1\\n"
-  "orthographic_zoom: 0.1\\n"
+  "orthographic_zoom: 1.0\\n"
   "\"\n"
   "  position {\n"
   "    x: 0.0\n"
@@ -631,6 +691,43 @@ embedded_instances {
   "    x: 1.0\n"
   "    y: 1.0\n"
   "    z: 0.5\n"
+  "  }\n"
+  "}\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale3 {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+  }
+}
+embedded_instances {
+  id: "mapAssets"
+  data: "components {\n"
+  "  id: \"hoop\"\n"
+  "  component: \"/main/mapFactories/hoop.factory\"\n"
+  "  position {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "  }\n"
+  "  rotation {\n"
+  "    x: 0.0\n"
+  "    y: 0.0\n"
+  "    z: 0.0\n"
+  "    w: 1.0\n"
+  "  }\n"
+  "  property_decls {\n"
   "  }\n"
   "}\n"
   ""
