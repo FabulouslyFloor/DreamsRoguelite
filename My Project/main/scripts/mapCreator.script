@@ -18,7 +18,9 @@ function on_message(self, message_id, message, sender)
 			local down = false
 			local right = false
 			local left = false
+			
 			if room ~= '' then
+
 				if i == 6 then
 					table.insert(roof_rooms, j)
 				end
@@ -58,6 +60,16 @@ function on_message(self, message_id, message, sender)
 					gym(temp_x, temp_y)
 				elseif grid[i][j] == "Boss" then
 					boss(temp_x, temp_y)
+					local coords = {}
+					local cloudX = temp_y
+					local cloudY = temp_x
+
+					cloudX = cloudX + (WIDTH-10)
+					cloudY = cloudY + ((LENGTH+15)/2)
+					table.insert(coords, cloudX)
+					table.insert(coords, cloudY)
+					msg.post("/chefBoss#chef_boss", 'placeChef', coords)
+					
 				elseif grid[i][j] == "End" then
 					exit(temp_x, temp_y)
 				else

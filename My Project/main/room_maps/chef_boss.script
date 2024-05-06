@@ -109,6 +109,14 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash("spawn_spray9") then
 		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-35,-5,.8)), nil, { track = false, id = 2 })
 	end
+
+	if message_id == hash("placeChef") then
+		local coords = message
+		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 1)
+		go.set_position(initPOS, go.get_id())
+		local s = vmath.vector3(0.5, 0.5, 1.0)
+		go.set_scale(s)
+	end
 end
 
 function final(self)
