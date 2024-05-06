@@ -2,7 +2,7 @@ go.property("track", false)
 go.property("id", 0)
 
 function init(self)
-	self.speed = 70
+	self.speed = 150
 end
 
 function update(self, dt)

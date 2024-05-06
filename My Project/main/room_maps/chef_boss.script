@@ -21,7 +21,7 @@ function init(self)
 	self.health = 20
 	self.track_attack = false
 	self.first = false
-	self.attack_timer = 100
+	self.attack_timer = 50
 	self.not_attacking = true
 	self.spray_timer = -1
 	self.currAttk = 0
@@ -30,21 +30,22 @@ end
 function update(self, dt)
 	if self.attack_timer == 0 and self.not_attacking then
 		if self.hurt then
-			if self.track_attack == false then
+			self.currAttk = math.random(1,2)
+			if self.currAttk == 1 then--self.track_attack == false then
 				msg.post(".", "play_animation",{id = hash("throw")})
 				self.track_attack = true
 				self.first = true
-				self.attack_timer = 100
+				self.attack_timer = 50
 				self.not_attacking = false
-			elseif self.track_attack then
+			elseif self.currAttk == 2 then --self.track_attack then
 				msg.post(".", "play_animation",{id = hash("spray")})
-				self.attack_timer = 100
+				self.attack_timer = 50
 				self.not_attacking = false
 				self.spray_timer = 100
 			end
 		else
 			msg.post(".", "play_animation",{id = hash("spray")})
-			self.attack_timer = 100
+			self.attack_timer = 50
 			self.not_attacking = false
 			self.spray_timer = 100
 		end
