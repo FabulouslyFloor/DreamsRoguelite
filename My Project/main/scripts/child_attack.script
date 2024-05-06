@@ -3,11 +3,15 @@ function init(self)
 	self.speed = 400
 end
 
--- rotation could be handled by animation. ignore for now.
 function update(self, dt)
 	local pos = go.get_position()
 	pos = pos + self.dir * self.speed * dt
 	go.set_position(pos)
+	local rotat = go.get_rotation()
+	--print(rotat)
+	local change = vmath.quat_rotation_z(3.14*dt)
+	--print(rotat * change)
+	go.set_rotation(rotat*change)
 end
 
 function on_message(self, message_id, message, sender)
