@@ -2,14 +2,7 @@ go.property("track", false)
 go.property("id", 0)
 
 function init(self)
-	self.speed = 70
-	print(self.id)
-end
-
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
+	self.speed = 150
 end
 
 function update(self, dt)
@@ -30,9 +23,39 @@ function update(self, dt)
 		end
 	else
 		local pos = go.get_position()
-		pos.y = pos.y -2
+		if self.id == 1 then
+			pos.x = pos.x + 2
+			pos.y = pos.y - 3
+		elseif self.id == 2 then
+			pos.x = pos.x + 1
+			pos.y = pos.y - 3
+		elseif self.id == 3 then
+			pos.x = pos.x + 0
+			pos.y = pos.y - 3
+		elseif self.id == 4 then
+			pos.x = pos.x - 1
+			pos.y = pos.y - 3
+		elseif self.id == 5 then
+			pos.x = pos.x - 2
+			pos.y = pos.y - 2
+		end
 		go.set_position(pos)
 	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("trigger_response") and message.other_group == hash("rockets") or message.other_group == hash("up") or message.other_group == hash("down") or message.other_group == hash("right") or message.other_group == hash("left") or message.other_group == hash("player") then
+		if self.id == 0 then
+			msg.post("/chefBoss#chef_boss", "burger_death")
+		end
+		go.delete()
+	end
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
 end
 
 function fixed_update(self, dt)
@@ -41,12 +64,6 @@ function fixed_update(self, dt)
 	-- Physics section of game.project
 	-- Add update code here
 	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-	-- Add message-handling code here
-	-- Learn more: https://defold.com/manuals/message-passing/
 	-- Remove this function if not needed
 end
 

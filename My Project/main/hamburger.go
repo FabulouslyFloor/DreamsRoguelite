@@ -36,8 +36,8 @@ embedded_components {
     w: 1.0
   }
   scale {
-    x: 0.35
-    y: 0.35
+    x: 0.5
+    y: 0.5
     z: 1.0
   }
 }
@@ -49,14 +49,19 @@ embedded_components {
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"enemy_projectile\"\n"
+  "group: \"enemy_body\"\n"
   "mask: \"player\"\n"
+  "mask: \"rockets\"\n"
+  "mask: \"up\"\n"
+  "mask: \"down\"\n"
+  "mask: \"left\"\n"
+  "mask: \"right\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_SPHERE\n"
   "    position {\n"
   "      x: 0.0\n"
-  "      y: -10.0\n"
+  "      y: -5.0\n"
   "      z: 0.0\n"
   "    }\n"
   "    rotation {\n"
@@ -69,7 +74,7 @@ embedded_components {
   "    count: 1\n"
   "    id: \"\"\n"
   "  }\n"
-  "  data: 150.0\n"
+  "  data: 75.0\n"
   "}\n"
   "linear_damping: 0.0\n"
   "angular_damping: 0.0\n"
