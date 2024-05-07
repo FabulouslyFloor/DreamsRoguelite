@@ -1,20 +1,125 @@
+--[[
+Script Name: slide_boss
+Author(s): Henry Hauger
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: woodchip_factory, child_factory, key_factory
+
+Script Purpose: Operates the slide boss, tracking its health and spawning projectiles, dropping key, etc.
+]]
+
 local function woodchip_attack_pt1(self)
 	-- perform rearing-up animation
-	msg.post(".", "play_animation",{id = hash("slap_left")})
-	-- on conclusion... see woodchip_attack_pt2
+	sprite.play_flipbook("#sprite", hash("slap_left"))
+	-- see on_message
 end
 
 local function woodchip_attack_pt2(self)
 	print("woodchip time")
-	factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
-	factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
-	factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
-	self.currAttk = 0
-	-- return to idle
-	msg.post(".", "play_animation",{id = hash("idle")})
-	-- and make woodchips
+	-- select one of three arrays of projectiles to fire
+	local pattern = math.random(1,3)
+	print(pattern)
+	-- send corresponding messages to the woodchip factory
+	if pattern == 1 then
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+	elseif pattern == 2 then
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(.9, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(.4, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-75, -90, 0)), nil, { dir = vmath.vector3(-.4, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-.9, -1, 0)}, .1)
+	else
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(.5, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-73, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-77, -90, 0)), nil, { dir = vmath.vector3(-.5, -1, 0)}, .1)
+		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+	end
+	-- reduce needed slaps
+	self.slap_count = self.slap_count - 1
+	-- if all slaps done...
+	if self.slap_count == 0 then
+		self.currAttk = 0
+		-- return to idle
+		sprite.play_flipbook("#sprite", hash("idle"))
+	else
+		-- slap again
+		woodchip_attack_pt1(self)
+	end
 end
 
+-- 
+local function child_attack(self)
+	--print("bowling time")
+	-- message child_factory to create a projectile at the appropriate location
+	factory.create("#child_factory", (go.get_position()+vmath.vector3(-70,-45,0)), nil, nil, .1)
+	self.currAttk = 0
+end
+
+local function damage(self)
+	-- take away 1 hp
+	self.health = self.health - 1
+	-- if  hp at 0, delete object
+	if self.health == 0 then
+		factory.create("#key_factory")
+		go.delete()
+	end
+end
+
+-- TODO: move from side to side???
+-- TODO: multiple slaps per woodchip attack???
+-- TODO: once all that is.. there.. get debugging idiot
+
+function init(self)
+	math.randomseed(os.time())
+	self.health = 15
+	self.moving = false
+	self.attack_cooldown = 240
+	self.damage_cooldown = 20
+	self.currAttk = 0
+	self.facing = "left"
+	self.slap_count = 0
+end
+
+function update(self, dt)
+	-- if the attack cooldown is done...
+	-- 50% chance to move. after moving, or if no move...
+	-- reset the cooldown, pick a new attack, and perform it
+	if self.attack_cooldown == 0 then
+		self.attack_cooldown = 240
+		-- select new attack and go to method that performs it
+		self.currAttk = math.random(1,2)
+		print(self.currAttk)
+		if self.currAttk == 1 then
+			self.slap_count = math.random(1,3)
+			woodchip_attack_pt1(self)
+		else
+			child_attack(self)
+		end
+	end
+	-- if not currently attacking then iterate cooldown
+	if self.currAttk == 0 then
+		self.attack_cooldown = self.attack_cooldown - 1
+	end
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("animation_done") then
+		if self.currAttk == 1 then
+			woodchip_attack_pt2(self)
+		else
+			stick_attack_pt2(self)
+		end
+	elseif message_id == hash("trigger_response") then
+		print("hit")
+		damage(self)
+	end 
+end
+
+
+--[[
+UNFINISHED. WILL NOT BE FINISHED. DEFUNCT. ABANDON ALL HOPE YE WHO ENTER HERE.
 local function stick_attack_pt1(self)
 	print("ladder time")
 	-- determine if L or R
@@ -40,77 +145,4 @@ local function stick_attack_pt2(self)
 	-- and spawn ladder, to attack and then delete itself (TODO: ladder)
 	self.currAttk = 0
 end
-
-local function child_attack(self)
-	print("bowling time")
-	-- don't play anything
-	-- spawn child, have its opacity fade in
-	-- make it stay in place for a second and then get bowled idiot
-	factory.create("#child_factory", (go.get_position()+vmath.vector3(-70,-45,0)), nil, nil, .1)
-	self.currAttk = 0
-end
-
-local function damage(self)
-	-- take away 1 hp
-	self.health = self.health - 1
-	-- if  hp at 0, delete object
-	if self.health == 0 then
-		factory.create("#key_factory")
-		go.delete()
-	end
-end
-
--- TODO: move from side to side???
--- TODO: stick attack AAAAAA
--- TODO: multiple slaps per woodchip attack???
--- TODO: once all that is.. there.. get debugging idiot
-
-function init(self)
-	math.randomseed(os.time())
-	self.health = 15
-	self.moving = false
-	self.attack_cooldown = 240
-	self.damage_cooldown = 20
-	self.currAttk = 0
-	self.swingside = 1
-end
-
-function update(self, dt)
-	-- if the attack cooldown is done...
-	-- 50% chance to move. after moving, or if no move...
-	-- reset the cooldown, pick a new attack, and perform it
-	if self.attack_cooldown == 0 then
-		self.attack_cooldown = 240
-		-- select new attack and go to loop that performs it
-		--self.currAttk = math.random(1, 3)
-		self.currAttk = math.random(1,2)
-		print(self.currAttk)
-		if self.currAttk == 1 then
-			woodchip_attack_pt1(self)
-		elseif self.currAttk == 2 then
-			child_attack(self)
-		else
-			stick_attack_pt1(self)
-		end
-	end
-	-- if not currently attacking then iterate cooldown
-	if self.currAttk == 0 then
-		self.attack_cooldown = self.attack_cooldown - 1
-	end
-end
-
-function on_message(self, message_id, message, sender)
-	if message_id == hash("animation_done") then
-		if self.currAttk == 1 then
-			woodchip_attack_pt2(self)
-		elseif self.currAttk == 2 then
-			stick_attack_pt2(self)
-		else
-			child_attack(self)
-		end
-	elseif message_id == hash("trigger_response") then
-		print("hit")
-		damage(self)
-	end 
-end
-
+]]
