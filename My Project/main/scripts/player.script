@@ -339,6 +339,11 @@ function on_input(self, action_id, action)
 		elseif action_id == hash("switch") and dt ~= 0 then
 			msg.post(".", "switch")
 		elseif action_id == hash("interact") and self.in_item_range then
+			if self.itemNear == hash("/cloud-exit") then
+				msg.post(".", "play_animation", {id = hash("away")})
+				msg.post("/cloud-exit#cloudSprite", "picked_up")
+				msg.post("/guis#victory_screen", "victory!")
+			end
 			weaponAcquired = true
 			if self.itemNear == hash("/MeleeItem") and meleeWeaponAcquired == false then
 				self.itemNear = hash("")

@@ -29,7 +29,8 @@ function on_message(self, message_id, message, sender)
 		show(self, "#opening")
 		-- If it recieves a call to display a playable level
 	-- If it recieves a call to display a playable level
-	elseif message_id == hash("show_Level") then
+elseif message_id == hash("show_Level") then
+		msg.post("#level", "set_time_step", {factor = 1, mode = 1})	
 		show(self,"#level")
 	-- If it recieves a call to load the proxy
 	elseif message_id == hash("proxy_loaded") then

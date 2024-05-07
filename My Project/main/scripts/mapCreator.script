@@ -388,7 +388,7 @@ function exit(temp_x, temp_y)
 	local cloudY = ((LENGTH-1)/2) + temp_x
 	table.insert(coords, cloudX)
 	table.insert(coords, cloudY)
-	msg.post("/exit_cloud#cloudSprite", 'createCloud', coords)
+	msg.post("/cloud-exit#cloudSprite", 'createCloud', coords)
 	
 	for x = 0, WIDTH-1 do
 		for y = 0, LENGTH-1 do

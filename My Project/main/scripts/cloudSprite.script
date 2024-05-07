@@ -1,4 +1,5 @@
 function init(self)
+	msg.post("#E", "disable")
 end
 
 function final(self)
@@ -15,6 +16,16 @@ function on_message(self, message_id, message, sender)
 		local coords = message
 		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 1)
 		go.set_position(initPOS, go.get_id())
+	end
+	if message_id == hash("trigger_response") and message.enter == true then
+		msg.post("#E", "enable")
+	elseif message_id == hash("trigger_response") and message.enter == false then
+		msg.post("#E", "disable")
+	end
+
+	if message_id == hash("picked_up") then
+		msg.post("Scenes:/controller#loader", "pause")
+		go.delete()
 	end
 end
 
