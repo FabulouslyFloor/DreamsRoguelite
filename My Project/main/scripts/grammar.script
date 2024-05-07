@@ -30,10 +30,10 @@ function init(self)
 	contentOps[4] = {}
 	contentOps[4][1] = "Room"
 	contentOps[4][2] = "[CONTENT]"
-	--contentOps[5] = {}
-	--contentOps[5][1] = "[CONTENT]"
-	--contentOps[5][2] = "[CONTENT]"
-	-- looks like: ((Room, Room, [CONTENT]), (Room, Room), (Room), (Room, [CONTENT])
+	contentOps[5] = {}
+	contentOps[5][1] = "[CONTENT]"
+	contentOps[5][2] = "[CONTENT]"
+	-- looks like: ((Room, Room, [CONTENT]), (Room, Room), (Room), (Room, [CONTENT]), ([CONTENT], [CONTENT])
 
 	createSentence(self, "School")
 	--createSentence(self, "Outside")
