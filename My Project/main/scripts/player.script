@@ -168,6 +168,8 @@ function on_message(self, message_id, message, sender)
 			anim = self.current_anim
 			-- If the player is on Melee weapon
 			if attackMelee and meleeWeaponAcquired then
+				-- Sets attacking to true to stop the player from moving during the attack animation
+				attacking = true
 				-- Checks which direction the player was facing based on animation 
 				-- Plays the proper attack animation
 				-- Spawns a weapon object with the direction animation which plays the proper animation
@@ -194,6 +196,8 @@ function on_message(self, message_id, message, sender)
 					factory.create("#Weaponfactory",nil,nil,props)
 				end
 			elseif attackMelee == false and rangedWeaponAcquired then
+				-- Sets attacking to true to stop the player from moving during the attack animation
+				attacking = true
 				-- Checks which direction the player was facing based on animation 
 				-- Plays the proper attack animation
 				-- Sets self.firing to true so the firing code in update happens
@@ -224,8 +228,6 @@ function on_message(self, message_id, message, sender)
 					factory.create("#rocketfactory",nil,nil,props)
 				end
 			end
-			-- Sets attacking to true to stop the player from moving during the attack animation
-			attacking = true
 		end
 	end
 	-- The "play_animation" message sends an "animation_done" message when it finishes playing

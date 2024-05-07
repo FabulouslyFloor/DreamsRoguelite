@@ -217,10 +217,6 @@ function on_message(self, message_id, message, sender)
 			for j=1, #grid[1] do
 				local room = grid[i][j]
 				if room ~= '' and string.find(room, "End") == nil then
-					if string.find(room, "Boss") ~= nil then
-						bossX = i
-						bossY = j
-					end
 					if string.find(room, "%^") ~= nil then
 						if i == 1 then
 							grid[i][j] = string.gsub(room, "%^", "")
@@ -259,10 +255,6 @@ function on_message(self, message_id, message, sender)
 				end
 			end
 		end
-
-		boss_room = grid[bossX][bossY]
-		grid[bossX][bossY] = string.gsub(boss_room, "%^", "")
-		grid[bossX][bossY+1] = string.gsub(boss_room, "%v", "")
 	end
 
 	function check(grid)
@@ -275,9 +267,15 @@ function on_message(self, message_id, message, sender)
 						if i == 1 or string.find(grid[i-1][j], "v") == nil then
 							return false
 						end
+						if string.find(room, "Boss") ~= nil then
+							return false
+						end
 					end
 					if string.find(room, "v") ~= nil and string.find(room, "Spawn") == nil then
 						if i == (#grid) or string.find(grid[i+1][j], "%^") == nil then
+							return false
+						end
+						if string.find(room, "Boss") ~= nil then
 							return false
 						end
 					end

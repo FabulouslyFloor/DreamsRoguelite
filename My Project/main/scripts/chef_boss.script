@@ -1,7 +1,23 @@
--- just does spray attack until player hits the enemy
--- After that it fires a homing burger and doesnt send out another one until it dies
--- throw -200, -250
+--[[
+Script Name: chef_boss.script
+Author(s): Florian Hurlbert
+Date of Last Change: 05/06/2024
 
+Scripts Referenced/Messaged:
+hamburger.script
+Player.script
+
+Script Purpose: Controlling the chef boss object. The chef boss only spawns within the indoors area of the map. It spawns 
+Hamburger projectiles in 2 different attacks. It changes its attack pattern after it has been hit. It also drops a key
+when it has been destoryed.
+]]
+
+--[[
+Function damage 
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function handles the enemy taking damage. 
+	It does so by accessing internal variables, subtracting and flipping booleans as necessary.
+]]
 local function damage(self)
 	-- take away 1 hp
 	self.health = self.health - 1
@@ -10,49 +26,93 @@ local function damage(self)
 		go.delete()
 	end
 
+	-- Checks if the enemy has been damaged before
 	if self.hurt == false then
+		-- Flips the variable to unlock new attack patterns
 		self.hurt = true
 	end
 end
 
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function sets up all the variables needed for the chef to execute.
+]]
 function init(self)
+	-- Sets up a random seed
 	math.randomseed(os.time())
+	-- Initializes the boss as not being hit yet 
 	self.hurt = false 
+	-- The boss as 20 hitpoints
 	self.health = 20
+	-- Sets up a tracker for which attack it is executing for spawning purposes
 	self.track_attack = false
-	self.first = false
+	-- Starts the attack timer
 	self.attack_timer = 50
+	-- Sets up the boolean for tracking attacking state
 	self.not_attacking = true
+	-- Initializes the spray timer 
 	self.spray_timer = -1
+	-- Initializes the attack tracker
 	self.currAttk = 0
 end
 
+--[[
+Function update
+Update is native to defold and executes it's code every frame.
+It takes in the self object to access the internal variables of the specific instance it is controlling. dt is the current frame.
+This function handles which attack the chef chooses.
+	It does this by checking the internal variables and executing the attack when it is ready. It then sends messages to itself
+	to spawn the projectiles.
+]]
 function update(self, dt)
+	-- If the attack timer is at 0 and the enemy is not currently attacking
 	if self.attack_timer == 0 and self.not_attacking then
+		-- If the enemy has been attacked
 		if self.hurt then
+			-- Randomly chooses one of the two attacks
 			self.currAttk = math.random(1,2)
-			if self.currAttk == 1 then--self.track_attack == false then
+			-- If it selects the first attack, the tracking one
+			if self.currAttk == 1 then
+				-- Sends a message to itself to play the throwing animation
 				msg.post(".", "play_animation",{id = hash("throw")})
+				-- Sets track_attack to true so it knows which attack it is doing
 				self.track_attack = true
-				self.first = true
+				-- Resets the attack timer
 				self.attack_timer = 50
+				-- Sets not_attacking to false 
 				self.not_attacking = false
-			elseif self.currAttk == 2 then --self.track_attack then
+			-- If it selects the second attack, the spray attack
+			elseif self.currAttk == 2 then
+				-- Sends a message to itself to play the spray animation
 				msg.post(".", "play_animation",{id = hash("spray")})
+				-- Resets the attack timer
 				self.attack_timer = 50
+				-- Sets not_attacking to false
 				self.not_attacking = false
+				-- Sets the spray timer
 				self.spray_timer = 100
 			end
+		-- If the boss has not been hit yet
 		else
+			-- Sends a message to itself to play the spray animation
 			msg.post(".", "play_animation",{id = hash("spray")})
+			-- Resets the attack timer
 			self.attack_timer = 50
+			-- Sets not_attacking to false
 			self.not_attacking = false
+			-- Sets the spray timer 
 			self.spray_timer = 100
 		end
+	-- If the boss is not currently attacking and the timer is not at 0, decrement the timer
 	elseif self.not_attacking then
 		self.attack_timer = self.attack_timer - 1
 	end
 
+	-- If the spray timer is above -1 (where it is set when not in use)
+	-- On certain frames it sends a message to itself to spawn a hamburger object
+	-- If it is not a spawning frame it will just decrement the timer
 	if self.spray_timer == 50 then
 		msg.post(".", "spawn_spray1")
 		self.spray_timer = self.spray_timer -1
@@ -71,24 +131,33 @@ function update(self, dt)
 		self.spray_timer = self.spray_timer -1
 	end
 
-
-	
 end
 
+--[[
+Function on_message
+on_message is native to defold and executes it's code whenever the script recieves a message (a defold special feature).
+This function handles primarily spawning projectiles, damage, and placement on the map.
+	This is executed through calls to the hamburgerFactory to spawn the projectiles, changing internal variables, and calls to internal functions.
+]]
 function on_message(self, message_id, message, sender)
+	-- When animations that execute once finish, then send an "Animation done" message
 	if message_id == hash("animation_done") then
-		if self.track_attack and self.first then
+		-- If the animation was the track attack
+		if self.track_attack then
+			-- Spawns a hamburger projectile at the throwing position with tracking set to true
 			factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-60,-60,.7)), nil, { track = true, id = 0})
-			self.first = false
+			-- Sets it to false so this doesn't go off again unless the animation plays
+			self.track_attack = false
 		end
+		-- Sets the animation back to the idle animation
 		msg.post(".","play_animation",{id = hash("idle")})
+		-- Sets not_attacking to true as the object is in a non-attacking state
 		self.not_attacking = true
-	elseif message_id == hash("burger_death") then
-		self.track_attack = false
+	-- When the enemy gets a trigger response which is only from weapons
 	elseif message_id == hash("trigger_response") then
-		print("hit")
-		self.hurt = true
+		-- Calls the damage function
 		damage(self)
+	-- Calls the factory to spawn a projectile with the appropriate positional data
 	elseif message_id == hash("spawn_spray1") then
 		factory.create("#hamburgerFactory",(go.get_position()+vmath.vector3(-30,-5,.8)), nil, { track = false, id = 1 })
 	elseif message_id == hash("spawn_spray2") then
@@ -102,18 +171,27 @@ function on_message(self, message_id, message, sender)
 		self.spray_timer = -1
 	end
 
+	-- Matt spawning code
 	if message_id == hash("placeChef") then
 		local coords = message
-		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 1)
+		local initPOS = vmath.vector3(coords[1], coords[2], 1)
 		go.set_position(initPOS, go.get_id())
 		local s = vmath.vector3(0.5, 0.5, 1.0)
 		go.set_scale(s)
 	end
 end
 
+--[[
+Function final
+Final is native to defold and this code executes when the object is deleted.
+This code spawns a key object.
+]]
 function final(self)
+	-- Gets the objects position (which is randomized on the map)
 	pos = go.get_position()
+	-- Spawns the key and saves the id of the key
 	local id = factory.create("#keyFactory",pos+vmath.vector3(0,-100,.2),nil,nil,1)
+	-- Sends the key id to the player to assist the player in picking it up.
 	msg.post("/Player#player", "key_2_created", {key_id = id})
 end
 
