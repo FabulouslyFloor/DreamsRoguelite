@@ -25,6 +25,6 @@ function init(self)
 		factory.create("/enemy_spawner#bee_factory", vmath.vector3(700, 200, 1), nil, nil, .1)
 	end
 	if loadBoss then
-		factory.create("/enemy_spawner#slidefactory", vmath.vector3(682, 475, 1), nil, nil, .33)
+		factory.create("/enemy_spawner#slidefactory", vmath.vector3(682, 475, 1), nil, nil, .8)
 	end
 end
