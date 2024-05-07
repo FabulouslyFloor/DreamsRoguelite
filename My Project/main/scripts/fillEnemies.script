@@ -19,6 +19,8 @@ function init(self)
 	tilemap.set_tile("/level#generateMap", "roof2", 99, 234, 7)
 
 	fill_outside()
+
+	factory.create("/enemy_spawner#slidefactory", vmath.vector3(6000, 8000, 0.00000001), nil, nil, 0.8)
 end
 
 function fill_outside()
