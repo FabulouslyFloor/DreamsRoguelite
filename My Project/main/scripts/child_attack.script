@@ -1,3 +1,13 @@
+--[[
+Script Name:
+Author(s):
+Date of Last Change:
+
+Scripts Referenced/Messaged:
+
+Script Purpose: 
+]]
+
 function init(self)
 	self.dir = vmath.vector3(0, -1, 0)
 	self.speed = 400
@@ -6,30 +16,32 @@ function init(self)
 end
 
 function update(self, dt)
+	-- if the windup phase is done, for each frame:
 	if self.winduptimer == 0 then
+		-- move the object down
 		local pos = go.get_position()
 		pos = pos + self.dir * self.speed * dt
 		go.set_position(pos)
+		-- rotate the object
 		local rotat = go.get_rotation()
 		local change = vmath.quat_rotation_z(6.28*dt)
 		go.set_rotation(rotat*change)
-		--if self.rolling == false then
-		--	go.cancel_animations(".", "euler.z")
-		--	go.animate(".", "euler.z", go.PLAYBACK_LOOP_FORWARD, 360, go.EASING_LINEAR, 1)
-			--go.animate(".", "position", go.PLAYBACK_LOOP_FORWARD, self.dir*self.speed*dt, go.EASING_LINEAR, 1)
-		--	self.rolling = true
-		--	print("rolling")
+	-- if still winding up...
 	else
+		-- if 80 frames out, begin fading in
 		if self.winduptimer == 80 then
-			go.animate("#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_INOUTQUAD, 1)
+			go.animate("#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_INOUTQUAD, 1.5)
+		-- if 35 frames out, do a warning rotate
 		elseif self.winduptimer == 35 then
-			go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, 360, go.EASING_INCIRC, .5)
+			go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, 360, go.EASING_INCIRC, .75)
 		end
+		-- decrement the windup timer
 		self.winduptimer = self.winduptimer - 1
 	end
 end
 
 function on_message(self, message_id, message, sender)
+	-- if the projectile collides with the player or a wall, it deletes itself
 	if message_id == hash("collision_response") then
 		go.delete()
 	end

@@ -137,15 +137,15 @@ function update(self, dt)
 	end
 end
 
--- todo: add attack animation for when hurts player?
 -- when detects the player, set self.tracking to true and start tracking the player
 function on_message(self, message_id, message, sender)
 	if message_id == hash("collision_response") and message.other_group == hash("player") then
 		track_player(self)
 		self.tracking = true
-	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
+	elseif message_id == hash("contact_point_response") and (message.other_group == hash("rockets") or message.other_group == hash("down") or message.other_group == hash("left")or message.other_group == hash("right")or message.other_group == hash("up")) then
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
+		print(message.other_group)
 		print("knockedback")
 	elseif message_id == hash("hit") then
 		damage(self)	
