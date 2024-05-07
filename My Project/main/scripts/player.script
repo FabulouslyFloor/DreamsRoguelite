@@ -1,3 +1,13 @@
+--[[
+Script Name: player
+Author(s): Henry Hauger, Florian Hurlbert
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: GUI, weapon factory, rocket factory
+
+Script Purpose: runs the player and their motion, attacks, and damage logic
+]]
+
 -- Local Variables Initialized
 local speed = 300
 local attacking = false
@@ -21,7 +31,6 @@ local function on_death(self)
 	msg.post(".", "release_input_focus")
 	print("you died!")
 	go.delete()
-	-- TODO: death screen
 end
 
 -- happens when player collides with an object with group 'enemy_body' (todo: if enemies hit in ways other than melee, add group 'enemy_attack')
@@ -38,7 +47,6 @@ local function on_damage(self, given_normal,trigger)
 	else
 		self.damaged = true
 		self.damage_cooldown = 120
-		-- TODO: implement knockback
 		if trigger then
 			self.knocked_back = true
 			self.dir = given_normal
@@ -67,12 +75,6 @@ function init(self)
 	self.key2id = hash("nothing")
 end
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
 function update(self, dt)
 	-- 
 	if self.damage_cooldown > 0 then
@@ -85,8 +87,6 @@ function update(self, dt)
 	if vmath.length_sqr(self.dir) > 1 then
 		self.dir = vmath.normalize(self.dir)
 	end
-
-
 
 	if weaponSwitchTimer ~= 0 then
 		weaponSwitchTimer = weaponSwitchTimer - 1
@@ -156,15 +156,6 @@ function update(self, dt)
 		end 
 
 	end
-end
-
-function fixed_update(self, dt)
-	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
-	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in
-	-- Physics section of game.project
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
 end
 
 function on_message(self, message_id, message, sender)
@@ -366,10 +357,4 @@ function on_input(self, action_id, action)
 			end
 		end
 	end
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
 end

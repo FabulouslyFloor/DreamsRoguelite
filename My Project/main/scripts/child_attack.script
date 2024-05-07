@@ -1,17 +1,19 @@
 --[[
-Script Name:
-Author(s):
-Date of Last Change:
+Script Name: child_attack
+Author(s): Henry Hauger
+Date of Last Change: 5/6/2024
 
-Scripts Referenced/Messaged:
+Scripts Referenced/Messaged: n/a
 
-Script Purpose: 
+Script Purpose: Operates the child projectile used by the slide boss, controlling its movement and deletion
 ]]
 
 function init(self)
 	self.dir = vmath.vector3(0, -1, 0)
 	self.speed = 400
+	-- timer controls how long (in frames) between projectile spawning to projectile firing
 	self.winduptimer = 100
+	-- sets to be initially invisible
 	go.set("#sprite", "tint.w", 0)
 end
 

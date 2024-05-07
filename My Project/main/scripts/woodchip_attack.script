@@ -1,24 +1,30 @@
+--[[
+Script Name: woodchip_attack
+Author(s): Henry Hauger
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: n/a
+
+Script Purpose: used by slideBoss as a projectile. Handles its own movement and deletion
+]]
+
+-- takes in property passed by factory to dictate its velocity. default value of (0,0,0)
 go.property("dir", vmath.vector3(0,0,0))
 function init(self)
-	--print("made at", go.get_position())
 	self.speed = 400
+	-- sets game object to be rotating in continuously
 	go.animate(".", "euler.z", go.PLAYBACK_LOOP_FORWARD, 360, go.EASING_LINEAR, .25)
 end
 
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
--- rotation could be handled by animation. ignore for now.
 function update(self, dt)
+	-- moves game object in direction of dir every frame
 	local pos = go.get_position()
 	pos = pos + self.dir * self.speed * dt
 	go.set_position(pos)
 end
 
 function on_message(self, message_id, message, sender)
+	-- deletes object when collides with player or wall
 	if message_id == hash("collision_response") then
 		go.delete()
 	end
