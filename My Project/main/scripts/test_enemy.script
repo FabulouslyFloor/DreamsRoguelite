@@ -60,7 +60,7 @@ function update(self, dt)
 		if self.trackplayer then
 			-- The enemy compares it's position to that of the player 
 			local current_position = go.get_position()
-			local diff = go.get_position("/Player") - current_position
+			local diff = go.get_position("/Player#player") - current_position
 			local distance_to_target = vmath.length(diff)
 			-- If the enemy has not reached the player
 			if distance_to_target > 0 then
