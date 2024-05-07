@@ -1,3 +1,13 @@
+--[[
+Script Name:
+Author(s):
+Date of Last Change:
+
+Scripts Referenced/Messaged:
+
+Script Purpose: 
+]]
+
 local death
 
 	function init(self)
