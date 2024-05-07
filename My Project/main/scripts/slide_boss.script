@@ -94,7 +94,8 @@ local function damage(self)
 	self.damage_cooldown = 20
 	-- if  hp at 0, delete object
 	if self.health == 0 then
-		factory.create("#key_factory")
+		local id = factory.create("#key_factory")
+		msg.post("/Player#player", "key_1_created", {key_id = id})
 		go.delete()
 	end
 end

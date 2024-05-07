@@ -72,6 +72,7 @@ function init(self)
 	self.itemNear = hash("")
 
 	self.keys = 0
+	self.key1id = hash("nothing")
 	self.key2id = hash("nothing")
 end
 
@@ -268,7 +269,9 @@ function on_message(self, message_id, message, sender)
 		self.itemNear = hash("")
 	end
 
-	if message_id == hash("key_2_created") then
+	if message_id == hash("key_1_created") then
+		self.key1id = message.key_id
+	elseif message_id == hash("key_2_created") then
 		self.key2id = message.key_id
 		print(self.key2id)
 	end
@@ -350,6 +353,12 @@ function on_input(self, action_id, action)
 				if attackMelee then
 					attackMelee = false
 				end
+			elseif self.itemNear == self.key1id then
+				self.itemNear = hash("")
+				print("key obtained!")
+				self.keys = self.keys + 1
+				msg.post(self.key1id, "picked_up")
+				print(self.keys)
 			elseif self.itemNear == self.key2id then
 				self.itemNear = hash("")
 				print("key obtained!")
