@@ -1,3 +1,13 @@
+--[[
+Script Name: worm_enemy
+Author(s): Henry Hauger
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: n/a
+
+Script Purpose: operates worm enemies
+]]
+
 go.property("local_pos", 0)
 go.property("bool", 0)
 -- draws in values from factory and uses them to set these values
@@ -5,6 +15,7 @@ go.property("bool", 0)
 -- can be up to 15% off center to the left or right
 -- self.bool randomly sets worm to be facing + moving left or right on initialization
 
+-- called when worm hits wall or is at end of movement range
 local function update_animation(self)
 	if self.go_left then
 		sprite.play_flipbook("#sprite", "left")
@@ -34,8 +45,6 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
-		-- Calls damage; TODO: currently not implemented, has only one hp
-		-- damage(self)
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
 		
@@ -70,10 +79,12 @@ function init(self)
 end
 
 function update(self, dt)
+	-- if in knockback state, perform knockback movement
 	if self.knockbacked then
 		local current_position = go.get_position()
 		go.set_position(current_position + self.dir * self.speed * dt) 
 		self.kbtimer = self.kbtimer - 1
+		-- once done being knocked back reset direction vector and resume movement
 		if self.kbtimer == 0 then
 			self.knockbacked = false
 			if self.go_left then
