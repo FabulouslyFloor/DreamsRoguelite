@@ -1,6 +1,5 @@
 local function woodchip_attack_pt1(self)
 	-- perform rearing-up animation
-	-- hi
 	msg.post(".", "play_animation",{id = hash("slap_left")})
 	-- on conclusion... see woodchip_attack_pt2
 end
@@ -59,19 +58,17 @@ local function damage(self)
 		factory.create("#key_factory")
 		go.delete()
 	end
-
-	if self.hurt == false then
-		self.hurt = true
-	end
 end
 
 -- TODO: move from side to side???
 -- TODO: stick attack AAAAAA
+-- TODO: multiple slaps per woodchip attack???
 -- TODO: once all that is.. there.. get debugging idiot
 
 function init(self)
 	math.randomseed(os.time())
 	self.health = 15
+	self.moving = false
 	self.attack_cooldown = 240
 	self.damage_cooldown = 20
 	self.currAttk = 0
@@ -79,7 +76,9 @@ function init(self)
 end
 
 function update(self, dt)
-	-- if the cooldown is done, reset the cooldown, pick a new attack, and perform it
+	-- if the attack cooldown is done...
+	-- 50% chance to move. after moving, or if no move...
+	-- reset the cooldown, pick a new attack, and perform it
 	if self.attack_cooldown == 0 then
 		self.attack_cooldown = 240
 		-- select new attack and go to loop that performs it
