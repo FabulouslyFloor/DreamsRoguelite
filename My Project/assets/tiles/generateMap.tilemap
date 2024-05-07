@@ -9945,13 +9945,13 @@ layers {
   is_visible: 1
 }
 layers {
-  id: "roof2"
-  z: 0.96
+  id: "roof"
+  z: 0.99
   is_visible: 1
 }
 layers {
-  id: "roof"
-  z: 0.99
+  id: "roof2"
+  z: 0.999
   is_visible: 1
 }
 layers {
