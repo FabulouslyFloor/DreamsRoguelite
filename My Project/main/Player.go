@@ -39,7 +39,7 @@ embedded_components {
 embedded_components {
   id: "on_hurt"
   type: "sound"
-  data: "sound: \"/assets/Sounds/585603__alex36917__ow-voice-3-WORKS.wav\"\n"
+  data: "sound: \"/assets/sounds/585603__alex36917__ow-voice-3-WORKS.wav\"\n"
   "looping: 0\n"
   "group: \"master\"\n"
   "gain: 0.5\n"
@@ -162,7 +162,7 @@ embedded_components {
 embedded_components {
   id: "walking"
   type: "sound"
-  data: "sound: \"/assets/Sounds/630006__trexlasso__walking-through-grass2.ogg\"\n"
+  data: "sound: \"/assets/sounds/630006__trexlasso__walking-through-grass2.ogg\"\n"
   "looping: 1\n"
   "group: \"master\"\n"
   "gain: 2.0\n"

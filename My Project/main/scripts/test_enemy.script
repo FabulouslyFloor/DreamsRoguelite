@@ -1,9 +1,3 @@
--- Local variables initialized
--- timer is for movement
-local timer = 0
--- Boolean for whether the player is being tracked
-local trackplayer = false
-
 local function damage(self)
 	print("Gremlin hit")
 	-- take away 1 hp
@@ -15,7 +9,7 @@ local function damage(self)
 end
 
 local function knockback(self, normal)
-	print(normal)
+	--print(normal)
 	-- sets knockback state
 	self.knockbacked = true
 	-- Gets direction vector from intersection and sets the direction to it
@@ -32,6 +26,8 @@ end
 
 function init(self)
 	-- Sets up internal variables
+	self.trackplayer = false
+	self.timer = 0
 	self.dir = vmath.vector3(0, 1, 0)
 	self.speed = 50
 	self.going = nil
@@ -61,7 +57,7 @@ function update(self, dt)
 	else
 		-- Checks whether the player is supposed to be chased
 		-- If the player is being chased,
-		if trackplayer then
+		if self.trackplayer then
 			-- The enemy compares it's position to that of the player 
 			local current_position = go.get_position()
 			local diff = go.get_position("/Player") - current_position
@@ -96,7 +92,7 @@ function update(self, dt)
 		-- If the enemy is not chasing the player
 		else
 			-- If the enemy has not reached it's destination and is currently waiting for a moment
-			if timer == 0 then
+			if self.timer == 0 then
 				-- Checks the difference between the enemies current position and where they are heading
 				local current_position = go.get_position()
 				local diff = self.going - current_position
@@ -127,16 +123,16 @@ function update(self, dt)
 				-- If they have reached the target position, idle for 60 frames
 				elseif distance_to_target <= 0 then
 					anim = hash("idle")
-					timer = 60
+					self.timer = 60
 				end
 			-- When the timer reaches 1
-			elseif timer == 1 then
+			elseif self.timer == 1 then
 				-- Sends a message to itself to pick a new position to walk to
 				msg.post(".","get_new_position")
-				timer = timer -1
+				self.timer = self.timer -1
 			else
 				-- Decrement the timer
-				timer = timer - 1
+				self.timer = self.timer - 1
 			end
 		end
 	end
@@ -155,19 +151,15 @@ function on_message(self, message_id, message, sender)
 	-- When the players hitbox collides with the enemy's scanning hitbox
 	elseif message_id == hash("collision_response") and message.own_group == hash("detect") then
 		-- Sets the variable to track the player to true (as if they got to close and are chasing them)
-		if not trackplayer then
-			trackplayer = true
+		if not self.trackplayer then
+			self.trackplayer = true
 		end
 	-- Should only trigger if the collision is between a weapon and the enemy body
 	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
-		-- Calls damage
-		--damage(self)
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
-
-	elseif message_id == hash("trigger_response") then
-		damage(self)
-		
+	elseif message_id == hash("hit") then
+		damage(self)	
 	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
 		local pos = go.get_position()
 		local to = pos + message.normal * 5

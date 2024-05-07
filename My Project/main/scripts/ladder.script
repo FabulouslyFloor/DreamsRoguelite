@@ -1,19 +1,7 @@
--- Sets up the object to recieve the data from the factory.create call
-go.property("anim", hash(""))
-
 function init(self)
-	-- Tells itself to play the right animation 
-	msg.post(".", "play_animation", {id = self.anim})
-end
-
-function on_message(self, message_id, message, sender)
-	-- When it recieves the animation done message it deletes itself
-	if message_id == hash("animation_done") then
-		go.delete()
-	end
-	if message_id == hash("trigger_response") and message.enter then
-		msg.post(message.other_id, "hit")
-	end
+	self.lifetimer = 240
+	self.speed = 150
+	go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, 75, go.EASING_LINEAR, .5)
 end
 
 function final(self)
@@ -34,6 +22,12 @@ function fixed_update(self, dt)
 	-- Physics section of game.project
 	-- Add update code here
 	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
 	-- Remove this function if not needed
 end
 
