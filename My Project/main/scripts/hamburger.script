@@ -1,15 +1,43 @@
+--[[
+Script Name: hamburger.script
+Author(s): Florian Hurlbert
+Date of Last Change: 05/06/2024
+
+Scripts Referenced/Messaged:
+
+Script Purpose: This script controls the projectiles spawned by the chef. It keeps track of two different types of movement
+and spawns them based on passed information. It also handles what they do upon death.
+]]
+
+-- Sets up internal variables which will get filled when the factory call is made.
 go.property("track", false)
 go.property("id", 0)
 
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function sets up all the variables needed for the hamburger to execute.
+]]
 function init(self)
 	self.speed = 150
 end
 
+--[[
+Function update
+Update is native to defold and executes it's code every frame.
+It takes in the self object to access the internal variables of the specific instance it is controlling. dt is the current frame.
+This function handles the movement of the projectiles.
+	It divdes it up between two different types of projectiles and moves them based on that.
+]]
 function update(self, dt)
+	-- If it was spawned with tracking enabled
 	if self.track then
 		-- The enemy compares it's position to that of the player 
 		local current_position = go.get_position()
+		-- Calculates the different between the players position and their position in a vector
 		local diff = go.get_position("/Player") - current_position
+		-- Determines the length of the difference
 		local distance_to_target = vmath.length(diff)
 		-- If the enemy has not reached the player
 		if distance_to_target > 0 then
@@ -21,8 +49,11 @@ function update(self, dt)
 			local new_position = current_position + direction * distance_to_move
 			go.set_position(new_position)
 		end
+	-- If the projectile is not tracking
 	else
+		-- Grabs the current position of the projectile
 		local pos = go.get_position()
+		-- Depending on the ID of the projectile, it adjusts the movement so they fan out
 		if self.id == 1 then
 			pos.x = pos.x + 2
 			pos.y = pos.y - 3
@@ -39,16 +70,23 @@ function update(self, dt)
 			pos.x = pos.x - 2
 			pos.y = pos.y - 2
 		end
+		-- Sets the position
 		go.set_position(pos)
 	end
 end
 
+--[[
+Function on_message
+on_message is native to defold and executes it's code whenever the script recieves a message (a defold special feature).
+This function handles collision responses.
+	When the script recieves a message from either hitting a wall, a weapon, or the player, it deletes itself.
+	This also helps keep the resources low as if too many hamburgers exist they will stop spawning.
+]]
 function on_message(self, message_id, message, sender)
+	-- Handles collision for player and weapons
 	if message_id == hash("trigger_response") and message.other_group == hash("rockets") or message.other_group == hash("up") or message.other_group == hash("down") or message.other_group == hash("right") or message.other_group == hash("left") or message.other_group == hash("player") then
-		if self.id == 0 then
-			msg.post("/chefBoss#chef_boss", "burger_death")
-		end
 		go.delete()
+	-- Handles collision for walls 
 	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
 		go.delete()
 	end
