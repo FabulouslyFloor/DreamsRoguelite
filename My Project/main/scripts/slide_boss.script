@@ -10,7 +10,11 @@ Script Purpose: Operates the slide boss, tracking its health and spawning projec
 
 local function woodchip_attack_pt1(self)
 	-- perform rearing-up animation
-	sprite.play_flipbook("#sprite", hash("slap_left"))
+	if self.facing == "left" then
+		sprite.play_flipbook("#sprite", hash("slap_left"))
+	else
+		sprite.play_flipbook("#sprite", hash("slap_right"))
+	end
 	-- see on_message
 end
 
@@ -20,21 +24,41 @@ local function woodchip_attack_pt2(self)
 	local pattern = math.random(1,3)
 	print(pattern)
 	-- send corresponding messages to the woodchip factory
-	if pattern == 1 then
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
-	elseif pattern == 2 then
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(.9, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(.4, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-75, -90, 0)), nil, { dir = vmath.vector3(-.4, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-.9, -1, 0)}, .1)
+	-- checking slide direction
+	if self.facing == "left" then
+		if pattern == 1 then
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+		elseif pattern == 2 then
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(.9, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(.4, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-75, -90, 0)), nil, { dir = vmath.vector3(-.4, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-.9, -1, 0)}, .1)
+		else
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(.5, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-73, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-77, -90, 0)), nil, { dir = vmath.vector3(-.5, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+		end
 	else
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-70, -90, 0)), nil, { dir = vmath.vector3(.5, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-73, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-77, -90, 0)), nil, { dir = vmath.vector3(-.5, -1, 0)}, .1)
-		factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(-80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+		if pattern == 1 then
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(70, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+		elseif pattern == 2 then
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(60, -90, 0)), nil, { dir = vmath.vector3(.9, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(70, -90, 0)), nil, { dir = vmath.vector3(.4, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(75, -90, 0)), nil, { dir = vmath.vector3(-.4, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(80, -90, 0)), nil, { dir = vmath.vector3(-.9, -1, 0)}, .1)
+		else
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(60, -90, 0)), nil, { dir = vmath.vector3(1, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(70, -90, 0)), nil, { dir = vmath.vector3(.5, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(73, -90, 0)), nil, { dir = vmath.vector3(0, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(77, -90, 0)), nil, { dir = vmath.vector3(-.5, -1, 0)}, .1)
+			factory.create("#woodchip_factory", (go.get_position()+vmath.vector3(80, -90, 0)), nil, { dir = vmath.vector3(-1, -1, 0)}, .1)
+		end
 	end
 	-- reduce needed slaps
 	self.slap_count = self.slap_count - 1
@@ -42,24 +66,32 @@ local function woodchip_attack_pt2(self)
 	if self.slap_count == 0 then
 		self.currAttk = 0
 		-- return to idle
-		sprite.play_flipbook("#sprite", hash("idle"))
+		if self.facing == "left" then
+			sprite.play_flipbook("#sprite", hash("idle_left"))
+		else
+			sprite.play_flipbook("#sprite", hash("idle_right"))
+		end
 	else
 		-- slap again
 		woodchip_attack_pt1(self)
 	end
 end
 
--- 
 local function child_attack(self)
 	--print("bowling time")
 	-- message child_factory to create a projectile at the appropriate location
-	factory.create("#child_factory", (go.get_position()+vmath.vector3(-70,-45,0)), nil, nil, .1)
+	if self.facing == "left" then
+		factory.create("#child_factory", (go.get_position()+vmath.vector3(-70,-45,0)), nil, nil, .1)
+	else
+		factory.create("#child_factory", (go.get_position()+vmath.vector3(70,-45,0)), nil, nil, .1)
+	end
 	self.currAttk = 0
 end
 
 local function damage(self)
 	-- take away 1 hp
 	self.health = self.health - 1
+	self.damage_cooldown = 20
 	-- if  hp at 0, delete object
 	if self.health == 0 then
 		factory.create("#key_factory")
@@ -68,7 +100,6 @@ local function damage(self)
 end
 
 -- TODO: move from side to side???
--- TODO: multiple slaps per woodchip attack???
 -- TODO: once all that is.. there.. get debugging idiot
 
 function init(self)
@@ -76,42 +107,77 @@ function init(self)
 	self.health = 15
 	self.moving = false
 	self.attack_cooldown = 240
-	self.damage_cooldown = 20
+	self.damage_cooldown = 0
+	self.speed = 100
 	self.currAttk = 0
 	self.facing = "left"
 	self.slap_count = 0
+	self.dir = vmath.vector3()
 end
 
 function update(self, dt)
 	-- if the attack cooldown is done...
-	-- 50% chance to move. after moving, or if no move...
-	-- reset the cooldown, pick a new attack, and perform it
 	if self.attack_cooldown == 0 then
-		self.attack_cooldown = 240
-		-- select new attack and go to method that performs it
-		self.currAttk = math.random(1,2)
-		print(self.currAttk)
-		if self.currAttk == 1 then
-			self.slap_count = math.random(1,3)
-			woodchip_attack_pt1(self)
+		local move = math.random(1,2)
+		print(move)
+		-- 50% chance to move. after moving, or if no move...
+		if move == 1 or self.moving == true then
+			-- reset the cooldown and moving flag, pick a new attack, and perform it
+			if self.facing == "left" then
+				sprite.play_flipbook("#sprite", hash("idle_left"))
+			else
+				sprite.play_flipbook("#sprite", hash("idle_right"))
+			end
+			self.moving = false
+			self.attack_cooldown = 240
+			-- select new attack and go to method that performs it
+			self.currAttk = math.random(1,2)
+			print(self.currAttk)
+			if self.currAttk == 1 then
+				-- set number of slaps the slide will perform
+				self.slap_count = math.random(1,3)
+				woodchip_attack_pt1(self)
+			else
+				child_attack(self)
+			end
+		-- if slide will move...
 		else
-			child_attack(self)
+			-- set time it will move (also serves as distance). options are 30-180 frames, in intervals of 30
+			self.attack_cooldown = math.random(1,6) * 30
+			print(self.attack_cooldown)
+			self.moving = true
+			-- decide direction to move in and change values accordingly
+			local direction = math.random(1,2)
+			if direction == 1 then
+				self.facing = "left"
+				self.dir = vmath.vector3(-1,0,0)
+				sprite.play_flipbook("#sprite", "run_left")
+			else
+				self.facing = "right"
+				self.dir = vmath.vector3(1,0,0)
+				sprite.play_flipbook("#sprite", "run_right")
+			end
 		end
+	end
+	-- if moving true, move 
+	if self.moving then
+		local dir = go.get_position()
+		go.set_position(dir + self.dir*dt*self.speed)
 	end
 	-- if not currently attacking then iterate cooldown
 	if self.currAttk == 0 then
 		self.attack_cooldown = self.attack_cooldown - 1
 	end
+	-- if on damage cooldown, iterate cooldown
+	if self.damage_cooldown > 0 then
+		self.damage_cooldown = self.damage_cooldown - 1
+	end
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("animation_done") then
-		if self.currAttk == 1 then
-			woodchip_attack_pt2(self)
-		else
-			stick_attack_pt2(self)
-		end
-	elseif message_id == hash("trigger_response") then
+	if message_id == hash("animation_done") and self.currAttk == 1 then
+		woodchip_attack_pt2(self)
+	elseif message_id == hash("trigger_response") and self.damage_cooldown == 0 then
 		print("hit")
 		damage(self)
 	end 

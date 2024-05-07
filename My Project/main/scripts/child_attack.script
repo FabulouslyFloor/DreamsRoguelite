@@ -35,7 +35,7 @@ function update(self, dt)
 			go.animate("#sprite", "tint.w", go.PLAYBACK_ONCE_FORWARD, 1, go.EASING_INOUTQUAD, 1.5)
 		-- if 35 frames out, do a warning rotate
 		elseif self.winduptimer == 35 then
-			go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, 360, go.EASING_INCIRC, .75)
+			go.animate(".", "euler.z", go.PLAYBACK_ONCE_FORWARD, 360, go.EASING_INCIRC, .55)
 		end
 		-- decrement the windup timer
 		self.winduptimer = self.winduptimer - 1
