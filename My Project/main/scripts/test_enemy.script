@@ -9,7 +9,7 @@ Script Purpose: Operates gremlin enemies
 ]]
 
 local function damage(self)
-	print("Gremlin hit")
+	-- print("Gremlin hit")
 	-- take away 1 hp
 	self.health = self.health - 1
 	-- if  hp at 0, delete object
@@ -143,7 +143,7 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	-- When the enemy requests a position to move too
+	-- When the enemy requests a position to move to
 	if message_id == hash("get_new_position") then
 		-- gets the enemies current position
 		local pos = go.get_position()
