@@ -25,7 +25,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	-- deletes object when collides with player or wall
-	if message_id == hash("collision_response") then
+	if message_id == hash("collision_response") or message_id == hash("contact_point_response") then
 		go.delete()
 	end
 end

@@ -44,7 +44,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	-- if the projectile collides with the player or a wall, it deletes itself
-	if message_id == hash("collision_response") then
+	if message_id == hash("collision_response") or message_id == hash("contact_point_response") then
 		go.delete()
 	end
 end

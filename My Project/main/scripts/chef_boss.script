@@ -174,7 +174,7 @@ function on_message(self, message_id, message, sender)
 	-- Matt spawning code
 	if message_id == hash("placeChef") then
 		local coords = message
-		local initPOS = vmath.vector3(coords[1], coords[2], 1)
+		local initPOS = vmath.vector3(coords[1], coords[2], 0.98)
 		go.set_position(initPOS, go.get_id())
 		local s = vmath.vector3(0.5, 0.5, 1.0)
 		go.set_scale(s)
