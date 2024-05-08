@@ -1,3 +1,13 @@
+--[[
+Script Name: mapCreator
+Author(s): Matthew DeGirolamo
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: cellularAutomata, fillEnemies, cloudSprite, chef_boss
+
+Script Purpose: paints the tilemap based off of the cellularAutomata grid
+]]
+
 --constants that represent the width and length of each room in tile size
 WIDTH = 39
 LENGTH = 39

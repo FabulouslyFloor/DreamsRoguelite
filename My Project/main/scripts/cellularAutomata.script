@@ -1,3 +1,14 @@
+--[[
+Script Name: cellularAutomata
+Author(s): Matthew DeGirolamo
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: grammar, mapCreator
+
+Script Purpose: uses a cellular automata algorithm to create and fill a playable map
+]]
+
+
 --Initialization function that seeds this script's
 --random number generator through the built-in Lua library
 --@param self: references the script's instance within the collection

@@ -1,8 +1,20 @@
+--[[
+Script Name: cameraScript
+Author(s): Matthew DeGirolamo
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: render
+
+Script Purpose: create a camera that follows the player
+]]
+
+--initializes the camera object to be focused on its current game object (which is the player)
 function init(self)
 	msg.post(".", "acquire_camera_focus")
 	msg.post("@render:", "use_camera_projection")
 end
 
+--sets the view projection based on player movement
 function on_message(self, message_id, message, sender)
 	if message_id == hash("set_view_projection") then
 		self.view=message.view
