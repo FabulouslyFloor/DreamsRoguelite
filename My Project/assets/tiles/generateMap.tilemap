@@ -9950,7 +9950,7 @@ layers {
   is_visible: 1
 }
 layers {
-  id: "roof2"
+  id: "roof_doors"
   z: 0.999
   is_visible: 1
 }

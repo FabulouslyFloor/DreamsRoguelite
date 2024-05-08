@@ -14,7 +14,7 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash("createCloud") then
 		local coords = message
-		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 1)
+		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 0.98)
 		go.set_position(initPOS, go.get_id())
 	end
 	if message_id == hash("trigger_response") and message.enter == true then

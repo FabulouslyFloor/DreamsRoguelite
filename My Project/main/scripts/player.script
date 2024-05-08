@@ -296,7 +296,7 @@ function on_message(self, message_id, message, sender)
 		else
 			if roofVisible then
 				tilemap.set_visible("/level#generateMap", "roof", false)
-				tilemap.set_visible("/level#generateMap", "roof2", false)
+				tilemap.set_visible("/level#generateMap", "roof_doors", false)
 				roofVisible = false
 			end
 		end
