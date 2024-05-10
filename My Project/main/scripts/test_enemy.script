@@ -1,5 +1,19 @@
+--[[
+Script Name: player
+Author(s): Florian Hurlbert
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: 
+
+Script Purpose: This script controls the enemies movement and behaviors like taking damage.
+]]
+
+--[[
+Function damage 
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function handles the Gremlin taking damage, and deletes it when it dies.
+]]
 local function damage(self)
-	print("Gremlin hit")
 	-- take away 1 hp
 	self.health = self.health - 1
 	-- if  hp at 0, delete object
@@ -8,6 +22,11 @@ local function damage(self)
 	end
 end
 
+--[[
+Function knockback // Henry wrote this
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function handles the Gremlin's knockback state
+]]
 local function knockback(self, normal)
 	--print(normal)
 	-- sets knockback state
@@ -24,22 +43,41 @@ local function knockback(self, normal)
 	--go.set_position(to)
 end
 
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function sets up all the variables needed for the Gremlin to function
+]]
 function init(self)
 	-- Sets up internal variables
+	-- Is the Gremlin tracking the player
 	self.trackplayer = false
+	-- Sets up the idle timer
 	self.timer = 0
+	-- Sets up the direction, recorded as a vector3
 	self.dir = vmath.vector3(0, 1, 0)
+	-- Sets the speed
 	self.speed = 50
+	-- Sets up the spot the Gremlin is traveling to 
 	self.going = nil
+	-- Sets up health
 	self.health = 3 
+	-- Keeps track of the knockbacked state
 	self.knockbacked = false
+	-- ?
 	self.kbtimer = 0
 	-- Sends a message to get a place for the enemy to walk to
 	msg.post(".","get_new_position")
-	-- Ensures the timer starts at zero when it spawns in
-	timer = 0
 end
 
+--[[
+Function update
+Update is native to defold and executes it's code every frame.
+It takes in the self object to access the internal variables of the specific instance it is controlling. dt is the current frame.
+This function handles primarily the Gremlins movement.
+	It adjusts how it calculates movement based on whether or not it is currently tracking the player.
+]]
 function update(self, dt)
 
 	-- Ensures that the base animation is always idle
@@ -53,14 +91,16 @@ function update(self, dt)
 		if self.kbtimer == 0 then
 			self.knockbacked = false
 		end
-	-- else,
+	-- if it is not knockbacked
 	else
 		-- Checks whether the player is supposed to be chased
 		-- If the player is being chased,
 		if self.trackplayer then
 			-- The enemy compares it's position to that of the player 
 			local current_position = go.get_position()
+			-- Determines the difference between itself and the player 
 			local diff = go.get_position("/Player#player") - current_position
+			-- Calculates the difference as a number
 			local distance_to_target = vmath.length(diff)
 			-- If the enemy has not reached the player
 			if distance_to_target > 0 then
@@ -72,7 +112,7 @@ function update(self, dt)
 				local new_position = current_position + direction * distance_to_move
 				go.set_position(new_position)
 
-				-- Sets the appropriate walking animation
+				-- Sets the appropriate walking animation (only one for up and down)
 				if new_position.y > current_position.y then
 					anim = hash("up")
 				elseif new_position.y < current_position.y then
@@ -80,9 +120,11 @@ function update(self, dt)
 				end
 
 				-- Updates the animation if it has changed
-				if anim ~= self.current_anim then                          -- [3]
-					msg.post("#sprite", "play_animation", { id = anim })   -- [4]
-					self.current_anim = anim                               -- [5]
+				if anim ~= self.current_anim then
+					-- Sends a message to play the new animation
+					msg.post("#sprite", "play_animation", { id = anim })
+					-- Updates the internal variable
+					self.current_anim = anim
 				end
 
 			-- If the enemy has reached the player, they are to idle
@@ -95,7 +137,9 @@ function update(self, dt)
 			if self.timer == 0 then
 				-- Checks the difference between the enemies current position and where they are heading
 				local current_position = go.get_position()
+				-- Determines the difference between itself and the position it's traveling to
 				local diff = self.going - current_position
+				-- Calculates the difference as a number
 				local distance_to_target = vmath.length(diff)
 				-- If they have not reached the destination yet
 				if distance_to_target > 0 then
@@ -115,20 +159,25 @@ function update(self, dt)
 					end
 
 					-- Sets the animation if it changed
-					if anim ~= self.current_anim then                          -- [3]
-						msg.post("#sprite", "play_animation", { id = anim })   -- [4]
-						self.current_anim = anim                               -- [5]
+					if anim ~= self.current_anim then
+						-- Sends a message to iself to play the new animation
+						msg.post("#sprite", "play_animation", { id = anim })
+						-- Updates the internal variable
+						self.current_anim = anim
 					end
 
 				-- If they have reached the target position, idle for 60 frames
 				elseif distance_to_target <= 0 then
+					-- Sets anim to idle animation
 					anim = hash("idle")
+					-- Sets the timer to 60
 					self.timer = 60
 				end
 			-- When the timer reaches 1
 			elseif self.timer == 1 then
 				-- Sends a message to itself to pick a new position to walk to
 				msg.post(".","get_new_position")
+				-- Decrements
 				self.timer = self.timer -1
 			else
 				-- Decrement the timer
@@ -138,6 +187,11 @@ function update(self, dt)
 	end
 end
 
+--[[
+Function on_message
+on_message is native to defold and executes it's code whenever the script recieves a message (a defold special feature).
+This function generating a new position for the enemy to walk to, the tracking player flag, and damage recieved.
+]]
 function on_message(self, message_id, message, sender)
 	-- When the enemy requests a position to move too
 	if message_id == hash("get_new_position") then
@@ -158,8 +212,11 @@ function on_message(self, message_id, message, sender)
 	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
+	-- If it recieves a message it has been hit (from one of the weapon objects
 	elseif message_id == hash("hit") then
-		damage(self)	
+		-- Calls the damage function
+		damage(self)
+	-- If it recieves a collission response specific to the walls
 	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
 		local pos = go.get_position()
 		local to = pos + message.normal * 5
@@ -168,6 +225,9 @@ function on_message(self, message_id, message, sender)
 	
 end
 
+--[[
+All functions below here are currently unused, but retained in case they are needed in the future.
+]]
 function on_input(self, action_id, action)
 	-- Add input-handling code here. The game object this script is attached to
 	-- must have acquired input focus:

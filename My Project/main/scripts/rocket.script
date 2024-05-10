@@ -1,13 +1,52 @@
- -- Sets up the object to accept the direction passed to it
+--[[
+Script Name: rocket.script
+Author(s): Florian Hurlbert
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: 
+
+Script Purpose: This script handles the rockets after they are spawned by the player
+]]
+
+ -- Sets up the object to accept the direction passed to it by the factory
 go.property("dir", hash(""))
 
+--[[
+Function explode
+Explode takes the self object to access the internal variables.
+This function is used to set off the correct animations and finish off the rocket.
+]]
+local function explode(self)
+	-- Disables the main sprite
+	msg.post("#sprite", "disable")
+	-- Enables the explosion
+	msg.post("#explosion", "enable")
+	-- Sets the life really high so it doesn't trigger again
+	self.life = 1000
+	-- Stops moving
+	self.speed = 0
+	-- Plays the explosion animation
+	sprite.play_flipbook("#explosion", "explosion")       
+end
+
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function sets up variables and plays the correct animation for the direction it's moving
+	]]
 function init(self)
 	-- Sets up local variables
+	-- Initializes the speed
 	self.speed = 0
+	-- Starts with a life of 2
 	self.life = 2
 
+	-- Disables the explosion so it isn't playing until necessary
 	msg.post("#explosion", "disable")
-	
+
+	-- Checks the direction it was passed and plays the correct animation and sets up the speed to reflect
+	-- the direction it will be traveling
 	if self.dir == hash("up") then
 		msg.post(".", "play_animation", {id = hash("ranged_up")})
 		self.speed = 7
@@ -23,26 +62,27 @@ function init(self)
 	end
 end
 
-local function explode(self)
-	msg.post("#sprite", "disable")
-	msg.post("#explosion", "enable")
-	-- Sets the life really high so it doesn't trigger again
-	self.life = 1000
-	-- Stops moving
-	go.set_rotation(vmath.quat())
-	self.speed = 0
-	-- Plays the explosion animation
-	sprite.play_flipbook("#explosion", "explosion")       
-end
-
+--[[
+Function update
+Update is native to defold and executes it's code every frame.
+It takes in the self object to access the internal variables of the specific instance it is controlling. dt is the current frame.
+This function handles the movement of the rocket.
+]]
 function update(self, dt)
-	-- Moves itself forward
+	-- Gets the local position
 	local pos = go.get_position()
+	-- Checks the direction, whether it is moving X or Y
+	-- If y related
 	if self.dir == hash("up") or self.dir == hash("down") then
+		-- Adds the speed to the y position
 		pos.y = pos.y + self.speed
+		-- Sets the new position
 		go.set_position(pos)
+	-- If x related
 	elseif self.dir == hash("right") or self.dir == hash("left") then
+		-- Adds the speed to the x position
 		pos.x = pos.x + self.speed
+		-- Sets the new position
 		go.set_position(pos)
 	end
 
@@ -54,21 +94,28 @@ function update(self, dt)
 	end
 end
 
+--[[
+Function on_message
+on_message is native to defold and executes it's code whenever the script recieves a message (a defold special feature).
+This function handles deleting the object and damage when it collides with something.
+]]
 function on_message(self, message_id, message, sender)
 	-- When the explosion animation finishes, it deletes itself
 	if message_id == hash("animation_done") then
 		go.delete()
-	-- if the rocket collides with an enemy, it triggers the explosion and deletes the other enemy.
+	-- if the rocket collides with an enemy, it deletes itself.
 	elseif message_id == hash("collision_response") then
-		--explode(self)
-		--go.delete(message.other_id)
 		go.delete()
 	end
+	-- If it gets a trigger response, it sends a message to the other object that it was hit.
 	if message_id == hash("trigger_response") and message.enter then
 		msg.post(message.other_id, "hit")
 	end
 end
 
+--[[
+All functions below here are currently unused, but retained in case they are needed in the future.
+]]
 function fixed_update(self, dt)
 	-- This function is called if 'Fixed Update Frequency' is enabled in the Engine section of game.project
 	-- Can be coupled with fixed updates of the physics simulation if 'Use Fixed Timestep' is enabled in

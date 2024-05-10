@@ -1,15 +1,47 @@
+--[[
+Script Name: item.script
+Author(s): Florian Hurlbert
+Date of Last Change: 05/06/2024
+
+Scripts Referenced/Messaged:
+none
+
+Script Purpose: This script is the basis for all "item" interaction. These are objects with sit on the ground, react when the
+player goes near them, and react when the player presses a button near them. Their primary purpose is to disappear after
+being interacted with.
+]]
+
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+This function only needs to do one thing upon loading, and that is disable the interaction sprite so it isn't flashing.
+]]
 function init(self)
+	-- Sends a message to the E sprite to tell it to be disabled
 	msg.post("#E", "disable")
 end
 
+--[[
+Function on_message
+on_message is native to defold and executes it's code whenever the script recieves a message (a defold special feature).
+When the player collides with the item, this function enables and disables the E sprite as necessary and deleting the object
+	once it has been used.
+]]
 function on_message(self, message_id, message, sender)
+	-- When a message comes in that is a trigger response indicating the area has been entered
 	if message_id == hash("trigger_response") and message.enter == true then
+		-- Enables the E sprite so it flashes
 		msg.post("#E", "enable")
+	-- When a message comes in that is a trigger response indicating the area has been left
 	elseif message_id == hash("trigger_response") and message.enter == false then
+		-- Disables the E sprite so it can't be seen
 		msg.post("#E", "disable")
 	end
 
+	-- When a message comes in from the player that the item has been picked up
 	if message_id == hash("picked_up") then
+		-- Deletes the object
 		go.delete()
 	end
 end
@@ -23,7 +55,9 @@ end
 
 
 
-
+--[[
+All functions below here are currently unused, but retained in case they are needed in the future.
+]]
 function final(self)
 	-- Add finalization code here
 	-- Learn more: https://defold.com/manuals/script/

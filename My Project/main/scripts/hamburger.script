@@ -4,6 +4,7 @@ Author(s): Florian Hurlbert
 Date of Last Change: 05/06/2024
 
 Scripts Referenced/Messaged:
+none
 
 Script Purpose: This script controls the projectiles spawned by the chef. It keeps track of two different types of movement
 and spawns them based on passed information. It also handles what they do upon death.
@@ -92,6 +93,9 @@ function on_message(self, message_id, message, sender)
 	end
 end
 
+--[[
+All functions below here are currently unused, but retained in case they are needed in the future.
+]]
 function final(self)
 	-- Add finalization code here
 	-- Learn more: https://defold.com/manuals/script/
