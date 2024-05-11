@@ -1,6 +1,6 @@
 components {
   id: "flying_enemy"
-  component: "/main/scripts/flying_enemy.script"
+  component: "/main/scripts/enemy_scripts/flying_enemy.script"
   position {
     x: 0.0
     y: 0.0

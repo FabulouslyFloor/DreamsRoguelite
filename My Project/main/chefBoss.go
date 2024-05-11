@@ -1,6 +1,6 @@
 components {
   id: "chef_boss"
-  component: "/main/scripts/chef_boss.script"
+  component: "/main/scripts/enemy_scripts/chef_boss.script"
   position {
     x: 0.0
     y: 0.0

@@ -1,6 +1,6 @@
 components {
   id: "test_enemy"
-  component: "/main/scripts/test_enemy.script"
+  component: "/main/scripts/enemy_scripts/test_enemy.script"
   position {
     x: 0.0
     y: 0.0

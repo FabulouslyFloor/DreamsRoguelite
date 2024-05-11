@@ -1,6 +1,6 @@
 components {
   id: "woodchip_attack"
-  component: "/main/scripts/woodchip_attack.script"
+  component: "/main/scripts/enemy_scripts/woodchip_attack.script"
   position {
     x: 0.0
     y: 0.0

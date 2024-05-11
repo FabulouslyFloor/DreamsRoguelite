@@ -1,6 +1,6 @@
 components {
   id: "hamburger"
-  component: "/main/scripts/hamburger.script"
+  component: "/main/scripts/item_scripts/hamburger.script"
   position {
     x: 0.0
     y: 0.0

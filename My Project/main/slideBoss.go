@@ -1,6 +1,6 @@
 components {
   id: "slide_boss"
-  component: "/main/scripts/slide_boss.script"
+  component: "/main/scripts/enemy_scripts/slide_boss.script"
   position {
     x: 0.0
     y: 0.0

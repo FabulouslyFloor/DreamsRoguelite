@@ -1,6 +1,6 @@
 components {
   id: "cloudSprite"
-  component: "/main/scripts/cloudSprite.script"
+  component: "/main/scripts/item_scripts/cloudSprite.script"
   position {
     x: 0.0
     y: 0.0

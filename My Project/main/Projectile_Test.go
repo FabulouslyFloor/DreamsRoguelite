@@ -1,6 +1,6 @@
 components {
   id: "rocket"
-  component: "/main/scripts/rocket.script"
+  component: "/main/scripts/item_scripts/rocket.script"
   position {
     x: 0.0
     y: 0.0

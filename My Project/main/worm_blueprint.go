@@ -1,6 +1,6 @@
 components {
   id: "worm_enemy"
-  component: "/main/scripts/worm_enemy.script"
+  component: "/main/scripts/enemy_scripts/worm_enemy.script"
   position {
     x: 0.0
     y: 0.0
