@@ -1,7 +1,7 @@
 name: "mapGeneration"
 instances {
   id: "chefBoss"
-  prototype: "/main/chefBoss.go"
+  prototype: "/main/game_objects/enemies/chefBoss.go"
   position {
     x: 0.0
     y: 0.0
@@ -21,7 +21,7 @@ instances {
 }
 instances {
   id: "MeleeItem"
-  prototype: "/main/MeleeItem.go"
+  prototype: "/main/game_objects/MeleeItem.go"
   position {
     x: 3500.0
     y: 7800.0
@@ -41,7 +41,7 @@ instances {
 }
 instances {
   id: "RangedItem"
-  prototype: "/main/RangedItem.go"
+  prototype: "/main/game_objects/RangedItem.go"
   position {
     x: 2500.0
     y: 7800.0
@@ -61,7 +61,7 @@ instances {
 }
 instances {
   id: "cloud-exit"
-  prototype: "/main/cloud-exit.go"
+  prototype: "/main/game_objects/items/cloud-exit.go"
   position {
     x: 0.0
     y: 0.0
@@ -331,7 +331,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"rocketfactory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/Projectile_Test.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/Projectile_Test.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: true\\n"
   "\"\n"
@@ -350,7 +350,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"Weaponfactory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/Melee Weapon.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/Melee Weapon.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -574,7 +574,7 @@ embedded_instances {
   data: "embedded_components {\n"
   "  id: \"bee_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/bee_blueprint.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/enemies/bee_blueprint.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -593,7 +593,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"gremlin_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/enemy_test.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/enemies/enemy_test.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -612,7 +612,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"worm_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/worm_blueprint.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/enemies/worm_blueprint.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -631,7 +631,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"slidefactory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/slideBoss.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/enemies/slideBoss.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -707,7 +707,7 @@ embedded_instances {
   data: "embedded_components {\n"
   "  id: \"hoop_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/hoop.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/hoop.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -726,7 +726,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"desk_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/desk.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/desk.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -745,7 +745,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"table_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/table.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/table.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -764,7 +764,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"paper_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/paper.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/paper.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -783,7 +783,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"blackboard_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/blackboard.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/blackboard.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -802,7 +802,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"tray_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/tray.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/tray.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -821,7 +821,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"tree_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/tree.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/tree.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"
@@ -840,7 +840,7 @@ embedded_instances {
   "embedded_components {\n"
   "  id: \"swingset_factory\"\n"
   "  type: \"factory\"\n"
-  "  data: \"prototype: \\\"/main/swingset.go\\\"\\n"
+  "  data: \"prototype: \\\"/main/game_objects/items/swingset.go\\\"\\n"
   "load_dynamically: false\\n"
   "dynamic_prototype: false\\n"
   "\"\n"

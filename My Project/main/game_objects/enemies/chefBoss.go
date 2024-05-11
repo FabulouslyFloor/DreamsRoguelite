@@ -92,7 +92,7 @@ embedded_components {
 embedded_components {
   id: "hamburgerFactory"
   type: "factory"
-  data: "prototype: \"/main/hamburger.go\"\n"
+  data: "prototype: \"/main/game_objects/items/hamburger.go\"\n"
   "load_dynamically: false\n"
   "dynamic_prototype: false\n"
   ""
@@ -111,7 +111,7 @@ embedded_components {
 embedded_components {
   id: "keyFactory"
   type: "factory"
-  data: "prototype: \"/main/key_item.go\"\n"
+  data: "prototype: \"/main/game_objects/items/key_item.go\"\n"
   "load_dynamically: false\n"
   "dynamic_prototype: false\n"
   ""

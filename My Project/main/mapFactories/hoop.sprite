@@ -1,7 +1,0 @@
-default_animation: "hoop"
-material: "/builtins/materials/sprite.material"
-blend_mode: BLEND_MODE_ALPHA
-textures {
-  sampler: "texture_sampler"
-  texture: "/assets/items/exit_idle/hoopwork.atlas"
-}
