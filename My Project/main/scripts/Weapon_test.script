@@ -1,21 +1,46 @@
+--[[
+Script Name: Weapon_test.script
+Author(s): Florian Hurlbert
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged:
+
+Script Purpose: This script handles the melee weapon when it spawns and deletes itself.
+]]
+
 -- Sets up the object to recieve the data from the factory.create call
 go.property("anim", hash(""))
 
+--[[
+Function init
+Init is native to defold and executes it's code whenever an instance is first loaded.
+It takes in the self object to access the internal variables of the specific instance it is controlling.
+It tells the object to play the proper animation.
+]]
 function init(self)
 	-- Tells itself to play the right animation 
 	msg.post(".", "play_animation", {id = self.anim})
 end
 
+--[[
+Function on_message
+on_message is native to defold and executes it's code whenever the script recieves a message (a defold special feature).
+This function handles the object deleting itself and causing damage.
+]]
 function on_message(self, message_id, message, sender)
 	-- When it recieves the animation done message it deletes itself
 	if message_id == hash("animation_done") then
 		go.delete()
 	end
+	-- When recieving a trigger response that it hit something, it sends a message to the other object that it was hit.
 	if message_id == hash("trigger_response") and message.enter then
 		msg.post(message.other_id, "hit")
 	end
 end
 
+--[[
+All functions below here are currently unused, but retained in case they are needed in the future.
+]]
 function final(self)
 	-- Add finalization code here
 	-- Learn more: https://defold.com/manuals/script/

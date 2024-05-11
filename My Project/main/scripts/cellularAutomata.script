@@ -1,362 +1,42 @@
+--[[
+Script Name: cellularAutomata
+Author(s): Matthew DeGirolamo
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: grammar, mapCreator
+
+Script Purpose: uses a cellular automata algorithm to create and fill a playable map
+]]
+
+
+--Initialization function that seeds this script's
+--random number generator through the built-in Lua library
+--@param self: references the script's instance within the collection
 function init(self)
+	math.randomseed(os.time())
 end
 
+--on_message function receives the sentence from the grammar class,
+--creates the empty cellular automata grid as a 2D table,
+--and keeps generating filled versions of this grid until one is playable
+--@param message: the grammar sentence sent over by the grammar class
+--@msg.post: sends the completely filled grid to the mapCreator script
 function on_message(self, message_id, message, sender)
-	--Cellular Automata PCG
-	math.randomseed(os.time())
 
-	function generate(tokens, grid)
-
-		current_loc = {6, 3}
-		prev_loc = {0, 0}
-
-		for i, token in ipairs(tokens) do
-
-			if token == "Spawn" then
-
-				place(token, prev_loc, current_loc, grid)
-				prev_loc = current_loc
-
-			elseif token == "End" then
-
-				current_loc = find_next(current_loc, grid)
-				place(token, prev_loc, current_loc, grid)
-
-			else
-
-				current_loc = find_next(current_loc, grid)   
-				place(token, prev_loc, current_loc, grid)
-				prev_loc = current_loc
-
-			end
-		end
-	end
-
-	function place(room, prev_loc, current_loc, grid)
-
-		if room == "Spawn" then
-			room = "v" .. room
-			grid[current_loc[1]][current_loc[2]] = room
-
-		else
-			local prev_room = grid[prev_loc[1]][prev_loc[2]]
-
-			if (((prev_loc[1] ~= current_loc[1]) and (prev_loc[2] ~= current_loc[2])) or (((math.abs(prev_loc[1] - current_loc[1])) > 1) or ((math.abs(prev_loc[2] - current_loc[2])) > 1))) then
-				possible_choices = {}
-
-				if current_loc[1] + 1 <= 6 then
-					if grid[current_loc[1]+1][current_loc[2]] ~= '' then
-						table.insert(possible_choices, {current_loc[1]+1, current_loc[2], "down"})
-					end
-				end
-				if current_loc[1] - 1 >= 1 then
-					if grid[current_loc[1]-1][current_loc[2]] ~= '' then
-						table.insert(possible_choices, {current_loc[1]-1, current_loc[2], "up"})
-					end
-				end
-				if current_loc[2] + 1 <= 6 then
-					if grid[current_loc[1]][current_loc[2]+1] ~= '' then
-						table.insert(possible_choices, {current_loc[1], current_loc[2]+1, "right"})
-					end
-				end
-				if current_loc[2] - 1 >= 1 then
-					if grid[current_loc[1]][current_loc[2]-1] ~= '' then
-						table.insert(possible_choices, {current_loc[1], current_loc[2]-1, "left"})
-					end
-				end
-
-				prev_loc = possible_choices[math.random(#possible_choices)]
-				prev_room = grid[prev_loc[1]][prev_loc[2]]
-
-
-				if prev_loc[3] == "down" then
-					room = "v" .. room
-					prev_room = "^" .. prev_room
-				elseif prev_loc[3] == "up" then
-					room = "^" .. room
-					prev_room = "v" .. prev_room
-				elseif prev_loc[3] == "right" then
-					room = ">" .. room
-					prev_room = "<" .. prev_room
-				elseif prev_loc[3] == "left" then
-					room = "<" .. room
-					prev_room = ">" .. prev_room
-				end
-
-			else
-
-				if (prev_loc[1]+1 == current_loc[1]) then
-					room = "^" .. room
-					if string.find(prev_room, "v") == nil then
-						prev_room = "v" .. prev_room
-					end
-				elseif (prev_loc[1]-1 == current_loc[1]) then
-					room = "v" .. room
-					if string.find(prev_room, "%^") == nil then
-						prev_room = "^" .. prev_room
-					end
-				elseif (prev_loc[2]+1 == current_loc[2]) then
-					room = "<" .. room
-					if string.find(prev_room, ">") == nil then
-						prev_room = ">" .. prev_room
-					end
-				elseif (prev_loc[2]-1 == current_loc[2]) then
-					room = ">" .. room
-					if string.find(prev_room, "<") == nil then
-						prev_room = "<" .. prev_room
-					end
-				end
-			end
-
-			grid[current_loc[1]][current_loc[2]] = room
-			grid[prev_loc[1]][prev_loc[2]] = prev_room
-
-		end
-	end
-
-	function find_next(current_loc, grid)
-
-		min_distance = math.huge
-		possible_choices = {}
-
-		for i=1, #grid do
-			for j=1, #grid[1] do
-				if grid[i][j] == '' then
-					local distance = math.abs(i - current_loc[1]) + math.abs(j - current_loc[2])
-
-					if distance < min_distance then
-						min_distance = distance
-						possible_choices = {}
-						table.insert(possible_choices, {i, j})
-
-					elseif distance == min_distance then
-						table.insert(possible_choices, {i, j})
-					end
-				end
-			end
-		end
-
-		return possible_choices[math.random(#possible_choices)]
-	end
-
-	function populate_doors(grid)
-
-		for i=1, #grid do
-			for j=1, #grid[1] do
-				local room = grid[i][j]
-				if room ~= '' and string.find(room, "End") == nil and string.find(room, "Boss") == nil then
-					if string.find(room, "%^") == nil then
-						if i >= 2 then
-							if grid[i-1][j] ~= '' then
-								local chance = math.random(1,3)
-								if chance == 2 then
-									grid[i][j] = "^" .. room
-									prev_room = grid[i-1][j]
-									if string.find(prev_room, "v") == nil and string.find(prev_room, "End") == nil then
-										grid[i-1][j] = "v" .. prev_room
-									end
-								end
-							end
-						end
-					end
-
-					if string.find(room, "v") == nil then
-						if i <= 5 then
-							if grid[i+1][j] ~= '' then
-								local chance = math.random(1,3)
-								if chance == 2 then
-									grid[i][j] = "v" .. room
-									prev_room = grid[i+1][j]
-									if string.find(prev_room, "%^") == nil and string.find(prev_room, "End") == nil then
-										grid[i+1][j] = "^" .. prev_room
-									end
-								end
-							end
-						end
-					end
-
-					if string.find(room, "<") == nil then
-						if j >= 2 then
-							if grid[i][j-1] ~= '' then
-								local chance = math.random(1,3)
-								if chance == 2 then
-									grid[i][j] = "<" .. room
-									prev_room = grid[i][j-1]
-									if string.find(prev_room, ">") == nil and string.find(prev_room, "End") == nil then
-										grid[i][j-1] = ">" .. prev_room
-									end
-								end
-							end
-						end
-					end
-
-					if string.find(room, ">") == nil then
-						if j <= 5 then
-							if grid[i][j+1] ~= '' then
-								local chance = math.random(1,3)
-								if chance == 2 then
-									grid[i][j] = ">" .. room
-									prev_room = grid[i][j+1]
-									if string.find(prev_room, "<") == nil and string.find(prev_room, "End") == nil then
-										grid[i][j+1] = "<" .. prev_room
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end		
-	end
-
-	function enforce(grid)
-
-		bossX = 0
-		bossY = 0
-		for i=1, #grid do
-			for j=1, #grid[1] do
-				local room = grid[i][j]
-				if room ~= '' and string.find(room, "End") == nil then
-					if string.find(room, "Boss") ~= nil then
-						bossX = i
-						bossY = j
-					end
-					if string.find(room, "%^") ~= nil then
-						if i == 1 then
-							grid[i][j] = string.gsub(room, "%^", "")
-						elseif string.find(grid[i-1][j], "v") == nil then
-							prev_room = grid[i-1][j]
-							grid[i-1][j] = "v" .. prev_room
-						end
-					end
-
-					if string.find(room, "v") ~= nil and string.find(room, "Begin") == nil then
-						if i == (#grid) then
-							grid[i][j] = string.gsub(room, "%v", "")
-						elseif string.find(grid[i+1][j], "%^") == nil then
-							prev_room = grid[i+1][j]
-							grid[i+1][j] = "^" .. prev_room
-						end
-					end
-
-					if string.find(room, "<") ~= nil then
-						if j == 1 then
-							grid[i][j] = string.gsub(room, "%<", "")
-						elseif string.find(grid[i][j-1], ">") == nil then
-							prev_room = grid[i][j-1]
-							grid[i][j-1] = ">" .. prev_room
-						end
-					end
-
-					if string.find(room, ">") ~= nil then
-						if j == (#grid[1]) then
-							grid[i][j] = string.gsub(room, "%>", "")
-						elseif string.find(grid[i][j+1], "<") == nil then
-							prev_room = grid[i][j+1]
-							grid[i][j+1] = "<" .. prev_room
-						end
-					end
-				end
-			end
-		end
-
-		boss_room = grid[bossX][bossY]
-		grid[bossX][bossY] = string.gsub(boss_room, "%^", "")
-		grid[bossX][bossY+1] = string.gsub(boss_room, "%v", "")
-	end
-
-	function check(grid)
-
-		for i=1, #grid do
-			for j=1, #grid[1] do
-				local room = grid[i][j]
-				if room ~= '' then
-					if string.find(room, "%^") ~= nil then
-						if i == 1 or string.find(grid[i-1][j], "v") == nil then
-							return false
-						end
-					end
-					if string.find(room, "v") ~= nil and string.find(room, "Spawn") == nil then
-						if i == (#grid) or string.find(grid[i+1][j], "%^") == nil then
-							return false
-						end
-					end
-					if string.find(room, "<") ~= nil then
-						if j == 1 or string.find(grid[i][j-1], ">") == nil then
-							return false
-						end
-					end
-					if string.find(room, ">") ~= nil then
-						if j == (#grid[1]) or string.find(grid[i][j+1], "<") == nil then
-							return false
-						end
-					end	
-				end			
-			end				
-		end
-
-		visited = { {6, 3} }
-		stack = { {6, 3} }
-		boss_found = false
-		exit_found = false
-
-		while #stack > 0 do
-			loc = table.remove(stack)
-			room = grid[loc[1]][loc[2]]
-
-			if string.find(room, "Boss") then
-				boss_found = true
-			end
-			if string.find(room, "End") then
-				exit_found = true
-			end
-
-			for _, direction in ipairs({"%^", "v", "<", ">"}) do
-				if string.find(room, direction) ~= nil then
-					adj_loc = { loc[1], loc[2] }
-					if direction == "%^" then
-						adj_loc[1] = adj_loc[1] - 1
-					elseif direction == "v" and loc[1] ~= 6 and loc[2] ~= 3 then
-						adj_loc[1] = adj_loc[1] + 1
-					elseif direction == "<" then
-						adj_loc[2] = adj_loc[2] - 1
-					elseif direction == ">" then
-						adj_loc[2] = adj_loc[2] + 1
-					end
-
-					local isVisited = false
-					for _, v in ipairs(visited) do
-						if v[1] == adj_loc[1] and v[2] == adj_loc[2] then
-							isVisited = true
-							break
-						end
-					end
-
-					if not isVisited then
-						table.insert(visited, { adj_loc[1], adj_loc[2] })
-						table.insert(stack, { adj_loc[1], adj_loc[2] })
-					end
-				end
-			end
-		end
-
-		if not boss_found or not exit_found then
-			return false
-		end
-
-		return true
-
-	end
-
+	--splits the grammar sentence into a table of individual tokens
 	local grammar = table.concat(message, " ")
 	local tokens = {}
 	for token in string.gmatch(grammar, "%S+") do
 		table.insert(tokens, token)
 	end
 
+	--variable keeping track of the map's playability status
 	local valid_map = false
 
+	--keeps generating new maps until one is deemed playable
 	while not valid_map do
+
+		--fill a 6x6 2D table with empty strings: this is the grid
 		local grid = {}
 		for i = 1, 6 do
 			grid[i] = {}
@@ -365,13 +45,458 @@ function on_message(self, message_id, message, sender)
 			end
 		end
 
+		--fill the map
 		generate(tokens, grid)
 		populate_doors(grid)
-		enforce(grid)
+
+		--check for playability
 		valid_map = check(grid)
 
+		--if map is playable, break the loop and send the complete grid to mapCreator
 		if valid_map then
 			msg.post('/level#mapCreator', 'generate', grid)
 		end
 	end
+end
+
+--the generate function loops through each token and determines how to place it in the grid
+function generate(tokens, grid)
+
+	--holds the current location where the current room should be placed
+	--initialized to a set location so that the spawn room is always in the same place on the map
+	current_loc = {6, 3}
+
+	--the location where the previous room was placed
+	prev_loc = {0, 0}
+
+	--for each token in the grammar, place the room on the grid
+	for i, token in ipairs(tokens) do
+
+		--spawn is always placed first
+		if token == "Spawn" then
+
+			place(token, prev_loc, current_loc, grid)
+			prev_loc = current_loc
+
+		--for each subsequent room, find the new location, place it on the grid, and update prev_loc
+		else
+
+			current_loc = find_next(prev_loc, grid)   
+			place(token, prev_loc, current_loc, grid)
+			prev_loc = current_loc
+
+		end
+	end
+end
+
+--the place() function updates the grid with each new room added in
+function place(room, prev_loc, current_loc, grid)
+
+	--the spawn room always has a set door that leads to the outside of the school map
+	if room == "Spawn" then
+		room = "v" .. room
+
+		--updates the current grid location
+		grid[current_loc[1]][current_loc[2]] = room
+
+	--if the room is not the spawn room, find in which direction it needs a necessary door
+	else
+
+		--obtain the previous location's room
+		local prev_room = grid[prev_loc[1]][prev_loc[2]]
+
+		--this block of code underneath this if-line has the following functionality:
+		--this if-statement checks if the previous location is not directly adjacent to the current location
+		--if it really is not directly adjacent, then a room that is adjacent to the current location must be found
+		--by the way room positions are decided in find_next(), it is impossible for a room to not have a
+		--directly adjacent neighbor
+		if (((prev_loc[1] ~= current_loc[1]) and (prev_loc[2] ~= current_loc[2])) or (((math.abs(prev_loc[1] - current_loc[1])) > 1) or ((math.abs(prev_loc[2] - current_loc[2])) > 1))) then
+
+			--keeps track of each room found that is directly adjacent to the current location
+			possible_choices = {}
+
+			--checks downards from the current location
+			if current_loc[1] + 1 <= 6 then
+				if grid[current_loc[1]+1][current_loc[2]] ~= '' then
+					table.insert(possible_choices, {current_loc[1]+1, current_loc[2], "down"})
+				end
+			end
+
+			--checks upwards
+			if current_loc[1] - 1 >= 1 then
+				if grid[current_loc[1]-1][current_loc[2]] ~= '' then
+					table.insert(possible_choices, {current_loc[1]-1, current_loc[2], "up"})
+				end
+			end
+
+			--checks to the right
+			if current_loc[2] + 1 <= 6 then
+				if grid[current_loc[1]][current_loc[2]+1] ~= '' then
+					table.insert(possible_choices, {current_loc[1], current_loc[2]+1, "right"})
+				end
+			end
+
+			--checks to the left
+			if current_loc[2] - 1 >= 1 then
+				if grid[current_loc[1]][current_loc[2]-1] ~= '' then
+					table.insert(possible_choices, {current_loc[1], current_loc[2]-1, "left"})
+				end
+			end
+
+			--chooses one of the directly adjacent rooms to be the new previous room for this function
+			prev_loc = possible_choices[math.random(#possible_choices)]
+			prev_room = grid[prev_loc[1]][prev_loc[2]]
+
+			--adds in corresponding doors for the current and previous room to guarantee
+			--map access to the new room
+			if prev_loc[3] == "down" then
+				room = "v" .. room
+				prev_room = "^" .. prev_room
+			elseif prev_loc[3] == "up" then
+				room = "^" .. room
+				prev_room = "v" .. prev_room
+			elseif prev_loc[3] == "right" then
+				room = ">" .. room
+				prev_room = "<" .. prev_room
+			elseif prev_loc[3] == "left" then
+				room = "<" .. room
+				prev_room = ">" .. prev_room
+			end
+
+		--if the prev_loc is already directly adjacent to the current_loc, add in corresponding doors
+		else
+
+			if (prev_loc[1]+1 == current_loc[1]) then
+				room = "^" .. room
+				if string.find(prev_room, "v") == nil then
+					prev_room = "v" .. prev_room
+				end
+			elseif (prev_loc[1]-1 == current_loc[1]) then
+				room = "v" .. room
+				if string.find(prev_room, "%^") == nil then
+					prev_room = "^" .. prev_room
+				end
+			elseif (prev_loc[2]+1 == current_loc[2]) then
+				room = "<" .. room
+				if string.find(prev_room, ">") == nil then
+					prev_room = ">" .. prev_room
+				end
+			elseif (prev_loc[2]-1 == current_loc[2]) then
+				room = ">" .. room
+				if string.find(prev_room, "<") == nil then
+					prev_room = "<" .. prev_room
+				end
+			end
+		end
+
+		--updates the grid locations of the current room and the previous room with
+		--current's new room type and door, and previous's new door
+		grid[current_loc[1]][current_loc[2]] = room
+		grid[prev_loc[1]][prev_loc[2]] = prev_room
+
+	end
+end
+
+--this function finds the next location on the grid to place a room in
+--@return {int, int}: the next location
+function find_next(current_loc, grid)
+
+	--variable keeping track of the closest distance a grid spot has to the previous location
+	min_distance = math.huge
+
+	--holds all possible choices for new room location
+	possible_choices = {}
+
+	--for each spot in the grid, find its manhattan distance from the prev_loc
+	for i=1, #grid do
+		for j=1, #grid[1] do
+			--only want to check the grid spots that are currently empty
+			if grid[i][j] == '' then
+
+				--manhattan distance calculation
+				local distance = math.abs(i - current_loc[1]) + math.abs(j - current_loc[2])
+
+				--if the current grid spot is closer than any previous one that was checked,
+				--update the minimum distance and possible_choices accordingly
+				if distance < min_distance then
+					min_distance = distance
+					possible_choices = {}
+					table.insert(possible_choices, {i, j})
+
+				--if the current grid spot is the same distance as the current minimum distance,
+				--add it to possible_choices
+				elseif distance == min_distance then
+					table.insert(possible_choices, {i, j})
+				end
+			end
+		end
+	end
+
+	--choose a grid spot from the possible choices
+	return possible_choices[math.random(#possible_choices)]
+end
+
+--this function adds more doors into the grid (currently, only essential doors are added)
+--This increases the degree to which the player can move through the map
+function populate_doors(grid)
+
+	--for each non-empty grid spot, check which adjacent rooms it has and generate a random
+	--chance to spawn a door between them
+	for i=1, #grid do
+		for j=1, #grid[1] do
+
+			--the room at the current grid spot
+			local room = grid[i][j]
+
+			--don't try to add doors to empty rooms, or the exit and boss rooms
+			if room ~= '' and string.find(room, "End") == nil and string.find(room, "Boss") == nil then
+
+				--if the current room doesn't have an upwards door,
+				--check if it has a room above it and generate a random chance
+				--to spawn a door connection there if so
+				if string.find(room, "%^") == nil then
+					if i >= 2 then
+						if grid[i-1][j] ~= '' then
+							local chance = math.random(1,3)
+							if chance == 2 then
+								grid[i][j] = "^" .. room
+								prev_room = grid[i-1][j]
+								if string.find(prev_room, "v") == nil and string.find(prev_room, "End") == nil then
+									grid[i-1][j] = "v" .. prev_room
+								end
+							end
+						end
+					end
+				end
+
+				--downwards door generation
+				if string.find(room, "v") == nil then
+					if i <= 5 then
+						if grid[i+1][j] ~= '' then
+							local chance = math.random(1,3)
+							if chance == 2 then
+								grid[i][j] = "v" .. room
+								prev_room = grid[i+1][j]
+								if string.find(prev_room, "%^") == nil and string.find(prev_room, "End") == nil then
+									grid[i+1][j] = "^" .. prev_room
+								end
+							end
+						end
+					end
+				end
+
+				--leftwards door generation
+				if string.find(room, "<") == nil then
+					if j >= 2 then
+						if grid[i][j-1] ~= '' then
+							local chance = math.random(1,3)
+							if chance == 2 then
+								grid[i][j] = "<" .. room
+								prev_room = grid[i][j-1]
+								if string.find(prev_room, ">") == nil and string.find(prev_room, "End") == nil then
+									grid[i][j-1] = ">" .. prev_room
+								end
+							end
+						end
+					end
+				end
+
+				--rightwards door generation
+				if string.find(room, ">") == nil then
+					if j <= 5 then
+						if grid[i][j+1] ~= '' then
+							local chance = math.random(1,3)
+							if chance == 2 then
+								grid[i][j] = ">" .. room
+								prev_room = grid[i][j+1]
+								if string.find(prev_room, "<") == nil and string.find(prev_room, "End") == nil then
+									grid[i][j+1] = "<" .. prev_room
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end		
+end
+
+--the enforce() function does a check through the entire grid on the
+--validity of door placement, and makes corrective adjustments
+--@return boolean: whether or not the door placement is valid
+function enforce(grid)
+
+	--loop through the entire grid
+	for i=1, #grid do
+		for j=1, #grid[1] do
+
+			--the room at the current grid spot
+			local room = grid[i][j]
+
+			--only care about non-empty rooms
+			if room ~= '' then
+
+				--check for upwards door validity
+				if string.find(room, "%^") ~= nil then
+
+					--due to the nature of the chef boss, can not have an upwards door in the boss room
+					--at this point, it would be too risky to correct this (don't want to sever a vital connection),
+					--so return false and effectively regenerate a grid
+					if string.find(room, "Boss") ~= nil then
+						return false
+					end
+
+					--check if the upwards door in the room is valid (does not lead out of bounds)
+					if i == 1 then
+						grid[i][j] = string.gsub(room, "%^", "")
+
+						--check if the room above has a downwards door, and add it in if it does not
+						--if the room above does not exist, then an error has occurred and return false
+					elseif string.find(grid[i-1][j], "v") == nil then
+						if grid[i-1][j] == "" then
+							return false
+						else
+							prev_room = grid[i-1][j]
+							grid[i-1][j] = "v" .. prev_room
+						end
+					end
+				end
+
+				--checks for downard door validity
+				--spawn has an unmatched door for access to the outside, so do not want to remove that
+				if string.find(room, "v") ~= nil and string.find(room, "Spawn") == nil then
+
+					--can't have a downwards door in the chef boss room
+					if string.find(room, "Boss") ~= nil then
+						return false
+					end
+
+					--check if the room below exists and has an upwards door
+					if i == (#grid) then
+						grid[i][j] = string.gsub(room, "%v", "")
+					elseif string.find(grid[i+1][j], "%^") == nil then
+						if grid[i+1][j] == "" then
+							return false
+						else
+							prev_room = grid[i+1][j]
+							grid[i+1][j] = "^" .. prev_room
+						end
+					end
+				end
+
+				--leftwards door validity check
+				if string.find(room, "<") ~= nil then
+					if j == 1 then
+						grid[i][j] = string.gsub(room, "%<", "")
+					elseif string.find(grid[i][j-1], ">") == nil then
+						if grid[i][j-1] == "" then
+							return false
+						else
+							prev_room = grid[i][j-1]
+							grid[i][j-1] = ">" .. prev_room
+						end
+					end
+				end
+
+				--rightwards door validity check
+				if string.find(room, ">") ~= nil then
+					if j == (#grid[1]) then
+						grid[i][j] = string.gsub(room, "%>", "")
+					elseif string.find(grid[i][j+1], "<") == nil then
+						if grid[i][j+1] == "" then
+							return false
+						else
+							prev_room = grid[i][j+1]
+							grid[i][j+1] = "<" .. prev_room
+						end
+					end
+				end
+			end
+		end
+	end
+
+	--return true if all conditions pass and all errors were fixable
+	return true
+end
+
+--performs a search through the entire grid for playability/traversability
+--checks that the player can go from spawn, to boss, to exit feasibly
+function check(grid)
+
+	--calls the enforce function to update door errors and for first validity check
+	door_check = enforce(grid)
+	if door_check == false then
+		return false
+	end
+
+	--main part of check() function: depth first search of the grid using a stack
+
+	--list of all visited locations on the grid: always start with fixed spawn location
+	visited = { {6, 3} }
+
+	--stack performing the depth first search: also starts with fixed spawn location
+	stack = { {6, 3} }
+
+	--booleans recording if the boss and exit were found throughout the search
+	boss_found = false
+	exit_found = false
+
+	--while the stack is not empty, keep popping room locations, checking
+	--for their status, and adding their unchecked connections to the stack
+	while #stack > 0 do
+
+		--current location being checked
+		loc = table.remove(stack)
+		room = grid[loc[1]][loc[2]]
+
+		--if boss or exit, update the booleans
+		if string.find(room, "Boss") then
+			boss_found = true
+		end
+		if string.find(room, "End") then
+			exit_found = true
+		end
+
+		--for each possible direction, check if a room has a door in that direction
+		--if it does, update an adj_loc variable with the adjacent room that that door leads to
+		for _, direction in ipairs({"%^", "v", "<", ">"}) do
+			if string.find(room, direction) ~= nil then
+				adj_loc = { loc[1], loc[2] }
+				if direction == "%^" then
+					adj_loc[1] = adj_loc[1] - 1
+				elseif direction == "v" and loc[1] ~= 6 and loc[2] ~= 3 then
+					adj_loc[1] = adj_loc[1] + 1
+				elseif direction == "<" then
+					adj_loc[2] = adj_loc[2] - 1
+				elseif direction == ">" then
+					adj_loc[2] = adj_loc[2] + 1
+				end
+
+				--loop through the visited locations and see if the
+				--adjacent location has been checked by the stack yet
+				local isVisited = false
+				for _, v in ipairs(visited) do
+					if v[1] == adj_loc[1] and v[2] == adj_loc[2] then
+						isVisited = true
+						break
+					end
+				end
+
+				--if the adjacent location has not yet been visited, add it to the visited table and stack
+				if not isVisited then
+					table.insert(visited, { adj_loc[1], adj_loc[2] })
+					table.insert(stack, { adj_loc[1], adj_loc[2] })
+				end
+			end
+		end
+	end
+
+	--if the boss and/or exit cannot be reached by the player, return false
+	if not boss_found or not exit_found then
+		return false
+	end
+
+	--return true if the map can be traversed successfully
+	return true
+
 end

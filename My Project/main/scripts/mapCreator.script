@@ -1,428 +1,462 @@
+--[[
+Script Name: mapCreator
+Author(s): Matthew DeGirolamo
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: cellularAutomata, fillEnemies, cloudSprite, chef_boss
+
+Script Purpose: paints the tilemap based off of the cellularAutomata grid
+]]
+
+--constants that represent the width and length of each room in tile size
 WIDTH = 39
 LENGTH = 39
 
+--when placing assets on the tilemap, their locations are specified by pixel rather than tile
+--this causes a lot of issues, and this variable is the approximate pixel size of the assets
+--this allows their desired pixel map location to be calculated as seen in calc_asset_pos()
+local assetOffset = 35
+
+--initialization function that seeds the math.random generator
+--also paints a background onto the tilemap that covers the bottom-leftmost bound to the upper-rightmost bound
 function init(self)
-end
 
-function on_message(self, message_id, message, sender)
-
+	--reseeds the math.random
 	math.randomseed(os.time())
 
+	--paints the background grass onto the tilemap
+	for r = -10, WIDTH*6.5 do
+		for c = -10, LENGTH*7 do
+			--varies which tiles are used so the background is vibrant and dynamic
+			local pool = {11,11,11,12,12,12,13,13,13,14,14,14,15,16,17,17,17}
+			local tile = pool[math.random(#pool)]
+			tilemap.set_tile("/level#generateMap", "background", r, c, tile)
+		end
+	end
+
+	--paints the school entrance doors at the spawn room's location
+	tilemap.set_tile("/level#generateMap", "roof_doors", 98, 233, 6)
+	tilemap.set_tile("/level#generateMap", "roof_doors", 98, 234, 7)
+	tilemap.set_tile("/level#generateMap", "roof_doors", 97, 233, 6)
+	tilemap.set_tile("/level#generateMap", "roof_doors", 97, 234, 7)
+	tilemap.set_tile("/level#generateMap", "roof_doors", 99, 233, 6)
+	tilemap.set_tile("/level#generateMap", "roof_doors", 99, 234, 7)
+end
+
+--this function accepts the grid from the cellular automata class
+--it paints each room in the grid onto the tilemap
+function on_message(self, message_id, message, sender)
+
+	--the filled grid
 	local grid = message
+
+	--holds which room locations require a roof to be placed on them
 	roof_rooms = {}
 
+	--for each room on the grid, paint it onto the tilemap using various functions
 	for i = 1, #grid do
 		for j = 1, #grid[1] do
+
+			--the current room
 			local room = grid[i][j]
-			local up = false
-			local down = false
-			local right = false
-			local left = false
-			
+
+			--if the room is not empty
 			if room ~= '' then
 
+				--if the room is on the top row by the school entrance, it needs to have a roof
 				if i == 6 then
 					table.insert(roof_rooms, j)
 				end
-				if string.find(room, "%^") ~= nil then
-					grid[i][j] = string.gsub(grid[i][j], "%^", "")
-					up = true
-				end
 
-				if string.find(room, "v") ~= nil then
-					grid[i][j] = string.gsub(grid[i][j], "%v", "")
-					down = true
-				end
+				--two important variables: temp_x and temp_y
+				--the cellular automata grid represents each room as a 1x1 unit in the 2D table
+				--however, these rooms need to be represented by many more tiles, in this case, 39x39 to be exact
+				--this necessitates a conversion between grid indexes and tilemap indexes
+				--temp_x and temp_y hold the bottom left corner location for each room they are calculated for
+				--for example, the room [0,0] would start out at tilemap location [1,1] and have its rightmost
+				--upper corner be at [39,39], meaning the room diagonal to it now has to start at location [40, 40]
+				--instead of [2, 2]. The following equations convert the grid coordinates to the tilemap coordinates
+				--according to these needs
+				temp_x = (((j - 1) * WIDTH) + 1)
+				temp_y = (((i - 1) * LENGTH) + 1)
 
-				if string.find(room, "<") ~= nil then
-					grid[i][j] = string.gsub(grid[i][j], "%<", "")
-					left = true
-				end
+				--removes all door characters from the current room to isolate its room type
+				room = string.gsub(room, "%^", "")
+				room = string.gsub(room, "%v", "")
+				room = string.gsub(room, "%<", "")
+				room = string.gsub(room, "%>", "")
 
-				if string.find(room, ">") ~= nil then
-					grid[i][j] = string.gsub(grid[i][j], "%>", "")
-					right = true
-				end
+				--function to paint the base of the specified room at the required location
+				--includes floor and wall tiles
+				paint_room_base(room, temp_x, temp_y)
 
-				temp_x = (((i - 1) * WIDTH) + 1)
-				temp_y = (((j - 1) * LENGTH) + 1)
-
-				if grid[i][j] == "Spawn" then
-					down = true
-					spawn(temp_x, temp_y)
-				elseif grid[i][j] == "C" then
-					classroom(temp_x, temp_y)
-				elseif grid[i][j] == "R" then
-					bathroom(temp_x, temp_y)
-				elseif grid[i][j] == "B" then
-					basement(temp_x, temp_y)
-				elseif grid[i][j] == "G" then
-					gym(temp_x, temp_y)
-				elseif grid[i][j] == "Boss" then
-					boss(temp_x, temp_y)
-					local coords = {}
-					local cloudX = temp_y
-					local cloudY = temp_x
-
-					cloudX = cloudX + (WIDTH-10)
-					cloudY = cloudY + ((LENGTH+15)/2)
-					table.insert(coords, cloudX)
-					table.insert(coords, cloudY)
-					msg.post("/chefBoss#chef_boss", 'placeChef', coords)
-					
-				elseif grid[i][j] == "End" then
+				--room-specific functions that place certain assets, such as desks, tables, or bosses
+				if string.find(room, "R") ~= nil then
+					classroom(temp_x, temp_y, j, i)
+				elseif string.find(room, "C") ~= nil then
+					cafeteria(temp_x, temp_y, j, i)
+				elseif string.find(room, "G") ~= nil then
+					gym(temp_x, temp_y, j, i)
+				elseif string.find(room, "Boss") ~= nil then
+					boss(j, i)
+				elseif string.find(room, "End") ~= nil then
 					exit(temp_x, temp_y)
-				else
-					classroom(temp_x, temp_y)
 				end
 
-				if up then
-					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH/2), temp_x, 7)
-					tilemap.set_tile("/level#generateMap", "walls", (temp_y+(LENGTH/2))-1, temp_x, 7)
-					tilemap.set_tile("/level#generateMap", "walls", (temp_y+(LENGTH/2))+1, temp_x, 7)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+(LENGTH/2), temp_x, 0)
-					tilemap.set_tile("/level#generateMap", "borders", (temp_y+(LENGTH/2))-1, temp_x, 25)
-					tilemap.set_tile("/level#generateMap", "borders", (temp_y+(LENGTH/2))+1, temp_x, 18)
-
-					if grid[i][j] == "End" then
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x-1, 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x-1, 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x-1, 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x, 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x, 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x, 9)
-					end
-				end
-				if down then
-					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH/2), temp_x+(WIDTH-1), 6)
-					tilemap.set_tile("/level#generateMap", "walls", (temp_y+(LENGTH/2))-1, temp_x+(WIDTH-1), 6)
-					tilemap.set_tile("/level#generateMap", "walls", (temp_y+(LENGTH/2))+1, temp_x+(WIDTH-1), 6)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+(LENGTH/2), temp_x+(WIDTH-1), 0)
-					tilemap.set_tile("/level#generateMap", "borders", (temp_y+(LENGTH/2))-1, temp_x+(WIDTH-1), 25)
-					tilemap.set_tile("/level#generateMap", "borders", (temp_y+(LENGTH/2))+1, temp_x+(WIDTH-1), 18)
-					
-					if grid[i][j] == "End" then
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x+(WIDTH), 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x+(WIDTH), 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x+(WIDTH), 9)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH/2), temp_x+(WIDTH-1), 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))-1, temp_x+(WIDTH-1), 8)
-						tilemap.set_tile("/level#generateMap", "locked_doors", (temp_y+(LENGTH/2))+1, temp_x+(WIDTH-1), 8)
-					end
-				end
-				if right then
-					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH-1), temp_x+(WIDTH/2), 7, tilemap.ROTATE_270)
-					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH-1), (temp_x+(WIDTH/2))-1, 7, tilemap.ROTATE_270)
-					tilemap.set_tile("/level#generateMap", "walls", temp_y+(LENGTH-1), (temp_x+(WIDTH/2))+1, 7, tilemap.ROTATE_270)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+(LENGTH-1), temp_x+(WIDTH/2), 0)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+(LENGTH-1), (temp_x+(WIDTH/2))-1, 24)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+(LENGTH-1), (temp_x+(WIDTH/2))+1, 26)
-
-					if grid[i][j] == "End" then
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH-1), temp_x+(WIDTH/2), 9, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH-1), (temp_x+(WIDTH/2))-1, 9, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH-1), (temp_x+(WIDTH/2))+1, 9, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH-1)+1, temp_x+(WIDTH/2), 8, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH-1)+1, (temp_x+(WIDTH/2))-1, 8, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y+(LENGTH-1)+1, (temp_x+(WIDTH/2))+1, 8, tilemap.ROTATE_270)
-					end
-				end
-				if left then
-					tilemap.set_tile("/level#generateMap", "walls", temp_y, temp_x+(WIDTH/2), 6, tilemap.ROTATE_270)
-					tilemap.set_tile("/level#generateMap", "walls", temp_y, (temp_x+(WIDTH/2))-1, 6, tilemap.ROTATE_270)
-					tilemap.set_tile("/level#generateMap", "walls", temp_y, (temp_x+(WIDTH/2))+1, 6, tilemap.ROTATE_270)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y, temp_x+(WIDTH/2), 0)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y, (temp_x+(WIDTH/2))-1, 24)
-					tilemap.set_tile("/level#generateMap", "borders", temp_y, (temp_x+(WIDTH/2))+1, 26)
-
-					if grid[i][j] == "End" then
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y, temp_x+(WIDTH/2), 8, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y, (temp_x+(WIDTH/2))-1, 8, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y, (temp_x+(WIDTH/2))+1, 8, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y-1, temp_x+(WIDTH/2), 9, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y-1, (temp_x+(WIDTH/2))-1, 9, tilemap.ROTATE_270)
-						tilemap.set_tile("/level#generateMap", "locked_doors", temp_y-1, (temp_x+(WIDTH/2))+1, 9, tilemap.ROTATE_270)
-					end
-				end	
+				--function that paints the room's doors
+				paint_doors(grid, i, j, temp_x, temp_y)
 			end
 		end
 	end
 
-	--generate roof
-	--paint_roof(roof_rooms)
+	--function that paints the roof onto the finished school map
+	paint_roof(roof_rooms, #grid)
+
+	--once the tilemap itself has been completely drawn, a message is sent to a script
+	--that fills the map with enemies
 	msg.post('/level#fillEnemies', 'generate', grid)
 end
 
-function classroom(temp_x, temp_y)
-	for x = 0, WIDTH-1 do
-		for y = 0, LENGTH-1 do
-			if x == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
+--paints a room's floor and wall tiles based on its starting location and room style
+function paint_room_base(room, temp_x, temp_y)
+
+	--loops through location offset values
+	--specifically, as described above for temp_x and temp_y, those represent the starting location
+	--to paint a room on. By looping through the values below, we can paint the rest of the room.
+	--for example, with room starting at [40, 40], after we paint that first tile, we can paint the next
+	--one at [41, 40] by adding the x offset specified by the loop, seen in the tilemap.set_tile() lines
+
+	--also another note, this loop begins with y and the x is nested due to the nature of defold's tilemap
+	--specifically, the cellular automata grid is made with x = 0 being the topmost x value, while
+	--the tilemap has x = 0 being the bottom most. Therefore, we must rotate our understanding of the
+	--CA grid, which necessitates starting with y
+	for y = 0, LENGTH-1 do
+		for x = 0, WIDTH-1 do
+			--bottom walls
+			if y == 0 then
+				tilemap.set_tile("/level#generateMap", "walls", temp_x+x, temp_y+y, 57)
+				if x ~= 0 and x ~=38 then
+					tilemap.set_tile("/level#generateMap", "borders", temp_x+x, temp_y+y, 26)
 				end
-			elseif y == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if x ~= 38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
+			--leftside walls
+			elseif x == 0 then
+				tilemap.set_tile("/level#generateMap", "walls", temp_x+x, temp_y+y, 57)
+				if y ~= 38 then
+					tilemap.set_tile("/level#generateMap", "borders", temp_x+x, temp_y+y, 18)
 				end
-			elseif x == WIDTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
+			--top walls
+			elseif y == WIDTH-1 then
+				tilemap.set_tile("/level#generateMap", "walls", temp_x+x, temp_y+y, 57)
+				if x ~= 0 and x ~=38 then
+					tilemap.set_tile("/level#generateMap", "borders", temp_x+x, temp_y+y, 24)
 				end
-			elseif y == LENGTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
+			--rightside walls
+			elseif x == LENGTH-1 then
+				tilemap.set_tile("/level#generateMap", "walls", temp_x+x, temp_y+y, 57)
+				tilemap.set_tile("/level#generateMap", "borders", temp_x+x, temp_y+y, 25)
+			--floor tiles
 			else
-				local tile = math.random(31,34)
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
+				floor_tile = select_floor_tile(room)
+				tilemap.set_tile("/level#generateMap", "floor", temp_x+x, temp_y+y, floor_tile)
 			end
 		end
 	end
 end
 
-function basement(temp_x, temp_y)
-	for x = 0, WIDTH-1 do
-		for y = 0, LENGTH-1 do
-			if x == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
-				end
-			elseif y == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if x ~= 38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				end
-			elseif x == WIDTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				end
-			elseif y == LENGTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-			else
-				local pool = {41,41,41,41,41,42,42,42,42,42,43,43,43,43,43,44,45,45,45,45,45}
-				local tile = pool[math.random(#pool)]
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
-			end
+--each room style requires a different type of floor tile, which is specified by calling this function
+function select_floor_tile(room)
+
+	if room == "Spawn" then
+		return 54
+	elseif room == "C" or room == "Boss" then
+		local pool = {1,1,1,1,1,2,2,2,2,2,3,4,4,4,4,4,5}
+		return pool[math.random(#pool)]
+	elseif room == "R" then
+		return math.random(31,34)
+	elseif room == "B" or room == "End" then
+		local pool = {41,41,41,41,41,42,42,42,42,42,43,43,43,43,43,44,45,45,45,45,45}
+		return pool[math.random(#pool)]
+	elseif room == "G" then
+		local pool = {21,22,23}
+		return pool[math.random(#pool)]
+	end	
+end
+
+--this function paints the doors onto the current room by performing calculations using temp_x and temp_y
+--i and j are needed to access the specific grid index to find which doors are needed in the room string
+function paint_doors(grid, i, j, temp_x, temp_y)
+	--upwards door
+	if string.find(grid[i][j], "%^") ~= nil then
+
+		tilemap.set_tile("/level#generateMap", "walls", temp_x+(LENGTH/2), temp_y, 7)
+		tilemap.set_tile("/level#generateMap", "walls", (temp_x+(LENGTH/2))-1, temp_y, 7)
+		tilemap.set_tile("/level#generateMap", "walls", (temp_x+(LENGTH/2))+1, temp_y, 7)
+		
+		tilemap.set_tile("/level#generateMap", "borders", temp_x+(LENGTH/2), temp_y, 0)
+		tilemap.set_tile("/level#generateMap", "borders", (temp_x+(LENGTH/2))-1, temp_y, 25)
+		tilemap.set_tile("/level#generateMap", "borders", (temp_x+(LENGTH/2))+1, temp_y, 18)
+
+		--"End" requires a specific set of door tiles to be painted that are different
+		--from all the other used door tiles (this provides locked door functionality for exit room)
+		if string.find(grid[i][j], "End") ~= nil then
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH/2), temp_y-1, 8)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))-1, temp_y-1, 8)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))+1, temp_y-1, 8)
+			
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH/2), temp_y, 9)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))-1, temp_y, 9)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))+1, temp_y, 9)
+		end
+	end
+
+	--downwards door
+	if string.find(grid[i][j], "v") ~= nil or string.find(grid[i][j], "Spawn") ~= nil then
+
+		tilemap.set_tile("/level#generateMap", "walls", temp_x+(LENGTH/2), temp_y+(WIDTH-1), 6)
+		tilemap.set_tile("/level#generateMap", "walls", (temp_x+(LENGTH/2))-1, temp_y+(WIDTH-1), 6)
+		tilemap.set_tile("/level#generateMap", "walls", (temp_x+(LENGTH/2))+1, temp_y+(WIDTH-1), 6)
+		
+		tilemap.set_tile("/level#generateMap", "borders", temp_x+(LENGTH/2), temp_y+(WIDTH-1), 0)
+		tilemap.set_tile("/level#generateMap", "borders", (temp_x+(LENGTH/2))-1, temp_y+(WIDTH-1), 25)
+		tilemap.set_tile("/level#generateMap", "borders", (temp_x+(LENGTH/2))+1, temp_y+(WIDTH-1), 18)
+
+		if string.find(grid[i][j], "End") ~= nil then
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH/2), temp_y+(WIDTH), 9)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))-1, temp_y+(WIDTH), 9)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))+1, temp_y+(WIDTH), 9)
+			
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH/2), temp_y+(WIDTH-1), 8)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))-1, temp_y+(WIDTH-1), 8)
+			tilemap.set_tile("/level#generateMap", "locked_doors", (temp_x+(LENGTH/2))+1, temp_y+(WIDTH-1), 8)
+		end
+	end
+
+	--leftside door
+	if string.find(grid[i][j], "<") ~= nil then
+
+		tilemap.set_tile("/level#generateMap", "walls", temp_x, temp_y+(WIDTH/2), 6, tilemap.ROTATE_270)
+		tilemap.set_tile("/level#generateMap", "walls", temp_x, (temp_y+(WIDTH/2))-1, 6, tilemap.ROTATE_270)
+		tilemap.set_tile("/level#generateMap", "walls", temp_x, (temp_y+(WIDTH/2))+1, 6, tilemap.ROTATE_270)
+		
+		tilemap.set_tile("/level#generateMap", "borders", temp_x, temp_y+(WIDTH/2), 0)
+		tilemap.set_tile("/level#generateMap", "borders", temp_x, (temp_y+(WIDTH/2))-1, 24)
+		tilemap.set_tile("/level#generateMap", "borders", temp_x, (temp_y+(WIDTH/2))+1, 26)
+
+		if string.find(grid[i][j], "End") ~= nil then
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x, temp_y+(WIDTH/2), 8, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x, (temp_y+(WIDTH/2))-1, 8, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x, (temp_y+(WIDTH/2))+1, 8, tilemap.ROTATE_270)
+			
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x-1, temp_y+(WIDTH/2), 9, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x-1, (temp_y+(WIDTH/2))-1, 9, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x-1, (temp_y+(WIDTH/2))+1, 9, tilemap.ROTATE_270)
+		end
+
+	end
+
+	--rightside door
+	if string.find(grid[i][j], ">") ~= nil then
+
+		tilemap.set_tile("/level#generateMap", "walls", temp_x+(LENGTH-1), temp_y+(WIDTH/2), 7, tilemap.ROTATE_270)
+		tilemap.set_tile("/level#generateMap", "walls", temp_x+(LENGTH-1), (temp_y+(WIDTH/2))-1, 7, tilemap.ROTATE_270)
+		tilemap.set_tile("/level#generateMap", "walls", temp_x+(LENGTH-1), (temp_y+(WIDTH/2))+1, 7, tilemap.ROTATE_270)
+		
+		tilemap.set_tile("/level#generateMap", "borders", temp_x+(LENGTH-1), temp_y+(WIDTH/2), 0)
+		tilemap.set_tile("/level#generateMap", "borders", temp_x+(LENGTH-1), (temp_y+(WIDTH/2))-1, 24)
+		tilemap.set_tile("/level#generateMap", "borders", temp_x+(LENGTH-1), (temp_y+(WIDTH/2))+1, 26)
+
+		if string.find(grid[i][j], "End") ~= nil then
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH-1), temp_y+(WIDTH/2), 9, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH-1), (temp_y+(WIDTH/2))-1, 9, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH-1), (temp_y+(WIDTH/2))+1, 9, tilemap.ROTATE_270)
+			
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH-1)+1, temp_y+(WIDTH/2), 8, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH-1)+1, (temp_y+(WIDTH/2))-1, 8, tilemap.ROTATE_270)
+			tilemap.set_tile("/level#generateMap", "locked_doors", temp_x+(LENGTH-1)+1, (temp_y+(WIDTH/2))+1, 8, tilemap.ROTATE_270)
 		end
 	end
 end
 
-function bathroom(temp_x, temp_y)
-	for x = 0, WIDTH-1 do
-		for y = 0, LENGTH-1 do
-			if x == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
+--function that paints assets onto a classroom
+function classroom(temp_x, temp_y, j, i)
+
+	--creates a blackboard asset
+	factory.create("/mapAssets#blackboard_factory", vmath.vector3(calc_asset_pos(WIDTH/2, temp_x, 1, j*4), calc_asset_pos(LENGTH-3, temp_y, -2, i*4), 0.99), nil, nil, 1)
+
+	--minimum distance between desks
+	local minDistance = 80
+
+	--table to store positions of generated desks
+	local deskPositions = {}
+
+	--loop that places 20 desks that do not overlap with one another
+	for m = 1, 20 do
+		local deskX, deskY
+
+		--generate desk position and ensure it doesn't overlap with previous desks
+		repeat
+			deskX = math.random(calc_asset_pos(WIDTH/2, temp_x, -6, j*4), calc_asset_pos(WIDTH/2, temp_x, 10, j*4))
+			deskY = math.random(calc_asset_pos(LENGTH/2, temp_y, -6, i*4), calc_asset_pos(LENGTH/2, temp_y, 10, i*4))
+
+			--check overlap with previous desks
+			local overlap = false
+			for _, pos in ipairs(deskPositions) do
+				if math.abs(deskX - pos.x) < minDistance and math.abs(deskY - pos.y) < minDistance then
+					overlap = true
+					break
 				end
-			elseif y == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if x ~= 38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				end
-			elseif x == WIDTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				end
-			elseif y == LENGTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-			else
-				local pool = {1,1,1,1,1,2,2,2,2,2,3,4,4,4,4,4,5}
-				local tile = pool[math.random(#pool)]
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
 			end
+		until not overlap
+
+		--store current desk position
+		table.insert(deskPositions, {x = deskX, y = deskY})
+
+		--place desk
+		factory.create("/mapAssets#desk_factory", vmath.vector3(deskX, deskY, 0.99), nil, nil, 1)
+
+		--place papers around desk area
+		factory.create("/mapAssets#paper_factory", vmath.vector3(deskX+2, deskY+80, 0.99), nil, nil, 1)	
+		factory.create("/mapAssets#paper_factory", vmath.vector3(deskX+2, deskY-80, 0.99), nil, nil, 1)
+		factory.create("/mapAssets#paper_factory", vmath.vector3(deskX+60, deskY, 0.99), nil, nil, 1)
+		factory.create("/mapAssets#paper_factory", vmath.vector3(deskX-60, deskY, 0.99), nil, nil, 1)
+	end
+end
+
+--funtion that places assets in a cafeteria room
+function cafeteria(temp_x, temp_y, j, i)
+
+	--x-values needed to place the assets at
+	local x_offset_vals = {-2, 0, 1, 2, 4}
+	
+	for k = 1, #x_offset_vals do
+
+		--place cafeteria tables
+		if x_offset_vals[k] == 1 then
+			factory.create("/mapAssets#table_factory", vmath.vector3(calc_asset_pos(WIDTH/2, temp_x, x_offset_vals[k], j*4), calc_asset_pos(LENGTH/2, temp_y, -1, i*4), 0.90), nil, nil, 1)
+			factory.create("/mapAssets#table_factory", vmath.vector3(calc_asset_pos(WIDTH/2, temp_x, x_offset_vals[k], j*4), calc_asset_pos(LENGTH-3, temp_y, -1, i*4), 0.90), nil, nil, 1)
+
+		--place food trays onto the cafeteria tables
+		else
+			factory.create("/mapAssets#tray_factory", vmath.vector3(calc_asset_pos(WIDTH/2, temp_x, x_offset_vals[k], j*4), calc_asset_pos(LENGTH/2, temp_y, 0, i*4), 0.90), nil, nil, 1)
+			factory.create("/mapAssets#tray_factory", vmath.vector3(calc_asset_pos(WIDTH/2, temp_x, x_offset_vals[k], j*4), calc_asset_pos(LENGTH-3, temp_y, 0, i*4), 0.90), nil, nil, 1)
 		end
 	end
 end
 
-function gym(temp_x, temp_y)
-	--factory.create("/mapAssets#hoop", vmath.vector3(temp_y+(LENGTH/2), temp_x+(WIDTH/2), 0.00000001), nil, nil, 1)
-	for x = 0, WIDTH-1 do
-		for y = 0, LENGTH-1 do
-			if x == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
-				end
-			elseif y == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if x ~= 38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				end
-			elseif x == WIDTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				end
-			elseif y == LENGTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-			else
-				local pool = {21,22,23}
-				local tile = pool[math.random(#pool)]
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
-			end
-		end
-	end
+--function that paints assets onto a gymnasium room
+function gym(temp_x, temp_y, j, i)
+
+	--x location of a hoop
+	local hoopX = calc_asset_pos(WIDTH/2, temp_x, 1, j*4)
+
+	--places hoop factory objects
+	factory.create("/mapAssets#hoop_factory", vmath.vector3(hoopX, calc_asset_pos(LENGTH/2, temp_y, -2, i*4), 0.99), nil, nil, 1)
+	factory.create("/mapAssets#hoop_factory", vmath.vector3(hoopX, calc_asset_pos(LENGTH-3, temp_y, -2, i*4), 0.99), nil, nil, 1)
 end
 
-function spawn(temp_x, temp_y)
-	for x = 0, WIDTH-1 do
-		for y = 0, LENGTH-1 do
-			if x == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
-				end
-			elseif y == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if x ~= 38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				end
-			elseif x == WIDTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				end
-			elseif y == LENGTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-			else
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, 54)
-			end
-		end
-	end
-end
-
+--function that adds the chef boss into the boss room
 function boss(temp_x, temp_y)
-	for x = 0, WIDTH-1 do
-		for y = 0, LENGTH-1 do
-			if x == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
-				end
-			elseif y == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if x ~= 38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				end
-			elseif x == WIDTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				end
-			elseif y == LENGTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-			else
-				local pool = {1,1,1,1,1,2,2,2,2,2,3,4,4,4,4,4,5}
-				local tile = pool[math.random(#pool)]
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
-			end
-		end
-	end
+	--positioning of the chef in the room (always at the top of the room against the wall)
+	local coords = {}
+	local chefX = ((((temp_x-1)*WIDTH)*30)+(625)) + (temp_x*50)
+	local chefY = ((((temp_y-1)*LENGTH)*30)+(1025)) + (temp_y*75)
+
+	--placement of the chef via message sent to its gameobject script
+	table.insert(coords, chefX)
+	table.insert(coords, chefY)
+	msg.post("/chefBoss#chef_boss", 'placeChef', coords)
 end
 
+--function that places the exit cloud into the exit room
 function exit(temp_x, temp_y)
+	--cloud positioning (always in the middle of the room)
 	local coords = {}
-	local cloudX = ((WIDTH-1)/2) + temp_y
-	local cloudY = ((LENGTH-1)/2) + temp_x
+	local cloudX = ((WIDTH-1)/2) + temp_x
+	local cloudY = ((LENGTH-1)/2) + temp_y
+
+	--placement of the cloud via message sent to its gameobject script
 	table.insert(coords, cloudX)
 	table.insert(coords, cloudY)
-	msg.post("/exit_cloud#cloudSprite", 'createCloud', coords)
-	
-	for x = 0, WIDTH-1 do
-		for y = 0, LENGTH-1 do
-			if x == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 26)
-				end
-			elseif y == 0 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if x ~= 38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 18)
-				end
-			elseif x == WIDTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				if y ~= 0 and y ~=38 then
-					tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 24)
-				end
-			elseif y == LENGTH-1 then
-				tilemap.set_tile("/level#generateMap", "walls", temp_y+y, temp_x+x, 57)
-				tilemap.set_tile("/level#generateMap", "borders", temp_y+y, temp_x+x, 25)
-			else
-				local pool = {41,41,41,41,41,42,42,42,42,42,43,43,43,43,43,44,45,45,45,45,45}
-				local tile = pool[math.random(#pool)]
-				tilemap.set_tile("/level#generateMap", "floor", temp_y+y, temp_x+x, tile)
-			end
-		end
-	end
+	msg.post("/cloud-exit#cloudSprite", 'createCloud', coords)
 end
 
-function paint_roof(roof_rooms)
+--function that calculates the placement of various environmental assets
+--@param room_position: the desired location within the room (based off of WIDTH and LENGTH values)
+--@param map_position: the tilemap coordinate of the room itself (temp_x or temp_y)
+--@param room_offset: more particular placement within the room that allows for finer detail in addition to room_position
+--@param map_offset: due to the nature of pixels not lining up well with tiles, we need to subtract some pixels from 
+--placement based on the further left and up the room is placed (based on grid i and j values)
+function calc_asset_pos(room_position, map_position, room_offset, map_offset)
+	return (((room_position)+map_position+room_offset-(map_offset))*assetOffset)
+end
+
+--function that paints the roof onto the specified roof_rooms
+--@param roof_rooms: the rooms designated as needing a roof in on_message
+--@param top_x: the current uppermost x value in the grid
+function paint_roof(roof_rooms, top_x)
+	--keeps track if there is a roof room directly before the current roof room in the loop
+	--this is needed so that fences can be put in between roof rooms if needed to contain player
+	--and so that roof walls can be added
 	previous = -1
-	--[[
-	tilemap.set_tile("/level#generateMap", "roof", 96, 234, 20)
-	tilemap.set_tile("/level#generateMap", "roof", 96, 233, 59)
-	tilemap.set_tile("/level#generateMap", "roof", 97, 232, 39)
-	tilemap.set_tile("/level#generateMap", "roof", 98, 232, 39)
-	tilemap.set_tile("/level#generateMap", "roof", 99, 232, 39)
-	tilemap.set_tile("/level#generateMap", "roof", 100, 234, 49)
-	tilemap.set_tile("/level#generateMap", "roof", 100, 233, 10)
-	--]]
+
+	--loops through roof rooms and paints the necessary tiles
 	for i, room in ipairs(roof_rooms) do
-		temp_x = (((6 - 1) * WIDTH) + 1)
-		temp_y = (((room - 1) * LENGTH) + 1)
 
-		for x = 0, WIDTH-1 do
-			for y = 0, LENGTH-1 do
-				tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 19)
+		--calculates starting location of each roof room on the tilemap
+		temp_x = (((room - 1) * WIDTH) + 1)
+		temp_y = (((top_x - 1) * LENGTH) + 1)
 
-				if x == 38 then
-					tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 39)
+		--for the y and x tilemap offsets for the roof room, paint the tiles
+		for y = 0, LENGTH-1 do
+			for x = 0, WIDTH-1 do
+
+				--general roof tile placement
+				tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 19)
+
+				--upwards roof wall
+				if y == 38 then
+					tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 39)
 				end
+
+				--leftside roof wall
 				if (room - previous) > 1 then
-					if y == 0 then
-						if x==38 then
-							tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 10)
+					if x == 0 then
+						if y==38 then
+							tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 10)
 						else
-							tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 49)
+							tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 49)
 						end
 					end
 				end
 
+				--handle decisions for the right side based on if there is a next roof room or not
 				if roof_rooms[i+1] ~= null then
 
+					--if the next roof room exists but is not directcly adjacent, paint rightside roof wall tiles
 					if (roof_rooms[i+1] - room > 1) then
-						if y == LENGTH-1 then
-							if x==38 then
-								tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 20)
+						if x == LENGTH-1 then
+							if y==38 then
+								tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 20)
 							else
-								tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 59)
+								tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 59)
 							end
 						end
 					end
 
+				--if there is no next roof room, paint rightside wall tiles
 				else
-					if y == LENGTH-1 then
-						if x==38 then
-							tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 20)
+					if x == WIDTH-1 then
+						if y==38 then
+							tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 20)
 						else
-							tilemap.set_tile("/level#generateMap", "roof", temp_y+y, temp_x+x, 59)
+							tilemap.set_tile("/level#generateMap", "roof", temp_x+x, temp_y+y, 59)
 						end
 					end
 				end
 			end
 		end
+
+		--increment previous variable
 		previous = room		
 	end
 end

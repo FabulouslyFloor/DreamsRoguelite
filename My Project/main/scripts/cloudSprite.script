@@ -1,3 +1,13 @@
+--[[
+Script Name: cloudSprite
+Author(s): Matthew DeGirolamo, Summer Whitley
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: mapCreator
+
+Script Purpose: creates the exit cloud sprite game object and implements interactivity
+]]
+
 function init(self)
 	msg.post("#E", "disable")
 end
@@ -12,12 +22,12 @@ function fixed_update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
+	--when the message is received from the mapCreator, place the cloud at the specified coordinates
 	if message_id == hash("createCloud") then
 		local coords = message
-		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 1)
+		local initPOS = vmath.vector3(coords[1]*32, coords[2]*33.5, 0.98)
 		go.set_position(initPOS, go.get_id())
 	end
-	
 	if message_id == hash("trigger_response") and message.enter == true then
 		msg.post("#E", "enable")
 	elseif message_id == hash("trigger_response") and message.enter == false then
@@ -26,6 +36,7 @@ function on_message(self, message_id, message, sender)
 
 	if message_id == hash("picked_up") then
 		msg.post("/Player#player", "away")
+		msg.post("Scenes:/controller#loader", "pause")
 		go.delete()
 	end
 end

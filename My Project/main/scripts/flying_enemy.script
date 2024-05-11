@@ -1,4 +1,15 @@
+--[[
+Script Name: flying_enemy
+Author(s): Henry Hauger, Florian Hurlbert
+Date of Last Change: 5/6/2024
 
+Scripts Referenced/Messaged: Player
+
+Script Purpose: Operates the logic for flying enemies, including player-tracking and deletion
+]]
+
+-- changes the direction the enemy is moving, doing so in a cycle-like fashion (moving all directions once before restarting)
+-- to help prevent wandering
 local function change_dir(self)
 	valid_num = false
 	while not valid_num do
@@ -54,6 +65,7 @@ local function change_dir(self)
 	self.dir_change_timer = 60
 end
 
+-- used to set movement vector so it will be most direct path to player, if tracking
 local function track_player(self)
 	target_location = go.get_position("/Player#player") -- get the location of the player object
 	my_location = go.get_position()
@@ -66,8 +78,11 @@ local function track_player(self)
 	return diff_location -- return resulting vector
 end
 
+-- knocks back flying enemy upon taking damage
+-- NOTE: never used because this enemy is a one-hit kill
+-- here for posterity
 local function knockback(self, normal)
-	print(normal)
+	--print(normal)
 	-- sets knockback state
 	self.knockbacked = true
 	-- Gets direction vector from intersection and sets the direction to it
@@ -76,6 +91,7 @@ local function knockback(self, normal)
 	self.kbtimer = 45
 end
 
+-- run when the enemy takes damage
 local function damage(self)
 	print("Bee hit")
 	-- take away 1 hp
@@ -86,7 +102,6 @@ local function damage(self)
 	end
 end
 
--- todo: add factory here too (see worm_enemy)
 function init(self)
 	-- seed random object
 	math.randomseed(os.time())
@@ -104,17 +119,17 @@ function init(self)
 	self.track_numerator = 0
 	self.knockbacked = false
 	self.kbtimer = 0
-	-- the current code moves the flying enemy in a random cycle of the 8 directions, but always in a cycle, going through
-	-- all of them before repeating any. this ensures no 'wandering' occurs. enemies will stay in roughly the place
-	-- you put them.
+	-- sets initial direction for the enemy to move in
 	change_dir(self)
 end
 
 function update(self, dt)
 	local pos = go.get_position()
-	-- if knockedback, then
+	-- if in knockback state, then
 	if self.knockbacked then
+		-- move according to pre-defined normal
 		go.set_position(pos + self.dir * self.speed * dt) 
+		-- reduce knockback timer
 		self.kbtimer = self.kbtimer - 1
 		if self.kbtimer == 0 then
 			self.knockbacked = false
@@ -137,21 +152,21 @@ function update(self, dt)
 	end
 end
 
--- todo: add attack animation for when hurts player?
--- when detects the player, set self.tracking to true and start tracking the player
 function on_message(self, message_id, message, sender)
+	-- when detects the player, set self.tracking to true and start tracking the player
 	if message_id == hash("collision_response") and message.other_group == hash("player") then
 		track_player(self)
 		self.tracking = true
-	elseif message_id == hash("contact_point_response") and message.own_group == hash("enemy_body") then
+	-- when collides with a damaging hitbox (rocket or any melee), call knockback
+	elseif message_id == hash("contact_point_response") and (message.other_group == hash("rockets") or message.other_group == hash("down") or message.other_group == hash("left")or message.other_group == hash("right")or message.other_group == hash("up")) then
 		-- Calls knockback with special vector from this message
 		knockback(self, message.normal)
+		print(message.other_group)
 		print("knockedback")
+	-- when hit, call damage
 	elseif message_id == hash("hit") then
-		damage(self)	
-	elseif message_id == hash("trigger_response") then
 		damage(self)
-		print("damaged")
+	-- when run into walls, teleport back from them
 	elseif message_id == hash("contact_point_response") and (message.other_group == hash("walls") or message.other_group == hash("enemy_walls")) then
 		local pos = go.get_position()
 		local to = pos + message.normal * 5

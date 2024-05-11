@@ -35,3 +35,6 @@ max_resources = 100000000
 [sprite]
 max_count = 1000000
 
+[collection]
+max_instances = 2048
+
