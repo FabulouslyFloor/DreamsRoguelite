@@ -1,9 +1,19 @@
+--[[
+Script Name: pause_menu_gui
+Author(s): Summer Whitley
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: loader
+
+Script Purpose: Animates GUI components and manages button functionality for the pause menu
+]]
+
 local current_level
 local paused
 
 function init(self)
-	print(msg.url())
 	msg.post(".", "acquire_input_focus")
+	-- set nodes to invisible
 	gui.set_enabled(gui.get_node("menu"), false)
 	gui.set_enabled(gui.get_node("background"), false)
 	self.paused = false
@@ -17,13 +27,8 @@ function final(self)
 	msg.post(".", "release_input_focus")
 end
 
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
 function on_message(self, message_id, message, sender)
+	-- reacts to player death by disabling the pause cloud button and enabling other nodes
 	if message_id == hash("death_pause") then
 		self.paused = true
 		gui.set_enabled(gui.get_node("pause"), false)
@@ -31,6 +36,7 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+	-- if pressed, animate
 	if action.pressed and action_id == hash("touch") and gui.pick_node(gui.get_node("pause"), action.x, action.y) then
 		gui.play_flipbook(self.pause, hash("cloud-button-pushed"))
 
@@ -40,13 +46,14 @@ function on_input(self, action_id, action)
 	elseif action.pressed and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) then
 		gui.play_flipbook(self.quit_to_menu, hash("menu-button-pushed"))
 
+	-- if released, functionality
 	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("pause"), action.x, action.y) and self.paused == false then
 		gui.play_flipbook(self.pause, hash("cloud-button-unpushed"))
 		self.paused = true
 		gui.set_enabled(gui.get_node("menu"), true)
 		gui.set_enabled(gui.get_node("background"), true)
 		gui.set_enabled(gui.get_node("pause"), false)
-		msg.post("Scenes:/controller#loader", "pause")
+		msg.post("Scenes:/controller#loader", "pause") -- pause the game
 		
 	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("continue"), action.x, action.y) and self.paused == true then
 		gui.play_flipbook(self.continue, hash("menu-button-unpushed"))
@@ -54,16 +61,10 @@ function on_input(self, action_id, action)
 		gui.set_enabled(gui.get_node("menu"), false)
 		gui.set_enabled(gui.get_node("background"), false)
 		gui.set_enabled(gui.get_node("pause"), true)
-		msg.post("Scenes:/controller#loader", "unpause")
+		msg.post("Scenes:/controller#loader", "unpause") -- unpause the game
 		
 	elseif action.released and action_id == hash("touch") and gui.pick_node(gui.get_node("quit_to_menu"), action.x, action.y) and self.paused == true then
 		gui.play_flipbook(self.quit_to_menu, hash("menu-button-unpushed"))
-		msg.post("Scenes:/controller#loader", "show_opening")
+		msg.post("Scenes:/controller#loader", "show_opening") -- go back to the opening
 	end
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
 end

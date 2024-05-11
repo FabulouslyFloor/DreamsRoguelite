@@ -1,3 +1,13 @@
+--[[
+Script Name: player_health
+Author(s): Henry Hauger, Summer Whitley
+Date of Last Change: 5/6/2024
+
+Scripts Referenced/Messaged: none
+
+Script Purpose: Shows and removes hearts for player health
+]]
+
 function init(self)
 	-- sets hp counter
 	self.health_tracker = 5
