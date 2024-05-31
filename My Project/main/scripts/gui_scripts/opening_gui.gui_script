@@ -1,10 +1,12 @@
 --[[
+Script Name: opening_gui
+Author(s): Summer Whitley
+Date of Last Change: 5/6/2024
 
-Opening GUI Script File
+Scripts Referenced/Messaged: loader
 
-Controls opening splash screen and start/quit buttons
-
-]]--
+Script Purpose: Animates GUI components and manages button functionality for the splash and opening screens
+]]
 
 local play_splash = true
 
@@ -119,24 +121,3 @@ function on_input(self, action_id, action)
 	end
 	
 end	
-
-function final(self)
-	-- Add finalization code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function update(self, dt)
-	-- Add update code here
-	-- Learn more: https://defold.com/manuals/script/
-	-- Remove this function if not needed
-end
-
-function on_message(self, message_id, message, sender)
-end
-
-function on_reload(self)
-	-- Add reload-handling code here
-	-- Learn more: https://defold.com/manuals/hot-reload/
-	-- Remove this function if not needed
-end
