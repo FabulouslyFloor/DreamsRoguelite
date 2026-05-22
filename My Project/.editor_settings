@@ -1,0 +1,38 @@
+{
+  :code {
+    :breakpoints [
+    ]
+  }
+  :workflow {
+    :open-tabs [
+      [
+        [
+          "/main/guis/opening.gui"
+          :scene
+        ]
+        [
+          "/main/scripts/gui_scripts/opening_gui.gui_script"
+          :code
+        ]
+      ]
+    ]
+    :recent-files [
+      [
+        "/main/scripts/mapCreator.script"
+        :code
+      ]
+      [
+        "/main/scripts/room_factory.script"
+        :code
+      ]
+      [
+        "/main/guis/opening.gui"
+        :scene
+      ]
+      [
+        "/main/scripts/gui_scripts/opening_gui.gui_script"
+        :code
+      ]
+    ]
+  }
+}
